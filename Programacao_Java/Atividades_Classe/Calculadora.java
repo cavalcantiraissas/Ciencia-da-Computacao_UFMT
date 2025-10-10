@@ -91,7 +91,6 @@ public class Calculadora extends JFrame {
                     break;
             }
             
-            // Formatar o resultado
             String resultadoFormatado = String.format("%.2f", resultado);
             String mensagem = String.format("%.2f %s %.2f = %.2f", 
                 num1, 
