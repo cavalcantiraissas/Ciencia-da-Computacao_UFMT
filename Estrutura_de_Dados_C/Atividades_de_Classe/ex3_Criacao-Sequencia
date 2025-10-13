@@ -1,0 +1,38 @@
+/*
+Universidade Federal de Mato Grosso
+Disciplina: Estrutura de dados 1
+Lista de Exercícios sobre C
+Aluna: Raissa Cavalcanti
+
+Exercício 03: Leitura de valores e criação de sequencia
+*/
+
+#include <stdio.h>
+
+int main() {
+    int valor1, valor2;
+
+    printf("Digite o primeiro valor: ");
+    scanf("%d", &valor1);
+
+    printf("Digite o segundo valor: ");
+    scanf("%d", &valor2);
+
+    if (valor1 < valor2) {
+        printf("Números entre %d e %d:\n", valor1, valor2);
+        for (int i = valor1 + 1; i < valor2; i++) {
+            printf("%d ", i);
+        }
+    } else if (valor1 > valor2) {
+        printf("Números entre %d e %d:\n", valor2, valor1);
+        for (int i = valor2 + 1; i < valor1; i++) {
+            printf("%d ", i);
+        }
+    } else {
+        printf("Os valores são iguais.\n");
+    }
+
+    printf("\n");
+
+    return 0;
+}
