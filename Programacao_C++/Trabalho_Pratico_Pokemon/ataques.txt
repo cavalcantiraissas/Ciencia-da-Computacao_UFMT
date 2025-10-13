@@ -1,0 +1,78 @@
+Move,Categoria,Poder,Precisao,Tipo
+Absorb,Especial,20,1.0,Planta
+Acid,Especial,40,1.0,Venenoso
+Aurora Beam,Especial,65,1.0,Gelo
+Bone Club,Fisico,65,0.85,Terrestre
+Blizzard,Especial,110,0.7,Gelo
+Bubble,Especial,40,1.0,Agua
+Bubble Beam,Especial,65,1.0,Agua
+Clamp,Fisico,35,0.85,Agua
+Confusion,Especial,50,1.0,Psiquico
+Crabhammer,Fisico,100,0.9,Agua
+Cut,Fisico,50,0.95,Normal
+Dig,Fisico,80,1.0,Terrestre
+Dizzy Punch,Fisico,70,1.0,Normal
+Double Kick,Fisico,30,1.0,Lutador
+Double-Edge,Fisico,120,1.0,Normal
+Dragon Breath,Especial,60,1.0,Dragao
+Dream Eater,Especial,100,1.0,Psiquico
+Egg Bomb,Fisico,100,0.75,Normal
+Ember,Especial,40,1.0,Fogo
+Fury Attack,Fisico,15,0.85,Normal
+Fury Swipes,Fisico,18,0.8,Normal
+Fire Blast,Especial,110,0.85,Fogo
+Fire Punch,Fisico,75,1.0,Fogo
+Fire Spin,Especial,35,0.85,Fogo
+Flamethrower,Especial,90,1.0,Fogo
+Fly,Fisico,90,0.95,Voador
+Gust,Especial,40,1.0,Voador
+Headbutt,Fisico,70,1.0,Normal
+High Jump Kick,Fisico,130,0.9,Lutador
+Horn Attack,Fisico,65,1.0,Normal
+Hydro Pump,Especial,110,0.8,Agua
+Ice Beam,Especial,90,1.0,Gelo
+Ice Punch,Fisico,75,1.0,Gelo
+Iron Tail,Fisico,100,0.75,Metal
+Jump Kick,Fisico,100,0.95,Lutador
+Karate Chop,Fisico,50,1.0,Lutador
+Lick,Fisico,30,1.0,Fantasma
+Mega Drain,Especial,40,1.0,Planta
+Metal Claw,Fisico,50,0.95,Metal
+Night Shade,Especial,70,1.0,Fantasma
+Outrage,Fisico,120,1.0,Dragao
+Pay Day,Fisico,40,1.0,Normal
+Peck,Fisico,35,1.0,Voador
+Play Rough,Fisico,90,0.9,Fada
+Pin Missile,Fisico,25,0.95,Inseto
+Pound,Fisico,40,1.0,Normal
+Psybeam,Especial,65,1.0,Psiquico
+Psychic,Especial,90,1.0,Psiquico
+Rage,Fisico,20,1.0,Normal
+Razor Leaf,Fisico,55,0.95,Planta
+Rock Slide,Fisico,75,0.9,Rocha
+Rock Throw,Fisico,50,0.9,Rocha
+Rolling Kick,Fisico,60,0.85,Lutador
+Sky Attack,Fisico,140,0.9,Voador
+Slash,Fisico,70,1.0,Normal
+Smog,Especial,30,0.7,Venenoso
+Solar Beam,Especial,120,1.0,Planta
+Spike Cannon,Fisico,20,1.0,Normal
+Spirit Break,Fisico,75,1.0,Fada
+Steel Wing,Fisico,70,0.9,Metal
+Stomp,Fisico,65,1.0,Normal
+Strength,Fisico,80,1.0,Normal
+Submission,Fisico,80,0.8,Lutador
+Surf,Especial,90,1.0,Agua
+Swift,Especial,60,1.0,Normal
+Tackle,Fisico,40,1.0,Normal
+Take Down,Fisico,90,0.85,Normal
+Thunder,Especial,110,0.7,Eletrico
+Thunder Punch,Fisico,75,1.0,Eletrico
+Thunder Shock,Especial,40,1.0,Eletrico
+Thunderbolt,Especial,90,1.0,Eletrico
+Tri Attack,Especial,80,1.0,Normal
+Twineedle,Fisico,25,1.0,Inseto
+Twister,Especial,40,1.0,Dragao
+Vine Whip,Fisico,45,1.0,Planta
+Wing Attack,Fisico,60,1.0,Voador
+Wrap,Fisico,15,0.9,Normal
