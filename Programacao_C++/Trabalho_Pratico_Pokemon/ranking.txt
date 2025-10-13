@@ -1,0 +1,4 @@
+lais 30 2 0
+lexa 10 1 0
+paula 30 2 1
+raissa 300 20 2
