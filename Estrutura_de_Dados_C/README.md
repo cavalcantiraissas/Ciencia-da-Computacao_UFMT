@@ -1,4 +1,4 @@
-# Estrutura de Dados I — Ciência da Computação (UFMT)
+# Estrutura de Dados I - Ciência da Computação (UFMT)
 
 Este repositório reúne os materiais, códigos e exercícios desenvolvidos ao longo da disciplina **Estrutura de Dados I**, cursada no Bacharelado em Ciência da Computação da **Universidade Federal de Mato Grosso (UFMT)**.
 
