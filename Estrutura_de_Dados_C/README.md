@@ -55,7 +55,7 @@ Essa base permite compreender como organizar, armazenar e manipular informaçõe
 
 **Raissa Cavalcanti**  
 Estudante de Ciência da Computação — UFMT  
-📫 [LinkedIn](https://www.linkedin.com/in/cavalcantiraissa/) | 📧 cavalcanti.c.raissa@gmail.com
+📫 [LinkedIn](https://www.linkedin.com/in/cavalcantiraissa/) | 📧 Cavalcanti.c.raissa@gmail.com
 
 ---
 
