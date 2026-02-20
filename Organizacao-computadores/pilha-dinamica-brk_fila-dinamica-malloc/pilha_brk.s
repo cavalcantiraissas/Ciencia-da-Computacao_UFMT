@@ -129,7 +129,6 @@ main:
     call printf
     j    .menu_loop
 
-# -------------------------------------------------------
 .op_push:
     la   a0, fmt_entrada
     call printf
