@@ -197,7 +197,7 @@ qemu-riscv64 -L /usr/riscv64-linux-gnu ./pilha_brk
 
 ---
 
-## 4. Parte 2 — Fila com `malloc`/`free` (`fila_malloc.s`)
+## 4. Parte 2 - Fila com `malloc`/`free` (`fila_malloc.s`)
 
 ### 4.1 Estrutura do nó
 
