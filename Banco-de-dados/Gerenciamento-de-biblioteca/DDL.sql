@@ -1,9 +1,7 @@
--- =============================================================
 -- SISTEMA DE GERENCIAMENTO DE BIBLIOTECA DIGITAL
 -- Script DDL - Definição das Estruturas de Dados
 -- Ambiente: MySQL 8.0+ / MySQL Workbench
--- Autor: Projeto BD
--- =============================================================
+
 
 -- Criação e seleção do banco de dados
 DROP DATABASE IF EXISTS biblioteca_digital;
@@ -13,10 +11,8 @@ CREATE DATABASE biblioteca_digital
 
 USE biblioteca_digital;
 
--- =============================================================
 -- TABELA: Editora
 -- RF005 - Gestão de Editoras
--- =============================================================
 CREATE TABLE Editora (
     id_editora   INT            NOT NULL AUTO_INCREMENT,
     nome         VARCHAR(150)   NOT NULL,
@@ -24,12 +20,11 @@ CREATE TABLE Editora (
     CONSTRAINT pk_editora PRIMARY KEY (id_editora)
 ) ENGINE=InnoDB;
 
--- =============================================================
 -- TABELA: Livro
 -- RF001 - Gerenciamento de Acervo
 -- RN001 - ISBN como identificador único
 -- RN002 - Associado a uma única Editora
--- =============================================================
+
 CREATE TABLE Livro (
     isbn             VARCHAR(20)   NOT NULL,
     titulo           VARCHAR(300)  NOT NULL,          -- RN003: NOT NULL
@@ -43,21 +38,19 @@ CREATE TABLE Livro (
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- =============================================================
 -- TABELA: Autor
 -- RF001 - Gerenciamento de Acervo (autores)
 -- RN003 - Nome obrigatório
--- =============================================================
 CREATE TABLE Autor (
     id_autor  INT           NOT NULL AUTO_INCREMENT,
     nome      VARCHAR(200)  NOT NULL,                  -- RN003: NOT NULL
     CONSTRAINT pk_autor PRIMARY KEY (id_autor)
 ) ENGINE=InnoDB;
 
--- =============================================================
+
 -- TABELA: Livro_Autor  (tabela associativa)
 -- RN004 - Relacionamento N:M entre Livro e Autor
--- =============================================================
+
 CREATE TABLE Livro_Autor (
     isbn      VARCHAR(20)  NOT NULL,
     id_autor  INT          NOT NULL,
@@ -70,11 +63,10 @@ CREATE TABLE Livro_Autor (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- =============================================================
+
 -- TABELA: Exemplar
 -- RN103 - Rastreamento físico de cada exemplar do título
 -- Empréstimos e Reservas são feitos no nível do Exemplar
--- =============================================================
 CREATE TABLE Exemplar (
     id_exemplar        INT          NOT NULL AUTO_INCREMENT,
     isbn               VARCHAR(20)  NOT NULL,
@@ -87,11 +79,9 @@ CREATE TABLE Exemplar (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- =============================================================
 -- TABELA: Usuario
 -- RF002 - Registro de Usuários
 -- RN001 - Código de identificação único
--- =============================================================
 CREATE TABLE Usuario (
     id_usuario           INT           NOT NULL AUTO_INCREMENT,
     nome                 VARCHAR(200)  NOT NULL,       -- RN003: NOT NULL
@@ -102,13 +92,11 @@ CREATE TABLE Usuario (
     CONSTRAINT uq_usuario_numid    UNIQUE (numero_identificacao)
 ) ENGINE=InnoDB;
 
--- =============================================================
 -- TABELA: Emprestimo
 -- RF003 - Controle de Empréstimos
 -- RF004 - Controle de Devoluções (data_real_devolucao)
 -- RN002 - Integridade referencial com Usuário e Exemplar
 -- RN006 - data_prevista_devolucao > data_emprestimo (CHECK)
--- =============================================================
 CREATE TABLE Emprestimo (
     id_emprestimo            INT   NOT NULL AUTO_INCREMENT,
     id_exemplar              INT   NOT NULL,
@@ -131,12 +119,10 @@ CREATE TABLE Emprestimo (
         CHECK (data_real_devolucao IS NULL OR data_real_devolucao >= data_emprestimo)
 ) ENGINE=InnoDB;
 
--- =============================================================
 -- TABELA: Reserva
 -- RN101 - Entidade Reserva com status
 -- RN102 - Prioridade FIFO por data_reserva
 -- RN103 - Reservas no nível do Exemplar
--- =============================================================
 CREATE TABLE Reserva (
     id_reserva    INT       NOT NULL AUTO_INCREMENT,
     id_exemplar   INT       NOT NULL,
@@ -152,10 +138,9 @@ CREATE TABLE Reserva (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- =============================================================
+
 -- TABELA: Multa
 -- RC008 - Relatório de Inadimplência (multas acumuladas)
--- =============================================================
 CREATE TABLE Multa (
     id_multa       INT             NOT NULL AUTO_INCREMENT,
     id_emprestimo  INT             NOT NULL,
@@ -168,9 +153,8 @@ CREATE TABLE Multa (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- =============================================================
 -- ÍNDICES auxiliares para otimização de consultas
--- =============================================================
+
 CREATE INDEX idx_emprestimo_usuario   ON Emprestimo(id_usuario);
 CREATE INDEX idx_emprestimo_exemplar  ON Emprestimo(id_exemplar);
 CREATE INDEX idx_emprestimo_datas     ON Emprestimo(data_prevista_devolucao, data_real_devolucao);
