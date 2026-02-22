@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Esquema Relacional Lógico – Biblioteca Digital</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8fafc; color: #1e293b; padding: 32px; }
+  h1 { font-size: 1.6rem; color: #1e3a5f; text-align: center; margin-bottom: 4px; }
+  .sub { text-align: center; color: #64748b; font-size: 0.85rem; margin-bottom: 30px; }
+  h2 { font-size: 1rem; color: #334155; margin: 28px 0 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; }
+  .schema-block { background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 18px; overflow: hidden; }
+  .schema-title {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 16px;
+    font-weight: 700; font-size: 0.88rem;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.81rem; }
+  th { background: #f1f5f9; padding: 6px 12px; text-align: left; color: #475569; font-weight: 600; border-bottom: 1px solid #e2e8f0; }
+  td { padding: 5px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+  .pk  { display:inline-block; background:#fef08a; color:#854d0e; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px; margin-right:3px; }
+  .fk  { display:inline-block; background:#bfdbfe; color:#1e40af; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px; margin-right:3px; }
+  .nn  { display:inline-block; background:#bbf7d0; color:#14532d; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px; margin-right:3px; }
+  .uq  { display:inline-block; background:#e9d5ff; color:#581c87; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px; margin-right:3px; }
+  .chk { display:inline-block; background:#fed7aa; color:#9a3412; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px; margin-right:3px; }
+  .ref { font-size: 0.78rem; color: #2563eb; font-style: italic; }
+  .nota { font-size:0.8rem; color:#64748b; background:#f8fafc; padding: 8px 12px; border-left: 3px solid #3b82f6; margin: 10px 0; border-radius:0 6px 6px 0; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+  .card { background:#fff; border-radius:8px; padding: 12px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); font-size:0.8rem; }
+  .card strong { display:block; margin-bottom:4px; color:#1e40af; font-size:0.82rem; }
+  .legend { display:flex; flex-wrap:wrap; gap:10px; margin: 20px 0 10px; justify-content:center; font-size:0.75rem; }
+  .leg { display:flex; align-items:center; gap:5px; background:#fff; padding:3px 10px; border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,0.07); }
+  .leg-box { width:13px; height:13px; border-radius:2px; }
+  .mono { font-family: 'Courier New', monospace; }
+</style>
+</head>
+<body>
+
+<h1>Esquema Relacional Lógico</h1>
+<p class="sub">Sistema de Gerenciamento de Biblioteca Digital &nbsp;|&nbsp; 3ª Forma Normal (3FN)</p>
+
+<div class="legend">
+  <div class="leg"><span class="leg-box" style="background:#fef08a;border:1px solid #ca8a04"></span>PK – Chave Primária</div>
+  <div class="leg"><span class="leg-box" style="background:#bfdbfe;border:1px solid #3b82f6"></span>FK – Chave Estrangeira</div>
+  <div class="leg"><span class="leg-box" style="background:#bbf7d0;border:1px solid #22c55e"></span>NN – Not Null</div>
+  <div class="leg"><span class="leg-box" style="background:#e9d5ff;border:1px solid #a855f7"></span>UQ – Unique</div>
+  <div class="leg"><span class="leg-box" style="background:#fed7aa;border:1px solid #f97316"></span>CK – Check Constraint</div>
+</div>
+
+<!-- EDITORA -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#dbeafe;color:#1e40af;">📦 Editora</div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><b>id_editora</b></td><td class="mono">INT</td><td>AUTO_INCREMENT</td><td>Identificador único da editora</td></tr>
+    <tr><td><span class="nn">NN</span>nome</td><td class="mono">VARCHAR(150)</td><td>NOT NULL</td><td>Nome da editora</td></tr>
+    <tr><td>localizacao</td><td class="mono">VARCHAR(200)</td><td>—</td><td>Cidade/País da editora</td></tr>
+  </table>
+</div>
+
+<!-- LIVRO -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#dcfce7;color:#166534;">📚 Livro</div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><b>isbn</b></td><td class="mono">VARCHAR(20)</td><td>NOT NULL</td><td>ISBN único do título (RN001)</td></tr>
+    <tr><td><span class="nn">NN</span>titulo</td><td class="mono">VARCHAR(300)</td><td>NOT NULL</td><td>Título do livro (RN003)</td></tr>
+    <tr><td>ano_publicacao</td><td class="mono">YEAR</td><td>—</td><td>Ano de publicação</td></tr>
+    <tr><td>edicao</td><td class="mono">VARCHAR(20)</td><td>—</td><td>Número/descrição da edição</td></tr>
+    <tr><td><span class="fk">FK</span>id_editora</td><td class="mono">INT</td><td>NOT NULL, FK→Editora</td><td>Editora do livro (RN002)</td></tr>
+  </table>
+</div>
+
+<!-- AUTOR -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#f3e8ff;color:#6b21a8;">✍️ Autor</div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><b>id_autor</b></td><td class="mono">INT</td><td>AUTO_INCREMENT</td><td>Identificador único do autor (RN001)</td></tr>
+    <tr><td><span class="nn">NN</span>nome</td><td class="mono">VARCHAR(200)</td><td>NOT NULL</td><td>Nome completo do autor (RN003)</td></tr>
+  </table>
+</div>
+
+<!-- LIVRO_AUTOR -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#f5f5f4;color:#44403c;">🔗 Livro_Autor &nbsp;<small style="font-weight:400;font-size:0.75rem;">(tabela associativa – RN004: N:M)</small></div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><span class="fk">FK</span><b>isbn</b></td><td class="mono">VARCHAR(20)</td><td>FK→Livro(isbn)</td><td>Referência ao livro</td></tr>
+    <tr><td><span class="pk">PK</span><span class="fk">FK</span><b>id_autor</b></td><td class="mono">INT</td><td>FK→Autor(id_autor)</td><td>Referência ao autor</td></tr>
+  </table>
+  <p class="nota">Chave Primária composta: (isbn, id_autor). Implementa o relacionamento N:M entre Livro e Autor (RN004).</p>
+</div>
+
+<!-- EXEMPLAR -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#ccfbf1;color:#0f766e;">🏷️ Exemplar</div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><b>id_exemplar</b></td><td class="mono">INT</td><td>AUTO_INCREMENT</td><td>Identificador único do item físico</td></tr>
+    <tr><td><span class="fk">FK</span>isbn</td><td class="mono">VARCHAR(20)</td><td>NOT NULL, FK→Livro(isbn)</td><td>Título ao qual pertence (RN103)</td></tr>
+    <tr><td>numero_tombamento</td><td class="mono">VARCHAR(50)</td><td>—</td><td>Código de patrimônio físico</td></tr>
+    <tr><td>status</td><td class="mono">ENUM</td><td>DEFAULT 'Disponivel'</td><td>'Disponivel','Emprestado','Reservado','Extraviado'</td></tr>
+  </table>
+  <p class="nota">Entidade criada para atender RN103: rastreia cada exemplar físico de um título. Empréstimos e Reservas operam no nível do Exemplar.</p>
+</div>
+
+<!-- USUARIO -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#fee2e2;color:#991b1b;">👤 Usuario</div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><b>id_usuario</b></td><td class="mono">INT</td><td>AUTO_INCREMENT</td><td>Identificador único (RN001)</td></tr>
+    <tr><td><span class="nn">NN</span>nome</td><td class="mono">VARCHAR(200)</td><td>NOT NULL</td><td>Nome completo (RN003)</td></tr>
+    <tr><td><span class="uq">UQ</span>numero_identificacao</td><td class="mono">VARCHAR(50)</td><td>NOT NULL, UNIQUE</td><td>RA/matrícula/SIAPE único</td></tr>
+    <tr><td>status</td><td class="mono">ENUM</td><td>DEFAULT 'Ativo'</td><td>'Ativo','Inativo' (RF002)</td></tr>
+    <tr><td>tipo</td><td class="mono">ENUM</td><td>NOT NULL</td><td>'Aluno','Professor' (RF002)</td></tr>
+  </table>
+</div>
+
+<!-- EMPRESTIMO -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#ffedd5;color:#9a3412;">📋 Emprestimo</div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><b>id_emprestimo</b></td><td class="mono">INT</td><td>AUTO_INCREMENT</td><td>Identificador da transação</td></tr>
+    <tr><td><span class="fk">FK</span>id_exemplar</td><td class="mono">INT</td><td>NOT NULL, FK→Exemplar</td><td>Exemplar emprestado (RN002, RN103)</td></tr>
+    <tr><td><span class="fk">FK</span>id_usuario</td><td class="mono">INT</td><td>NOT NULL, FK→Usuario</td><td>Usuário que retirou (RN002)</td></tr>
+    <tr><td><span class="nn">NN</span>data_emprestimo</td><td class="mono">DATE</td><td>NOT NULL</td><td>Data da retirada (RF003)</td></tr>
+    <tr><td><span class="nn">NN</span><span class="chk">CK</span>data_prevista_devolucao</td><td class="mono">DATE</td><td>NOT NULL, > data_emprestimo</td><td>Prazo de devolução (RN006)</td></tr>
+    <tr><td>data_real_devolucao</td><td class="mono">DATE</td><td>NULL (default)</td><td>NULL = não devolvido. Preenchido na devolução (RF004)</td></tr>
+  </table>
+  <p class="nota"><span class="chk">CK</span> RN006 — CHECK: data_prevista_devolucao &gt; data_emprestimo</p>
+</div>
+
+<!-- RESERVA -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#e2e8f0;color:#334155;">🔖 Reserva</div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><b>id_reserva</b></td><td class="mono">INT</td><td>AUTO_INCREMENT</td><td>Identificador da reserva</td></tr>
+    <tr><td><span class="fk">FK</span>id_exemplar</td><td class="mono">INT</td><td>NOT NULL, FK→Exemplar</td><td>Exemplar reservado (RN103)</td></tr>
+    <tr><td><span class="fk">FK</span>id_usuario</td><td class="mono">INT</td><td>NOT NULL, FK→Usuario</td><td>Usuário que reservou</td></tr>
+    <tr><td><span class="nn">NN</span>data_reserva</td><td class="mono">DATETIME</td><td>NOT NULL, DEFAULT NOW()</td><td>Data/hora da reserva – base do FIFO (RN102)</td></tr>
+    <tr><td>status</td><td class="mono">ENUM</td><td>DEFAULT 'Ativa'</td><td>'Ativa','Cancelada','Atendida' (RN101)</td></tr>
+  </table>
+  <p class="nota">Prioridade FIFO implementada via ORDER BY data_reserva ASC nas consultas de fila (RC010).</p>
+</div>
+
+<!-- MULTA -->
+<div class="schema-block">
+  <div class="schema-title" style="background:#fee2e2;color:#991b1b;">💰 Multa</div>
+  <table>
+    <tr><th>Atributo</th><th>Tipo</th><th>Restrições</th><th>Descrição</th></tr>
+    <tr><td><span class="pk">PK</span><b>id_multa</b></td><td class="mono">INT</td><td>AUTO_INCREMENT</td><td>Identificador da multa</td></tr>
+    <tr><td><span class="fk">FK</span>id_emprestimo</td><td class="mono">INT</td><td>NOT NULL, FK→Emprestimo</td><td>Empréstimo gerador da multa</td></tr>
+    <tr><td><span class="nn">NN</span><span class="chk">CK</span>valor</td><td class="mono">DECIMAL(10,2)</td><td>NOT NULL, ≥ 0</td><td>Valor em reais da multa (RC008)</td></tr>
+    <tr><td>pago</td><td class="mono">TINYINT(1)</td><td>DEFAULT 0</td><td>0=pendente, 1=pago</td></tr>
+    <tr><td>data_geracao</td><td class="mono">DATE</td><td>DEFAULT CURRENT_DATE</td><td>Data de emissão da multa</td></tr>
+  </table>
+</div>
+
+<h2>Relacionamentos e Cardinalidades</h2>
+<div class="card-grid">
+  <div class="card"><strong>Editora → Livro (1:N)</strong>Uma editora publica muitos livros. Um livro pertence a exatamente uma editora. FK: Livro.id_editora → Editora.id_editora</div>
+  <div class="card"><strong>Livro ↔ Autor (N:M)</strong>Um livro pode ter múltiplos autores; um autor pode escrever múltiplos livros (RN004). Implementado via Livro_Autor.</div>
+  <div class="card"><strong>Livro → Exemplar (1:N)</strong>Um título pode ter vários exemplares físicos (RN103). FK: Exemplar.isbn → Livro.isbn</div>
+  <div class="card"><strong>Exemplar → Emprestimo (1:N)</strong>Um exemplar pode ter vários empréstimos ao longo do tempo. FK: Emprestimo.id_exemplar → Exemplar.id_exemplar</div>
+  <div class="card"><strong>Usuario → Emprestimo (1:N)</strong>Um usuário pode fazer vários empréstimos. FK: Emprestimo.id_usuario → Usuario.id_usuario</div>
+  <div class="card"><strong>Exemplar → Reserva (1:N)</strong>Um exemplar pode ter várias reservas (fila). FK: Reserva.id_exemplar → Exemplar.id_exemplar</div>
+  <div class="card"><strong>Usuario → Reserva (1:N)</strong>Um usuário pode reservar vários exemplares. FK: Reserva.id_usuario → Usuario.id_usuario</div>
+  <div class="card"><strong>Emprestimo → Multa (1:N)</strong>Um empréstimo pode gerar múltiplas multas. FK: Multa.id_emprestimo → Emprestimo.id_emprestimo</div>
+</div>
+
+<h2>Normalização – Justificativa 3FN</h2>
+<div class="nota" style="margin-top:8px; font-size:0.82rem; line-height:1.7;">
+  <b>1FN</b> – Todos os atributos são atômicos (sem grupos repetitivos). A relação N:M Livro↔Autor foi decomposta em Livro_Autor.<br>
+  <b>2FN</b> – Todos os atributos não-chave dependem funcionalmente da chave primária inteira. Em Livro_Autor, não há atributos não-chave; em Emprestimo, todos dependem de id_emprestimo.<br>
+  <b>3FN</b> – Não existem dependências funcionais transitivas. Ex.: localização da editora foi separada para a tabela Editora (não fica em Livro). Status e tipo do usuário dependem apenas de id_usuario.
+</div>
+
+</body>
+</html>
