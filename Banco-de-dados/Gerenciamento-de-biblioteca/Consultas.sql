@@ -1,16 +1,13 @@
--- =============================================================
 -- SISTEMA DE GERENCIAMENTO DE BIBLIOTECA DIGITAL
 -- Script de Consultas SQL - RC001 a RC010
 -- Ambiente: MySQL 8.0+ / MySQL Workbench
--- =============================================================
 
 USE biblioteca_digital;
 
--- ---------------------------------------------------------------
+
 -- RC001 - LIVROS EM ATRASO
 -- Lista: Nome do Usuário, Título do Livro, Dias de Atraso
 -- Critério: data_prevista_devolucao < CURDATE() e não devolvido
--- ---------------------------------------------------------------
 SELECT
     u.nome                                              AS nome_usuario,
     l.titulo                                            AS titulo_livro,
@@ -30,11 +27,9 @@ ORDER BY
     dias_atraso DESC;
 
 
--- ---------------------------------------------------------------
 -- RC002 - ANÁLISE DE ACERVO
 -- Retorna: Nome da Editora e Total de Livros (títulos únicos)
 -- Ordenado do maior para o menor
--- ---------------------------------------------------------------
 SELECT
     ed.nome                  AS nome_editora,
     COUNT(l.isbn)            AS total_livros
@@ -47,11 +42,9 @@ ORDER BY
     total_livros DESC;
 
 
--- ---------------------------------------------------------------
 -- RC003 - DISPONIBILIDADE
 -- Lista todos os títulos de livros NÃO emprestados atualmente
 -- (considera: todos os exemplares disponíveis)
--- ---------------------------------------------------------------
 -- Versão 1: usando NOT IN (subquery)
 SELECT DISTINCT
     l.isbn,
@@ -71,30 +64,9 @@ WHERE
 ORDER BY
     l.titulo;
 
--- Versão 2 (alternativa com NOT EXISTS):
-SELECT DISTINCT
-    l.isbn,
-    l.titulo
-FROM
-    Livro l
-    INNER JOIN Exemplar ex ON l.isbn = ex.isbn
-WHERE
-    NOT EXISTS (
-        SELECT 1
-        FROM   Emprestimo e
-        WHERE  e.id_exemplar       = ex.id_exemplar
-          AND  e.data_real_devolucao IS NULL
-    )
-ORDER BY
-    l.titulo;
-
-
--- ---------------------------------------------------------------
 -- RC004 - TRANSAÇÕES POR USUÁRIO
 -- Lista livros emprestados por um determinado usuário
 -- incluindo status: 'Devolvido' ou 'Emprestado'
--- Substitua o valor 1 pelo id_usuario desejado
--- ---------------------------------------------------------------
 SELECT
     u.nome                      AS nome_usuario,
     l.titulo                    AS titulo_livro,
@@ -116,11 +88,8 @@ WHERE
 ORDER BY
     e.data_emprestimo DESC;
 
-
--- ---------------------------------------------------------------
 -- RC005 - CRIAÇÃO DE VISÃO (VIEW)
 -- V_EmprestimosAtivos: exibe apenas empréstimos não devolvidos
--- ---------------------------------------------------------------
 DROP VIEW IF EXISTS V_EmprestimosAtivos;
 
 CREATE VIEW V_EmprestimosAtivos AS
@@ -150,8 +119,6 @@ WHERE
 -- Consultar a VIEW:
 SELECT * FROM V_EmprestimosAtivos ORDER BY dias_atraso DESC;
 
-
--- ---------------------------------------------------------------
 -- RC006 - IMPLEMENTAÇÃO DE ÁLGEBRA RELACIONAL
 -- Expressão:
 --   Π_Nome,Titulo ( σ_Ano>2020 ( Usuário ⋈ Empréstimo ⋈ Livro ) )
@@ -159,7 +126,6 @@ SELECT * FROM V_EmprestimosAtivos ORDER BY dias_atraso DESC;
 -- Tradução: Projeção de Nome e Título sobre a seleção onde
 -- o ano de publicação do livro é > 2020, após junção natural
 -- das entidades Usuário, Empréstimo e Livro.
--- ---------------------------------------------------------------
 SELECT DISTINCT
     u.nome   AS nome_usuario,
     l.titulo AS titulo_livro
@@ -173,11 +139,8 @@ WHERE
 ORDER BY
     u.nome, l.titulo;
 
-
--- ---------------------------------------------------------------
 -- RC007 - RANKING DE LIVROS
 -- Livros mais emprestados nos últimos 6 meses
--- ---------------------------------------------------------------
 SELECT
     l.isbn,
     l.titulo                            AS titulo_livro,
@@ -195,10 +158,8 @@ ORDER BY
 LIMIT 10;
 
 
--- ---------------------------------------------------------------
 -- RC008 - RELATÓRIO DE INADIMPLÊNCIA
 -- Nome do Usuário e Valor Total de Multas Acumuladas (pagas ou não)
--- ---------------------------------------------------------------
 SELECT
     u.id_usuario,
     u.nome                          AS nome_usuario,
@@ -216,10 +177,8 @@ ORDER BY
     total_multas_acumuladas DESC;
 
 
--- ---------------------------------------------------------------
 -- RC009 - LISTAR RESERVAS PENDENTES
 -- Livros com Reservas Ativas: Título e Quantidade na Fila
--- ---------------------------------------------------------------
 SELECT
     l.isbn,
     l.titulo                        AS titulo_livro,
@@ -236,11 +195,9 @@ ORDER BY
     quantidade_na_fila DESC;
 
 
--- ---------------------------------------------------------------
 -- RC010 - PRÓXIMO NA FILA
 -- Para um dado ISBN, o usuário em 1ª posição (FIFO por data_reserva)
 -- Substitua o ISBN pelo desejado
--- ---------------------------------------------------------------
 SELECT
     u.nome                   AS nome_usuario,
     u.numero_identificacao,
