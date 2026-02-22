@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DER – Sistema de Gerenciamento de Biblioteca Digital</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #E8EDF4;
+    padding: 28px 20px 40px;
+    min-height: 100vh;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #1E3A5F;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+  }
+  .sub {
+    text-align: center;
+    font-size: 0.80rem;
+    color: #64748B;
+    margin-bottom: 26px;
+  }
+  .wrap { overflow-x: auto; padding-bottom: 12px; }
+
+  /* ── Canvas ── */
+  .canvas {
+    position: relative;
+    width: 1250px;
+    height: 1024px;
+    background: #F8FAFC;
+    border-radius: 18px;
+    box-shadow: 0 6px 32px rgba(30,58,95,.13), 0 1px 4px rgba(30,58,95,.08);
+    margin: 0 auto;
+  }
+
+  /* ── SVG layer for lines ── */
+  svg.lines {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  /* ── Entity cards ── */
+  .entity {
+    position: absolute;
+    border-radius: 10px;
+    box-shadow: 0 2px 14px rgba(0,0,0,.12);
+    z-index: 2;
+  }
+  .entity-header {
+    border-radius: 10px 10px 0 0;
+    padding: 8px 13px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.73rem;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .entity-body {
+    border-radius: 0 0 10px 10px;
+    background: #fff;
+    border: 1.5px solid;
+    border-top: none;
+  }
+  .attr {
+    padding: 4px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.70rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #334155;
+    white-space: nowrap;
+  }
+  .attr:last-child { border-bottom: none; }
+  .tag {
+    font-size: 0.57rem;
+    font-weight: 600;
+    padding: 1px 4px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .pk  { background: #FEF08A; color: #854D0E; }
+  .fk  { background: #BFDBFE; color: #1E40AF; }
+  .nn  { background: #BBF7D0; color: #14532D; }
+  .uq  { background: #E9D5FF; color: #581C87; }
+  .ck  { background: #FED7AA; color: #9A3412; }
+
+  /* Color themes */
+  .blue   .entity-header { background: #1E40AF; } .blue   .entity-body { border-color: #1E40AF; }
+  .green  .entity-header { background: #166534; } .green  .entity-body { border-color: #166534; }
+  .purple .entity-header { background: #6B21A8; } .purple .entity-body { border-color: #6B21A8; }
+  .red    .entity-header { background: #9F1239; } .red    .entity-body { border-color: #9F1239; }
+  .teal   .entity-header { background: #0F766E; } .teal   .entity-body { border-color: #0F766E; }
+  .orange .entity-header { background: #9A3412; } .orange .entity-body { border-color: #9A3412; }
+  .slate  .entity-header { background: #334155; } .slate  .entity-body { border-color: #334155; }
+  .crimson .entity-header { background: #881337; } .crimson .entity-body { border-color: #881337; }
+
+  /* Associative table (N:M) */
+  .assoc .entity-header { background: #57534E; }
+  .assoc .entity-body   { border-color: #57534E; border-style: dashed; border-width: 2px; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .leg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.73rem;
+    color: #475569;
+    background: #fff;
+    padding: 5px 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .leg-box { width: 13px; height: 13px; border-radius: 3px; flex-shrink: 0; }
+  .note {
+    text-align: center;
+    font-size: 0.68rem;
+    color: #94A3B8;
+    margin-top: 10px;
+  }
+
+  /* Line label tags in SVG */
+  .lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    fill: #334155;
+  }
+  .lbl-bg {
+    fill: #F8FAFC;
+    rx: 3;
+  }
+</style>
+</head>
+<body>
+
+<h1>Diagrama Entidade-Relacionamento (DER/MER)</h1>
+<p class="sub">Sistema de Gerenciamento de Biblioteca Digital &nbsp;|&nbsp; Terceira Forma Normal (3FN)</p>
+
+<div class="wrap">
+<div class="canvas">
+
+<!--
+  ══════════════════════════════════════════════════════════════
+  LAYOUT — posições absolutas calculadas para evitar cruzamentos
+  ══════════════════════════════════════════════════════════════
+
+  LINHA 1 (y=50):
+    Editora     x=20,  w=190, h=114  → right=(210,107)
+    Livro       x=260, w=200, h=166  → left=(260,133) right=(460,133) bottom=(360,216)
+    LivroAutor  x=510, w=200, h=88   → left=(510,94)  right=(710,94)
+    Autor       x=760, w=180, h=88   → left=(760,94)
+    Usuario     x=990, w=205, h=166  → bottom-ctr=(1092,216) pt-A=(1082,216) pt-B=(1042,216)
+
+  LINHA 2 (y=320):
+    Exemplar    x=20,  w=195, h=140  → right=(215,390) bottom=(117,460)
+
+  LINHA 3 (y=540):
+    Emprestimo  x=260, w=210, h=192  → top=(365,540) right=(470,636) bottom=(365,732)
+    Reserva     x=850, w=205, h=166  → left=(850,623) top=(952,540)
+
+  LINHA 4 (y=830):
+    Multa       x=260, w=200, h=166  → top=(360,830)
+
+  CONEXÕES (todas verificadas sem cruzamentos):
+  1  Editora→Livro        M210,107 L235,107 L235,133 L260,133
+  2  Livro→LivroAutor     M460,133 L485,133 L485,94 L510,94
+  3  Autor→LivroAutor     M760,94 L710,94
+  4  Livro→Exemplar       M360,216 L360,268 L117,268 L117,320
+  5  Exemplar→Emprestimo  M117,460 L117,500 L365,500 L365,540
+  6  Exemplar→Reserva     M215,390 L815,390 L815,623 L850,623   [linha alternativa dashed]
+  7  Usuario→Emprestimo   M1082,216 L1082,775 L560,775 L560,636 L470,636  [dashed]
+  8  Usuario→Reserva      M1042,216 L1042,512 L952,512 L952,540
+  9  Emprestimo→Multa     M365,732 L360,830
+  ══════════════════════════════════════════════════════════════
+-->
+
+<svg class="lines">
+<defs>
+  <!-- Seta padrão (cinza) -->
+  <marker id="arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+    <polygon points="0 0, 9 3.5, 0 7" fill="#94A3B8"/>
+  </marker>
+  <!-- Seta azul para linhas alternativas -->
+  <marker id="arr-blue" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+    <polygon points="0 0, 9 3.5, 0 7" fill="#6B7280"/>
+  </marker>
+  <!-- Tick de cardinalidade "1" -->
+  <marker id="tick" markerWidth="6" markerHeight="14" refX="3" refY="7" orient="auto">
+    <line x1="3" y1="1" x2="3" y2="13" stroke="#94A3B8" stroke-width="2"/>
+  </marker>
+</defs>
+
+<!-- ─── Estilo comum ─── -->
+<!-- stroke="#94A3B8" stroke-width="2" fill="none" -->
+
+<!-- ══════════════════════════════════
+     LINHA 1: Editora → Livro  (1:N)
+     ══════════════════════════════════ -->
+<path d="M210,107 L235,107 L235,133 L260,133"
+      stroke="#94A3B8" stroke-width="2" fill="none"
+      marker-start="url(#tick)" marker-end="url(#arr)"/>
+<rect x="214" y="93" width="26" height="16" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="227" y="105" text-anchor="middle" class="lbl">1:N</text>
+
+<!-- ══════════════════════════════════
+     LINHA 2: Livro → LivroAutor  (1:N)
+     ══════════════════════════════════ -->
+<path d="M460,133 L485,133 L485,94 L510,94"
+      stroke="#94A3B8" stroke-width="2" fill="none"
+      marker-start="url(#tick)" marker-end="url(#arr)"/>
+<rect x="460" y="107" width="26" height="16" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="473" y="119" text-anchor="middle" class="lbl">1:N</text>
+
+<!-- ══════════════════════════════════
+     LINHA 3: Autor → LivroAutor  (1:N)
+     ══════════════════════════════════ -->
+<path d="M760,94 L710,94"
+      stroke="#94A3B8" stroke-width="2" fill="none"
+      marker-start="url(#tick)" marker-end="url(#arr)"/>
+<rect x="720" y="81" width="26" height="16" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="733" y="93" text-anchor="middle" class="lbl">1:N</text>
+
+<!-- ══════════════════════════════════
+     LINHA 4: Livro → Exemplar  (1:N)
+     ══════════════════════════════════ -->
+<path d="M360,216 L360,268 L117,268 L117,320"
+      stroke="#94A3B8" stroke-width="2" fill="none"
+      marker-start="url(#tick)" marker-end="url(#arr)"/>
+<rect x="218" y="254" width="26" height="16" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="231" y="266" text-anchor="middle" class="lbl">1:N</text>
+
+<!-- ══════════════════════════════════
+     LINHA 5: Exemplar → Emprestimo  (1:N)
+     ══════════════════════════════════ -->
+<path d="M117,460 L117,500 L365,500 L365,540"
+      stroke="#94A3B8" stroke-width="2" fill="none"
+      marker-start="url(#tick)" marker-end="url(#arr)"/>
+<rect x="215" y="486" width="26" height="16" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="228" y="498" text-anchor="middle" class="lbl">1:N</text>
+
+<!-- ══════════════════════════════════════════════════════════
+     LINHA 6: Exemplar → Reserva  (1:N)
+     Rota: direita ao longo de y=390, depois desce até Reserva
+     Verificado: não cruza nenhuma entidade nem outra linha
+     ══════════════════════════════════════════════════════════ -->
+<path d="M215,390 L815,390 L815,623 L850,623"
+      stroke="#64748B" stroke-width="2" fill="none" stroke-dasharray="7,4"
+      marker-start="url(#tick)" marker-end="url(#arr-blue)"/>
+<!-- etiqueta no meio da horizontal -->
+<rect x="495" y="376" width="26" height="16" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1"/>
+<text x="508" y="388" text-anchor="middle" class="lbl">1:N</text>
+<!-- Indicação de origem/destino -->
+<text x="226" y="386" font-family="IBM Plex Mono,monospace" font-size="9" fill="#94A3B8">Exemplar</text>
+<text x="820" y="614" font-family="IBM Plex Mono,monospace" font-size="9" fill="#94A3B8">Reserva</text>
+
+<!-- ══════════════════════════════════════════════════════════
+     LINHA 7: Usuario → Emprestimo  (1:N)
+     Rota: desce por fora à direita, passa ABAIXO de Reserva,
+           vai para a esquerda, sobe até Emprestimo.right
+     Verificado: não cruza Linha 6 nem nenhuma entidade
+     ══════════════════════════════════════════════════════════ -->
+<path d="M1082,216 L1082,775 L560,775 L560,636 L470,636"
+      stroke="#64748B" stroke-width="2" fill="none" stroke-dasharray="7,4"
+      marker-start="url(#tick)" marker-end="url(#arr-blue)"/>
+<!-- etiqueta no trecho horizontal inferior -->
+<rect x="798" y="761" width="26" height="16" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1"/>
+<text x="811" y="773" text-anchor="middle" class="lbl">1:N</text>
+<text x="1087" y="496" font-family="IBM Plex Mono,monospace" font-size="9" fill="#94A3B8">Usuario</text>
+<text x="475" y="627" font-family="IBM Plex Mono,monospace" font-size="9" fill="#94A3B8">Emprestimo</text>
+
+<!-- ══════════════════════════════════
+     LINHA 8: Usuario → Reserva  (1:N)
+     Rota: sai do fundo de Usuario, desce direto à Reserva
+     ══════════════════════════════════ -->
+<path d="M1042,216 L1042,512 L952,512 L952,540"
+      stroke="#94A3B8" stroke-width="2" fill="none"
+      marker-start="url(#tick)" marker-end="url(#arr)"/>
+<rect x="1048" y="358" width="26" height="16" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="1061" y="370" text-anchor="middle" class="lbl">1:N</text>
+
+<!-- ══════════════════════════════════
+     LINHA 9: Emprestimo → Multa  (1:N)
+     ══════════════════════════════════ -->
+<path d="M365,732 L360,830"
+      stroke="#94A3B8" stroke-width="2" fill="none"
+      marker-start="url(#tick)" marker-end="url(#arr)"/>
+<rect x="370" y="774" width="26" height="16" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+<text x="383" y="786" text-anchor="middle" class="lbl">1:N</text>
+
+</svg>
+
+<!-- ══════════════════════════
+     ENTIDADES
+     ══════════════════════════ -->
+
+<!-- EDITORA  x=20, y=50, w=190 -->
+<div class="entity blue" style="left:20px; top:50px; width:190px;">
+  <div class="entity-header">📦 Editora</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span>id_editora</div>
+    <div class="attr"><span class="tag nn">NN</span>nome</div>
+    <div class="attr">localizacao</div>
+  </div>
+</div>
+
+<!-- LIVRO  x=260, y=50, w=200 -->
+<div class="entity green" style="left:260px; top:50px; width:200px;">
+  <div class="entity-header">📚 Livro</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span>isbn</div>
+    <div class="attr"><span class="tag nn">NN</span>titulo</div>
+    <div class="attr">ano_publicacao</div>
+    <div class="attr">edicao</div>
+    <div class="attr"><span class="tag fk">FK</span>id_editora</div>
+  </div>
+</div>
+
+<!-- LIVRO_AUTOR  x=510, y=50, w=200 -->
+<div class="entity assoc" style="left:510px; top:50px; width:200px;">
+  <div class="entity-header">🔗 Livro_Autor (N:M)</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span><span class="tag fk">FK</span>isbn</div>
+    <div class="attr"><span class="tag pk">PK</span><span class="tag fk">FK</span>id_autor</div>
+  </div>
+</div>
+
+<!-- AUTOR  x=760, y=50, w=180 -->
+<div class="entity purple" style="left:760px; top:50px; width:180px;">
+  <div class="entity-header">✍️ Autor</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span>id_autor</div>
+    <div class="attr"><span class="tag nn">NN</span>nome</div>
+  </div>
+</div>
+
+<!-- USUARIO  x=990, y=50, w=205 -->
+<div class="entity red" style="left:990px; top:50px; width:205px;">
+  <div class="entity-header">👤 Usuario</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span>id_usuario</div>
+    <div class="attr"><span class="tag nn">NN</span>nome</div>
+    <div class="attr"><span class="tag uq">UQ</span>num_identificacao</div>
+    <div class="attr">status (ENUM)</div>
+    <div class="attr">tipo (ENUM)</div>
+  </div>
+</div>
+
+<!-- EXEMPLAR  x=20, y=320, w=195 -->
+<div class="entity teal" style="left:20px; top:320px; width:195px;">
+  <div class="entity-header">🏷️ Exemplar</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span>id_exemplar</div>
+    <div class="attr"><span class="tag fk">FK</span>isbn</div>
+    <div class="attr">num_tombamento</div>
+    <div class="attr">status (ENUM)</div>
+  </div>
+</div>
+
+<!-- EMPRESTIMO  x=260, y=540, w=210 -->
+<div class="entity orange" style="left:260px; top:540px; width:210px;">
+  <div class="entity-header">📋 Emprestimo</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span>id_emprestimo</div>
+    <div class="attr"><span class="tag fk">FK</span>id_exemplar</div>
+    <div class="attr"><span class="tag fk">FK</span>id_usuario</div>
+    <div class="attr"><span class="tag nn">NN</span>data_emprestimo</div>
+    <div class="attr"><span class="tag nn ck">NN·CK</span>data_prev_dev.</div>
+    <div class="attr">data_real_dev.</div>
+  </div>
+</div>
+
+<!-- RESERVA  x=850, y=540, w=205 -->
+<div class="entity slate" style="left:850px; top:540px; width:205px;">
+  <div class="entity-header">🔖 Reserva</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span>id_reserva</div>
+    <div class="attr"><span class="tag fk">FK</span>id_exemplar</div>
+    <div class="attr"><span class="tag fk">FK</span>id_usuario</div>
+    <div class="attr"><span class="tag nn">NN</span>data_reserva</div>
+    <div class="attr">status (ENUM)</div>
+  </div>
+</div>
+
+<!-- MULTA  x=260, y=830, w=200 -->
+<div class="entity crimson" style="left:260px; top:830px; width:200px;">
+  <div class="entity-header">💰 Multa</div>
+  <div class="entity-body">
+    <div class="attr"><span class="tag pk">PK</span>id_multa</div>
+    <div class="attr"><span class="tag fk">FK</span>id_emprestimo</div>
+    <div class="attr"><span class="tag nn">NN</span>valor</div>
+    <div class="attr">pago (BOOL)</div>
+    <div class="attr">data_geracao</div>
+  </div>
+</div>
+
+</div><!-- /canvas -->
+</div><!-- /wrap -->
+
+<!-- ══════════════════════════
+     LEGENDA
+     ══════════════════════════ -->
+<div class="legend">
+  <div class="leg"><span class="leg-box" style="background:#FEF08A;border:1px solid #CA8A04;"></span>PK – Chave Primária</div>
+  <div class="leg"><span class="leg-box" style="background:#BFDBFE;border:1px solid #3B82F6;"></span>FK – Chave Estrangeira</div>
+  <div class="leg"><span class="leg-box" style="background:#BBF7D0;border:1px solid #22C55E;"></span>NN – Not Null</div>
+  <div class="leg"><span class="leg-box" style="background:#E9D5FF;border:1px solid #A855F7;"></span>UQ – Unique</div>
+  <div class="leg"><span class="leg-box" style="background:#FED7AA;border:1px solid #F97316;"></span>CK – Check Constraint</div>
+  <div class="leg">
+    <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#94A3B8" stroke-width="2"/></svg>
+    Relação 1:N direta
+  </div>
+  <div class="leg">
+    <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#64748B" stroke-width="2" stroke-dasharray="6,3"/></svg>
+    Relação 1:N roteada (FK cruzada)
+  </div>
+  <div class="leg"><span class="leg-box" style="background:#57534E;border:1px dashed #57534E;"></span>Tabela Associativa N:M</div>
+</div>
+<p class="note">
+  Linhas sólidas = relações diretas &nbsp;|&nbsp;
+  Linhas tracejadas = FKs de Exemplar e Usuario para Emprestimo/Reserva (roteadas sem cruzamento) &nbsp;|&nbsp;
+  Seta aponta para a entidade filho (lado N) &nbsp;|&nbsp;
+  Traço aponta para a entidade pai (lado 1)
+</p>
+
+</body>
+</html>
