@@ -1,0 +1,7 @@
+nome_usuario,titulo_livro,tombamento,data_emprestimo,data_prevista_devolucao,dias_atraso
+"Diego Rafael Souza","MySQL: Guia do Desenvolvedor",TOMB-0008,2024-12-01,2024-12-15,434
+"Ana Paula Ferreira","Sistemas de Banco de Dados",TOMB-0001,2025-01-05,2025-01-19,399
+"Bruno Henrique Costa","Introdução à Álgebra Relacional",TOMB-0005,2025-01-10,2025-01-24,394
+"Carla Dias Mendonça","Learning SQL",TOMB-0007,2025-01-15,2025-01-29,389
+"Isabela Cristina Nunes","SQL e Modelagem de Dados",TOMB-0011,2025-01-20,2025-02-03,384
+"João Pedro Matos","Python for Data Analysis",TOMB-0017,2025-02-01,2025-02-15,372

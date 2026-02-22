@@ -1,0 +1,7 @@
+id_emprestimo,id_usuario,nome_usuario,tipo_usuario,isbn,titulo_livro,numero_tombamento,data_emprestimo,data_prevista_devolucao,dias_atraso,situacao
+4,4,"Diego Rafael Souza",Aluno,978-8535281064,"MySQL: Guia do Desenvolvedor",TOMB-0008,2024-12-01,2024-12-15,434,"Em Atraso"
+1,1,"Ana Paula Ferreira",Aluno,978-8543004792,"Sistemas de Banco de Dados",TOMB-0001,2025-01-05,2025-01-19,399,"Em Atraso"
+2,2,"Bruno Henrique Costa",Aluno,978-8576050568,"Introdução à Álgebra Relacional",TOMB-0005,2025-01-10,2025-01-24,394,"Em Atraso"
+3,3,"Carla Dias Mendonça",Aluno,978-1492056348,"Learning SQL",TOMB-0007,2025-01-15,2025-01-29,389,"Em Atraso"
+13,9,"Isabela Cristina Nunes",Aluno,978-8575227244,"SQL e Modelagem de Dados",TOMB-0011,2025-01-20,2025-02-03,384,"Em Atraso"
+7,10,"João Pedro Matos",Aluno,978-1491950357,"Python for Data Analysis",TOMB-0017,2025-02-01,2025-02-15,372,"Em Atraso"

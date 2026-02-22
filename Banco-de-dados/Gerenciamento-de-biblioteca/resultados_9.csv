@@ -1,0 +1,7 @@
+id_usuario,nome_usuario,tipo_usuario,total_multas_acumuladas,multas_pagas,multas_pendentes
+4,"Diego Rafael Souza",Aluno,72.00,0.00,72.00
+1,"Ana Paula Ferreira",Aluno,37.00,0.00,37.00
+2,"Bruno Henrique Costa",Aluno,32.00,0.00,32.00
+3,"Carla Dias Mendonça",Aluno,27.00,0.00,27.00
+9,"Isabela Cristina Nunes",Aluno,22.00,0.00,22.00
+6,"Prof. Fernando Alves",Professor,0.00,0.00,0.00
