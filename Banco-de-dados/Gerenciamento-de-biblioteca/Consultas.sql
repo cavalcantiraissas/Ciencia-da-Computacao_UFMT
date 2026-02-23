@@ -1,6 +1,6 @@
 -- SISTEMA DE GERENCIAMENTO DE BIBLIOTECA DIGITAL
 -- Script de Consultas SQL - RC001 a RC010
--- Ambiente: MySQL 8.0+ / MySQL Workbench
+-- Ambiente: MySQL 8.0+ | MySQL Workbench
 
 USE biblioteca_digital;
 
