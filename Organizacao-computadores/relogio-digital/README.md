@@ -157,4 +157,3 @@ UART recebe byte
 - A contagem de tempo ocorre exclusivamente por interrupção (não por polling)
 - A recepção de caracteres da UART ocorre exclusivamente por interrupção
 - O loop principal apenas reage a flags levantadas pelas ISRs
-
