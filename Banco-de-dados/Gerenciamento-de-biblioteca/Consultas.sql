@@ -3,7 +3,7 @@
 -- Ambiente: MySQL 8.0+ | MySQL Workbench
 
 USE biblioteca_digital;
-
+  
 
 -- RC001 - LIVROS EM ATRASO
 -- Lista: Nome do Usuário, Título do Livro, Dias de Atraso
