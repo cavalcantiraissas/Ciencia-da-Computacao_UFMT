@@ -1,8 +1,8 @@
-# Relógio Digital — RISC-V Bare Metal
+# Relógio Digital - RISC-V Bare Metal
 
 > Implementação de um relógio digital em **Assembly RISC-V RV32IMA**, executando diretamente sobre o hardware emulado pelo **QEMU virt**, sem sistema operacional, sem bibliotecas externas.
 
-**Disciplina:** Organização de Computadores — UFMT  
+**Disciplina:** Organização de Computadores - UFMT  
 **Alunos:** Raissa Cavalcanti e Luiz Torres  
 **Professor:** Linder Cândido
 
