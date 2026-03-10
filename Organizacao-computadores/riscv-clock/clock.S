@@ -26,7 +26,7 @@
 .equ LSR_DR,       0x01        # Conferir se há dado para ser lido
 .equ LSR_THRE,     0x20        # Verificar se UART terminou de enviar o caractere
 
-# PLIC - enderecos absolutos para hart0 M-mode
+# PLIC - "Gerente central" de interrupções - Recebe pedidos externos e organiza
 # UART0 = IRQ 10 no QEMU virt
 .equ PLIC_PRIORITY, 0x0C000000  # Nivel de importancia de cada interrupcao
 .equ PLIC_ENABLE,   0x0C002000  # Chave para cada fonte de interrupção 
@@ -34,21 +34,23 @@
 .equ PLIC_CLAIM,    0x0C200004  # claim/complete
 .equ UART_IRQ,      10
 
-# CLINT - Gerar interrupções no timer
+# CLINT - Gerar interrupções no timer || Relogio de pulso interno do processador
 .equ MTIME_LO,     0x0200BFF8 # Parte baixa
 .equ MTIME_HI,     0x0200BFFC # Parte alta
 .equ MTIMECMP_LO,  0x02004000 # "Despertador" do processador
 .equ MTIMECMP_HI,  0x02004004 # MTIME = MTIMECMP hardware dispara
 .equ TIMER_HZ,     10000000    # 10 MHz = 1 segundo
 
-# mcause values para RV32 (bit 31 = interrupt)
-.equ CAUSE_TIMER,    0x80000007
-.equ CAUSE_EXTERNAL, 0x8000000B
+# mcause values para RV32 (bit 31 = interrupt) - Painel de identificacao do processador
+.equ CAUSE_TIMER,    0x80000007 # Tempo acabou - Vem do Clint
+.equ CAUSE_EXTERNAL, 0x8000000B # Vem do plic
 
-# CSR bits
+# CSR bits - Interruptores
 .equ MIE_MTIE,    (1 << 7)  # Interrompe o processador a cada 1s
 .equ MIE_MEIE,    (1 << 11) # Permite que disp. ext. interrompam o processador
 .equ MSTATUS_MIE, (1 << 3) # "Chave Geral" -> Se estiver desligada, nada funciona.
+
+# Sistema configura. Liga os bits 7 e 11 em MIE e o 3 em mstatus. 
 
 # Organização da memória RAM
 # PILHA 
@@ -82,9 +84,12 @@ str_err:
 .section .text
 .global _start
 
+
+# Garantir inicialização segura e odernada. Infraestrutura da memória, como lidar com eventos,
+# configuração dos periféricos (UART/PLIC) e ligação das interrupções globais
 _start:
 
-    # PASSO 1: pilha
+    # PASSO 1: pilha - processador "anota" coisas temporariamente
     la      sp, stack_top # Aponta o sp para o topo da memória
 
     # PASSO 2: trap handler
@@ -94,20 +99,20 @@ _start:
     # PASSO 3: UART - habilita interrupcao de dado recebido 
     li      t0, UART_BASE
     li      t1, 1
-    sb      t1, UART_IER(t0)
+    sb      t1, UART_IER(t0) 
 
     # PASSO 4: PLIC - seta prioridade da IRQ 10 (UART0) para 1
     li      t0, PLIC_PRIORITY
     li      t1, UART_IRQ
-    slli    t1, t1, 2           
-    add     t0, t0, t1
-    li      t2, 1
-    sw      t2, 0(t0)
+    slli    t1, t1, 2    # cada prioridade ocupa 4bytes (10x4)       
+    add     t0, t0, t1 # Deslocamento do endereço base
+    li      t2, 1 
+    sw      t2, 0(t0) # Prioridade nivel 1
 
     # PASSO 5: PLIC - habilita IRQ 10 no enable register
     li      t0, PLIC_ENABLE
-    li      t1, (1 << UART_IRQ)
-    sw      t1, 0(t0)
+    li      t1, (1 << UART_IRQ) 
+    sw      t1, 0(t0) 
 
     # PASSO 6: PLIC - threshold 0 (aceita qualquer prioridade >= 1)
     li      t0, PLIC_THRESHOLD
@@ -118,16 +123,17 @@ _start:
 
     # PASSO 8: habilita Machine Timer + Machine External Interrupt
     li      t0, (MIE_MTIE | MIE_MEIE)
-    csrs    mie, t0
+    csrs    mie, t0 # Permite ser interrompido por esses dois
 
     # PASSO 9: habilita interrupcoes globais
     li      t0, MSTATUS_MIE
     csrs    mstatus, t0
 
     # PASSO 10: exibe banner e hora inicial (00:00:00)
-    la      a0, str_banner
+    la      a0, str_banner 
     jal     uart_puts
     jal     display_time
+
 
 # Loop principal - wfi economiza CPU aguardando interrupcoes
 main_loop:
