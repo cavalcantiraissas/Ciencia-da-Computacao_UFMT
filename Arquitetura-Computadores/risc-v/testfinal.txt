@@ -1,0 +1,4063 @@
+## desc = tests to cover proper add writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 2
+##expect[2] = 2
+##expect[3] = 2
+##expect[4] = 2
+##expect[5] = 2
+##expect[6] = 2
+##expect[7] = 2
+##expect[8] = 2
+##expect[9] = 2
+##expect[10] = 2
+##expect[11] = 2
+##expect[12] = 2
+##expect[13] = 2
+##expect[14] = 2
+##expect[15] = 2
+##expect[16] = 2
+##expect[17] = 2
+##expect[18] = 2
+##expect[19] = 2
+##expect[20] = 2
+##expect[21] = 2
+##expect[22] = 2
+##expect[23] = 2
+##expect[24] = 2
+##expect[25] = 2
+##expect[26] = 2
+##expect[27] = 2
+##expect[28] = 2
+##expect[29] = 2
+##expect[30] = 2
+##expect[31] = 1
+
+## setting initial values
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+# testing add on each register
+
+add x0, x0, x1
+add x1, x1, x2
+add x2, x2, x3
+add x3, x3, x4
+add x4, x4, x5
+add x5, x5, x6
+add x6, x6, x7
+add x7, x7, x8
+add x8, x8, x9
+add x9, x9, x10
+add x10, x10, x11
+add x11, x11, x12
+add x12, x12, x13
+add x13, x13, x14
+add x14, x14, x15
+add x15, x15, x16
+add x16, x16, x17
+add x17, x17, x18
+add x18, x18, x19
+add x19, x19, x20
+add x20, x20, x21
+add x21, x21, x22
+add x22, x22, x23
+add x23, x23, x24
+add x24, x24, x25
+add x25, x25, x26
+add x26, x26, x27
+add x27, x27, x28
+add x28, x28, x29
+add x29, x29, x30
+add x30, x30, x31
+add x31, x31, x0
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for add
+## cycles = 6
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 5
+##expect[5] = 8
+##expect[6] = 0
+##expect[7] = 0
+##expect[8] = 0
+##expect[9] = 0
+##expect[10] = 0
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1
+
+## base cases begin here
+## used a brief segment of the fibonacci sequence to test simple numbers
+
+add x1, x1, x0	# x1 = 1
+add x2, x1, x1	# x2 = 2
+add x3, x2, x1	# x3 = 3
+add x4, x3, x2	# x4 = 5
+add x5, x4, x3	# x5 = 8
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for add operation
+## cycles = 84
+
+##expect[0] = 0
+##expect[1] = -1248344321
+##expect[2] = -1386080278
+##expect[3] = 1478276282
+##expect[4] = 1350480533
+##expect[5] = -1108920394
+##expect[6] = -585294973
+##expect[7] = 602655536
+##expect[8] = 768173701
+##expect[9] = -1006189593
+##expect[10] = -470462889
+##expect[11] = -72336008
+##expect[12] = -762193846
+##expect[13] = -865661517
+##expect[14] = 83002091
+##expect[15] = -1788849019
+##expect[16] = 358586340
+##expect[17] = 602655536
+##expect[18] = -668253203
+##expect[19] = -1915474832
+##expect[20] = 1733163337
+##expect[21] = -133500259
+##expect[22] = 1836862622
+##expect[23] = 1413982633
+##expect[24] = -1919519586
+##expect[25] = -382682804
+##expect[26] = -865661517
+##expect[27] = 1776836928
+##expect[28] = 1163616687
+##expect[29] = 306569821
+##expect[30] = 1684358057
+##expect[31] = -1972460727
+
+## setting random start values for each register
+
+# x1 = 2113734134
+lui x1, 516048
+addi x1, x1, 1526
+# x2 = -694693677
+lui x2, -169603
+addi x2, x2, 211
+# x3 = 1478276282
+lui x3, 360907
+addi x3, x3, 1210
+# x4 = -1464272299
+lui x4, -357488
+addi x4, x4, -1451
+# x5 = -1108920394
+lui x5, -270733
+addi x5, x5, 1974
+# x6 = -920357810
+lui x6, -224697
+addi x6, x6, 1102
+# x7 = 1606884123
+lui x7, 392306
+addi x7, x7, -1253
+# x8 = 768173701
+lui x8, 187542
+addi x8, x8, 1669
+# x9 = -1006189593
+lui x9, -245652
+addi x9, x9, 999
+# x10 = -470462889
+lui x10, -114859
+addi x10, x10, -425
+# x11 = -72336008
+lui x11, -17660
+addi x11, x11, -648
+# x12 = -762193846
+lui x12, -186082
+addi x12, x12, -1974
+# x13 = -1064669384
+lui x13, -259929
+addi x13, x13, -200
+# x14 = 83002091
+lui x14, 20264
+addi x14, x14, 747
+# x15 = -679997234
+lui x15, -166015
+addi x15, x15, 206
+# x16 = 358586340
+lui x16, 87545
+addi x16, x16, 2020
+# x17 = 602655536
+lui x17, 147133
+addi x17, x17, -1232
+# x18 = -668253203
+lui x18, -163148
+addi x18, x18, 1005
+# x19 = 2079729455
+lui x19, 507746
+addi x19, x19, 1839
+# x20 = 1733163337
+lui x20, 423136
+addi x20, x20, -1719
+# x21 = -133500259
+lui x21, -32593
+addi x21, x21, 669
+# x22 = -183872998
+lui x22, -44891
+addi x22, x22, 538
+# x23 = 1413982633
+lui x23, 345211
+addi x23, x23, -1623
+# x24 = -688547511
+lui x24, -168102
+addi x24, x24, -1719
+# x25 = -382682804
+lui x25, -93428
+addi x25, x25, -1716
+# x26 = 2038517952
+lui x26, 497685
+addi x26, x26, 192
+# x27 = -1514631041
+lui x27, -369783
+addi x27, x27, 127
+# x28 = 1163616687
+lui x28, 284086
+addi x28, x28, 431
+# x29 = 306569821
+lui x29, 74846
+addi x29, x29, 605
+# x30 = 1684358057
+lui x30, 411220
+addi x30, x30, 937
+# x31 = -1972460727
+lui x31, -481558
+addi x31, x31, 841
+
+## testing add on randomly chosen registers
+
+add x24, x13, x15
+add x26, x5, x6
+add x1, x6, x21
+add x7, x0, x17
+add x13, x28, x26
+add x22, x3, x16
+add x26, x28, x26
+add x2, x19, x6
+add x0, x2, x17
+add x6, x9, x14
+add x15, x22, x1
+add x27, x7, x27
+add x27, x1, x4
+add x4, x25, x20
+add x15, x6, x13
+add x19, x7, x27
+add x6, x24, x2
+add x2, x24, x16
+add x24, x13, x1
+add x1, x25, x26
+
+
+
+## desc = tests to cover proper add writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 0
+##expect[2] = 0
+##expect[3] = 0
+##expect[4] = 0
+##expect[5] = 0
+##expect[6] = 0
+##expect[7] = 0
+##expect[8] = 0
+##expect[9] = 0
+##expect[10] = 0
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 1
+
+## setting initial values
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+# testing sub on each register
+
+sub x0, x0, x1
+sub x1, x1, x2
+sub x2, x2, x3
+sub x3, x3, x4
+sub x4, x4, x5
+sub x5, x5, x6
+sub x6, x6, x7
+sub x7, x7, x8
+sub x8, x8, x9
+sub x9, x9, x10
+sub x10, x10, x11
+sub x11, x11, x12
+sub x12, x12, x13
+sub x13, x13, x14
+sub x14, x14, x15
+sub x15, x15, x16
+sub x16, x16, x17
+sub x17, x17, x18
+sub x18, x18, x19
+sub x19, x19, x20
+sub x20, x20, x21
+sub x21, x21, x22
+sub x22, x22, x23
+sub x23, x23, x24
+sub x24, x24, x25
+sub x25, x25, x26
+sub x26, x26, x27
+sub x27, x27, x28
+sub x28, x28, x29
+sub x29, x29, x30
+sub x30, x30, x31
+sub x31, x31, x0
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for sub
+## cycles = 10
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 1
+##expect[7] = 1
+##expect[8] = 2
+##expect[9] = 2
+##expect[10] = 4
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1
+addi x2, x0, 2
+addi x3, x0, 3
+addi x4, x0, 4
+addi x5, x0, 5
+
+## base cases begin here
+## testing small numbers with simple subtraction
+
+sub x6, x1, x0	# x6 = 1
+sub x7, x2, x1	# x7 = 1
+sub x8, x4, x2	# x8 = 2
+sub x9, x5, x3	# x9 = 2
+sub x10, x5, x1	# x10 = 4
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for sub operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = -1046116934
+##expect[2] = 1195422929
+##expect[3] = -733664702
+##expect[4] = 584673516
+##expect[5] = 1414356837
+##expect[6] = -1783543924
+##expect[7] = -1530501672
+##expect[8] = 2070521775
+##expect[9] = 205147680
+##expect[10] = 1673830308
+##expect[11] = -1647848783
+##expect[12] = -847203700
+##expect[13] = -1103224347
+##expect[14] = -1114356007
+##expect[15] = 1625327033
+##expect[16] = -2075916844
+##expect[17] = -837593064
+##expect[18] = 1109688183
+##expect[19] = -1498302872
+##expect[20] = 0
+##expect[21] = 5321556
+##expect[22] = 2062444997
+##expect[23] = 1469941680
+##expect[24] = 1894461360
+##expect[25] = -1506780981
+##expect[26] = 967297428
+##expect[27] = -1122834116
+##expect[28] = 203888628
+##expect[29] = -1420179353
+##expect[30] = -1821238219
+##expect[31] = -1801103745
+
+## setting random start values for each register
+
+# x1 = -1046116934
+lui x1, -255400
+addi x1, x1, 1466
+# x2 = 1195422929
+lui x2, 291851
+addi x2, x2, 1233
+# x3 = -733664702
+lui x3, -179117
+addi x3, x3, -1470
+# x4 = 556218741
+lui x4, 135796
+addi x4, x4, -1675
+# x5 = 848344426
+lui x5, 207115
+addi x5, x5, 1386
+# x6 = 1673830308
+lui x6, 408650
+addi x6, x6, -92
+# x7 = -1530501672
+lui x7, -373658
+addi x7, x7, 1496
+# x8 = 1947931892
+lui x8, 475569
+addi x8, x8, 1268
+# x9 = -642056020
+lui x9, -156752
+addi x9, x9, 172
+# x10 = 1832429217
+lui x10, 447370
+addi x10, x10, 1697
+# x11 = 535123441
+lui x11, 130645
+addi x11, x11, 1521
+# x12 = -847203700
+lui x12, -206837
+addi x12, x12, 652
+# x13 = -1103224347
+lui x13, -269342
+addi x13, x13, 485
+# x14 = -1744440983
+lui x14, -425889
+addi x14, x14, 361
+# x15 = 2061072329
+lui x15, 503191
+addi x15, x15, 1993
+# x16 = -2075916844
+lui x16, -506816
+addi x16, x16, 1492
+# x17 = -837593064
+lui x17, -204490
+addi x17, x17, -2024
+# x18 = 1350108787
+lui x18, 329616
+addi x18, x18, 1651
+# x19 = -1715732820
+lui x19, -418880
+addi x19, x19, -340
+# x20 = -1130730968
+lui x20, -276057
+addi x20, x20, -1496
+# x21 = 5321556
+lui x21, 1299
+addi x21, x21, 852
+# x22 = 2062444997
+lui x22, 503527
+addi x22, x22, -1595
+# x23 = -1679450544
+lui x23, -410022
+addi x23, x23, -432
+# x24 = -824318663
+lui x24, -201250
+addi x24, x24, 1337
+# x25 = -1506780981
+lui x25, -367866
+addi x25, x25, -1845
+# x26 = 967297428
+lui x26, 236157
+addi x26, x26, -1644
+# x27 = 2065279003
+lui x27, 504219
+addi x27, x27, -2021
+# x28 = 203888628
+lui x28, 49777
+addi x28, x28, 2036
+# x29 = -1420179353
+lui x29, -346723
+addi x29, x29, -1945
+# x30 = -1821238219
+lui x30, -444638
+addi x30, x30, -971
+# x31 = -1801103745
+lui x31, -439723
+addi x31, x31, 1663
+
+## testing sub on randomly chosen registers
+
+sub x9, x9, x12
+sub x24, x5, x1
+sub x4, x4, x3
+sub x23, x6, x28
+sub x0, x15, x29
+sub x15, x24, x1
+sub x15, x27, x7
+sub x14, x6, x25
+sub x20, x21, x21
+sub x11, x8, x15
+sub x5, x7, x18
+sub x8, x26, x13
+sub x19, x4, x25
+sub x10, x6, x20
+sub x27, x6, x19
+sub x15, x0, x12
+sub x15, x9, x29
+sub x18, x27, x22
+sub x6, x10, x17
+sub x4, x11, x22
+
+
+
+
+
+## desc = tests to cover proper and writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 0
+##expect[2] = 0
+##expect[3] = 0
+##expect[4] = 0
+##expect[5] = 0
+##expect[6] = 0
+##expect[7] = 0
+##expect[8] = 0
+##expect[9] = 0
+##expect[10] = 0
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+## testing and on each register
+
+and x0, x0, x31
+and x1, x1, x0
+and x2, x2, x1
+and x3, x3, x2
+and x4, x4, x3
+and x5, x5, x4
+and x6, x6, x5
+and x7, x7, x6
+and x8, x8, x7
+and x9, x9, x8
+and x10, x10, x9
+and x11, x11, x10
+and x12, x12, x11
+and x13, x13, x12
+and x14, x14, x13
+and x15, x15, x14
+and x16, x16, x15
+and x17, x17, x16
+and x18, x18, x17
+and x19, x19, x18
+and x20, x20, x19
+and x21, x21, x20
+and x22, x22, x21
+and x23, x23, x22
+and x24, x24, x23
+and x25, x25, x24
+and x26, x26, x25
+and x27, x27, x26
+and x28, x28, x27
+and x29, x29, x28
+and x30, x30, x29
+and x31, x31, x30
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for and
+## cycles = 10
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 0
+##expect[7] = 1
+##expect[8] = 2
+##expect[9] = 1
+##expect[10] = 4
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1	# 0b001
+addi x2, x0, 2	# 0b010
+addi x3, x0, 3	# 0b011
+addi x4, x0, 4	# 0b100
+addi x5, x0, 5	# 0b101
+
+## base cases begin here
+## testing small numbers with the and operation
+
+and x6, x1, x2	# x6 = 0b000
+and x7, x1, x3	# x7 = 0b001
+and x8, x2, x3	# x8 = 0b010
+and x9, x5, x3	# x9 = 0b001
+and x10, x5, x4	# x10 = 0b100
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for and operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = 268435712
+##expect[2] = -1904312044
+##expect[3] = -1682235918
+##expect[4] = 71827488
+##expect[5] = -1156134585
+##expect[6] = 285212928
+##expect[7] = -1582128426
+##expect[8] = 1492075449
+##expect[9] = -1862270720
+##expect[10] = -1379210703
+##expect[11] = 1414336741
+##expect[12] = 0
+##expect[13] = -2075655936
+##expect[14] = 102875392
+##expect[15] = 918538127
+##expect[16] = 67125248
+##expect[17] = 206069808
+##expect[18] = -1790372056
+##expect[19] = 152750857
+##expect[20] = 1176617314
+##expect[21] = -1744172992
+##expect[22] = -591106993
+##expect[23] = -1395336721
+##expect[24] = 0
+##expect[25] = 201851008
+##expect[26] = 0
+##expect[27] = 1195078870
+##expect[28] = -2147483392
+##expect[29] = 203162752
+##expect[30] = 67649536
+##expect[31] = 614795937
+
+## setting random start values for each register
+
+# x1 = 0b11011001001010011100100101011
+lui x1, 111188
+addi x1, x1, -1749
+# x2 = 0b10001110011111101000000100010100
+lui x2, -464920
+addi x2, x2, 276
+# x3 = 0b10011011101110110001110111110010
+lui x3, -410702
+addi x3, x3, -526
+# x4 = 0b1001101011100110101111011
+lui x4, 4957
+addi x4, x4, -645
+# x5 = 0b10111011000101101100100101000111
+lui x5, -282259
+addi x5, x5, -1721
+# x6 = 0b11100011010000111000110111110
+lui x6, 116359
+addi x6, x6, 446
+# x7 = 0b10100001101100101010001011010110
+lui x7, -386262
+addi x7, x7, 726
+# x8 = 0b1011000111011110100001110111001
+lui x8, 364276
+addi x8, x8, 953
+# x9 = 0b10001110001000111110101100010000
+lui x9, -466369
+addi x9, x9, -1264
+# x10 = 0b10101101110010101110101000110001
+lui x10, -336721
+addi x10, x10, -1487
+# x11 = 0b1010100010011010001000011100101
+lui x11, 345297
+addi x11, x11, 229
+# x12 = 0b10011100010010110110111001011
+lui x12, 80023
+addi x12, x12, -565
+# x13 = 0b10000001101100001000100001101000
+lui x13, -517367
+addi x13, x13, -1944
+# x14 = 0b11110010000111111011010110011011
+lui x14, -56837
+addi x14, x14, 1435
+# x15 = 0b110110101111111100011110001111
+lui x15, 224252
+addi x15, x15, 1935
+# x16 = 0b11101100100111111110110110010110
+lui x16, -79361
+addi x16, x16, -618
+# x17 = 0b1110001001110100100110010001111
+lui x17, 463781
+addi x17, x17, -881
+# x18 = 0b10010101010010010001011100101000
+lui x18, -437103
+addi x18, x18, 1832
+# x19 = 0b1001000110101100101100001001
+lui x19, 37293
+addi x19, x19, -1271
+# x20 = 0b1000110001000011100000101100010
+lui x20, 287260
+addi x20, x20, 354
+# x21 = 0b1111110010000000010110001010010
+lui x21, 517123
+addi x21, x21, -942
+# x22 = 0b11011100110001000110110001001111
+lui x22, -144313
+addi x22, x22, -945
+# x23 = 0b10101100110101001101100111101111
+lui x23, -340658
+addi x23, x23, -1553
+# x24 = 0b10011100010010100000101001001101
+lui x24, -408415
+addi x24, x24, -1459
+# x25 = 0b11000110011111001111011000001001
+lui x25, -235569
+addi x25, x25, 1545
+# x26 = 0b10100011100111011011101110010
+lui x26, 83771
+addi x26, x26, 1906
+# x27 = 0b1000111001110110111010011010110
+lui x27, 291767
+addi x27, x27, 1238
+# x28 = 0b10001111101011110001001011
+lui x28, 9196
+addi x28, x28, -949
+# x29 = 0b10100000001000000010101111010011
+lui x29, -392701
+addi x29, x29, -1069
+# x30 = 0b1111010111000000011011100001
+lui x30, 62912
+addi x30, x30, 1761
+# x31 = 0b100100101001010000101010100001
+lui x31, 150097
+addi x31, x31, -1375
+
+## testing and on randomly chosen registers
+
+and x21, x3, x24
+and x12, x8, x28
+and x13, x2, x18
+and x14, x9, x20
+and x9, x18, x5
+and x28, x13, x29
+and x12, x25, x0
+and x29, x16, x30
+and x17, x9, x4
+and x25, x10, x26
+and x24, x4, x12
+and x17, x10, x6
+and x25, x4, x2
+and x25, x29, x6
+and x16, x22, x14
+and x6, x9, x1
+and x4, x11, x17
+and x1, x8, x6
+and x26, x28, x12
+and x30, x17, x15
+
+
+
+
+## desc = tests to cover proper or writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 1
+##expect[3] = 1
+##expect[4] = 1
+##expect[5] = 1
+##expect[6] = 1
+##expect[7] = 1
+##expect[8] = 1
+##expect[9] = 1
+##expect[10] = 1
+##expect[11] = 1
+##expect[12] = 1
+##expect[13] = 1
+##expect[14] = 1
+##expect[15] = 1
+##expect[16] = 1
+##expect[17] = 1
+##expect[18] = 1
+##expect[19] = 1
+##expect[20] = 1
+##expect[21] = 1
+##expect[22] = 1
+##expect[23] = 1
+##expect[24] = 1
+##expect[25] = 1
+##expect[26] = 1
+##expect[27] = 1
+##expect[28] = 1
+##expect[29] = 1
+##expect[30] = 1
+##expect[31] = 1
+
+## setting initial values
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+## testing or on each register
+
+or x0, x0, x31
+or x1, x1, x0
+or x2, x2, x1
+or x3, x3, x2
+or x4, x4, x3
+or x5, x5, x4
+or x6, x6, x5
+or x7, x7, x6
+or x8, x8, x7
+or x9, x9, x8
+or x10, x10, x9
+or x11, x11, x10
+or x12, x12, x11
+or x13, x13, x12
+or x14, x14, x13
+or x15, x15, x14
+or x16, x16, x15
+or x17, x17, x16
+or x18, x18, x17
+or x19, x19, x18
+or x20, x20, x19
+or x21, x21, x20
+or x22, x22, x21
+or x23, x23, x22
+or x24, x24, x23
+or x25, x25, x24
+or x26, x26, x25
+or x27, x27, x26
+or x28, x28, x27
+or x29, x29, x28
+or x30, x30, x29
+or x31, x31, x30
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for or
+## cycles = 10
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 3
+##expect[7] = 3
+##expect[8] = 3
+##expect[9] = 7
+##expect[10] = 5
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1	# 0b001
+addi x2, x0, 2	# 0b010
+addi x3, x0, 3	# 0b011
+addi x4, x0, 4	# 0b100
+addi x5, x0, 5	# 0b101
+
+## base cases begin here
+## testing small numbers with the or operation
+
+or x6, x1, x2	# x6 = 0b011
+or x7, x1, x3	# x7 = 0b011
+or x8, x2, x3	# x8 = 0b011
+or x9, x5, x3	# x9 = 0b111
+or x10, x5, x4	# x10 = 0b101
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for or operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = -1
+##expect[2] = -37273926
+##expect[3] = -1537877446
+##expect[4] = -2086363942
+##expect[5] = -1621040039
+##expect[6] = -1850410091
+##expect[7] = 1468140924
+##expect[8] = -1
+##expect[9] = -37273922
+##expect[10] = -1
+##expect[11] = -1074266113
+##expect[12] = -1062068284
+##expect[13] = -1850520222
+##expect[14] = -1
+##expect[15] = 2055969695
+##expect[16] = 139057379
+##expect[17] = -1
+##expect[18] = -1659605236
+##expect[19] = 898964429
+##expect[20] = -1403135237
+##expect[21] = -1074266113
+##expect[22] = 25240092
+##expect[23] = -704905733
+##expect[24] = -1512703426
+##expect[25] = -1377961217
+##expect[26] = -144265649
+##expect[27] = -1
+##expect[28] = 1616418856
+##expect[29] = 1431895481
+##expect[30] = -524289
+##expect[31] = -1213386387
+
+## setting random start values for each register
+
+# x1 = 0b1010010111110011010011101
+lui x1, 5310
+addi x1, x1, 1693
+# x2 = 0b11111101110001110011111010111010
+lui x2, -9100
+addi x2, x2, -326
+# x3 = 0b10100100010101011101101000111010
+lui x3, -375458
+addi x3, x3, -1478
+# x4 = 0b10000011101001001001110011011010
+lui x4, -509366
+addi x4, x4, -806
+# x5 = 0b10011111011000001110010001011001
+lui x5, -395762
+addi x5, x5, 1113
+# x6 = 0b10010001101101001111101110010101
+lui x6, -451760
+addi x6, x6, -1131
+# x7 = 0b1010111100000100000110101111100
+lui x7, 358433
+addi x7, x7, -644
+# x8 = 0b11111011110000101011111001001010
+lui x8, -17364
+addi x8, x8, -438
+# x9 = 0b1010000001100000101111011111000
+lui x9, 328454
+addi x9, x9, -264
+# x10 = 0b110000111110101110111111010110
+lui x10, 200623
+addi x10, x10, -42
+# x11 = 0b1000001001001011111110111110011
+lui x11, 266848
+addi x11, x11, -525
+# x12 = 0b11000000101100100001111111000100
+lui x12, -259294
+addi x12, x12, -60
+# x13 = 0b10010001101100110100110101100010
+lui x13, -451787
+addi x13, x13, -670
+# x14 = 0b10010001010001011000100001110000
+lui x14, -453543
+addi x14, x14, -1936
+# x15 = 0b1111010100010111001101110011111
+lui x15, 501946
+addi x15, x15, -1121
+# x16 = 0b1000010010011101100011100011
+lui x16, 33950
+addi x16, x16, -1821
+# x17 = 0b1111101101101001110101010
+lui x17, 8045
+addi x17, x17, 938
+# x18 = 0b10011101000101000110111100001100
+lui x18, -405177
+addi x18, x18, -244
+# x19 = 0b110101100101010001101111001101
+lui x19, 219474
+addi x19, x19, -1075
+# x20 = 0b10110010010000110010001110101011
+lui x20, -318414
+addi x20, x20, 939
+# x21 = 0b11011001001111001111100110000
+lui x21, 111226
+addi x21, x21, -208
+# x22 = 0b1100000010010001000011100
+lui x22, 6162
+addi x22, x22, 540
+# x23 = 0b110111100001010001110101111110
+lui x23, 227410
+addi x23, x23, -642
+# x24 = 0b11011110100100011100101110110011
+lui x24, -136931
+addi x24, x24, -1101
+# x25 = 0b1011110000001110000010000011110
+lui x25, 385136
+addi x25, x25, 1054
+# x26 = 0b11110111011001101010111001001111
+lui x26, -35221
+addi x26, x26, -433
+# x27 = 0b11100101101101011111100100010101
+lui x27, -107680
+addi x27, x27, -1771
+# x28 = 0b1100000010110001001100000101000
+lui x28, 394634
+addi x28, x28, -2008
+# x29 = 0b1010101010110001111110110111001
+lui x29, 349584
+addi x29, x29, -583
+# x30 = 0b11101010010010101001100100011111
+lui x30, -88918
+addi x30, x30, -1761
+# x31 = 0b10110111101011010011000101101101
+lui x31, -296237
+addi x31, x31, 365
+
+## testing or on randomly chosen registers
+
+or x20, x3, x16
+or x1, x19, x0
+or x24, x13, x19
+or x14, x15, x17
+or x9, x9, x3
+or x21, x5, x24
+or x25, x20, x22
+or x11, x17, x21
+or x17, x21, x30
+or x23, x29, x13
+or x14, x6, x17
+or x24, x22, x3
+or x11, x6, x21
+or x14, x17, x21
+or x27, x14, x29
+or x10, x28, x17
+or x1, x19, x10
+or x9, x22, x2
+or x30, x12, x11
+or x8, x29, x27
+
+
+
+
+## desc = tests to cover proper xor writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 0
+##expect[3] = 1
+##expect[4] = 0
+##expect[5] = 1
+##expect[6] = 0
+##expect[7] = 1
+##expect[8] = 0
+##expect[9] = 1
+##expect[10] = 0
+##expect[11] = 1
+##expect[12] = 0
+##expect[13] = 1
+##expect[14] = 0
+##expect[15] = 1
+##expect[16] = 0
+##expect[17] = 1
+##expect[18] = 0
+##expect[19] = 1
+##expect[20] = 0
+##expect[21] = 1
+##expect[22] = 0
+##expect[23] = 1
+##expect[24] = 0
+##expect[25] = 1
+##expect[26] = 0
+##expect[27] = 1
+##expect[28] = 0
+##expect[29] = 1
+##expect[30] = 0
+##expect[31] = 1
+
+## setting initial values
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+## testing xor on each register
+
+xor x0, x0, x31
+xor x1, x1, x0
+xor x2, x2, x1
+xor x3, x3, x2
+xor x4, x4, x3
+xor x5, x5, x4
+xor x6, x6, x5
+xor x7, x7, x6
+xor x8, x8, x7
+xor x9, x9, x8
+xor x10, x10, x9
+xor x11, x11, x10
+xor x12, x12, x11
+xor x13, x13, x12
+xor x14, x14, x13
+xor x15, x15, x14
+xor x16, x16, x15
+xor x17, x17, x16
+xor x18, x18, x17
+xor x19, x19, x18
+xor x20, x20, x19
+xor x21, x21, x20
+xor x22, x22, x21
+xor x23, x23, x22
+xor x24, x24, x23
+xor x25, x25, x24
+xor x26, x26, x25
+xor x27, x27, x26
+xor x28, x28, x27
+xor x29, x29, x28
+xor x30, x30, x29
+xor x31, x31, x30
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for xor
+## cycles = 10
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 3
+##expect[7] = 2
+##expect[8] = 1
+##expect[9] = 6
+##expect[10] = 1
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1	# 0b001
+addi x2, x0, 2	# 0b010
+addi x3, x0, 3	# 0b011
+addi x4, x0, 4	# 0b100
+addi x5, x0, 5	# 0b101
+
+## base cases begin here
+## testing small numbers with the xor operation
+
+xor x6, x1, x2	# x6 = 0b011
+xor x7, x1, x3	# x7 = 0b010
+xor x8, x2, x3	# x8 = 0b001
+xor x9, x5, x3	# x9 = 0b110
+xor x10, x5, x4	# x10 = 0b001
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for xor operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = -1552403474
+##expect[2] = 5571227
+##expect[3] = -177143259
+##expect[4] = -1156515509
+##expect[5] = 650946202
+##expect[6] = 801819112
+##expect[7] = -763267161
+##expect[8] = -1985699023
+##expect[9] = 975428084
+##expect[10] = -249552881
+##expect[11] = -1871747397
+##expect[12] = 162397342
+##expect[13] = -680930088
+##expect[14] = -1863078528
+##expect[15] = 650946202
+##expect[16] = -104422499
+##expect[17] = 659560469
+##expect[18] = -1741196506
+##expect[19] = 903310703
+##expect[20] = 980867951
+##expect[21] = 473413385
+##expect[22] = -1934427642
+##expect[23] = 1154586734
+##expect[24] = -547420260
+##expect[25] = -1552403474
+##expect[26] = -196226755
+##expect[27] = -107765498
+##expect[28] = 1947330358
+##expect[29] = 1049800844
+##expect[30] = 780085139
+##expect[31] = -931874099
+
+## setting random start values for each register
+
+# x1 = 0b100110100010100001011001110
+lui x1, 19732
+addi x1, x1, 718
+# x2 = 0b11100001100010101010011111110110
+lui x2, -124758
+addi x2, x2, 2038
+# x3 = 0b11110101011100010000001000100101
+lui x3, -43248
+addi x3, x3, 549
+# x4 = 0b10111011000100001111100101001011
+lui x4, -282352
+addi x4, x4, -1717
+# x5 = 0b100110110011001010011010011010
+lui x5, 158922
+addi x5, x5, 1690
+# x6 = 0b101111110010101100100111101000
+lui x6, 195757
+addi x6, x6, -1560
+# x7 = 0b11010010100000010111011110100111
+lui x7, -186345
+addi x7, x7, 1959
+# x8 = 0b10001001101001001010001100110001
+lui x8, -484790
+addi x8, x8, 817
+# x9 = 0b111010001000111101100111110100
+lui x9, 238142
+addi x9, x9, -1548
+# x10 = 0b11110001001000000010000000001111
+lui x10, -60926
+addi x10, x10, 15
+# x11 = 0b10010000011011110110011010111011
+lui x11, -456970
+addi x11, x11, 1723
+# x12 = 0b10010101001100010011111100000011
+lui x12, -437484
+addi x12, x12, -253
+# x13 = 0b1011000000110100001111011110001
+lui x13, 360866
+addi x13, x13, -271
+# x14 = 0b10111101011010001011011110011111
+lui x14, -272757
+addi x14, x14, 1951
+# x15 = 0b11001100100010101101001110110101
+lui x15, -210771
+addi x15, x15, 949
+# x16 = 0b11111001110001101010001110011101
+lui x16, -25494
+addi x16, x16, 925
+# x17 = 0b100111010100000001100000010101
+lui x17, 161026
+addi x17, x17, -2027
+# x18 = 0b10011000001101110111001100100110
+lui x18, -425097
+addi x18, x18, 806
+# x19 = 0b110101110101110110110101101111
+lui x19, 220535
+addi x19, x19, -657
+# x20 = 0b11000011000011000111101101110101
+lui x20, -249656
+addi x20, x20, -1163
+# x21 = 0b11100001101111011011100001001
+lui x21, 115579
+addi x21, x21, 1801
+# x22 = 0b1111101010011010110111100111100
+lui x22, 513239
+addi x22, x22, -196
+# x23 = 0b1000100110100011001100001101110
+lui x23, 281882
+addi x23, x23, -1938
+# x24 = 0b10111111001110010110010001101000
+lui x24, -265322
+addi x24, x24, 1128
+# x25 = 0b10100011011110000011001111101110
+lui x25, -379005
+addi x25, x25, 1006
+# x26 = 0b10001010010110000100101011001
+lui x26, 70833
+addi x26, x26, -1703
+# x27 = 0b11111001100100111010000100000110
+lui x27, -26310
+addi x27, x27, 262
+# x28 = 0b1110100000100011110011100110110
+lui x28, 475422
+addi x28, x28, 1846
+# x29 = 0b111110100100101011000010001100
+lui x29, 256299
+addi x29, x29, 140
+# x30 = 0b100000010001001111011001010110
+lui x30, 132175
+addi x30, x30, 1622
+# x31 = 0b11001000011101001011101011001101
+lui x31, -227508
+addi x31, x31, -1331
+
+## testing xor on randomly chosen registers
+
+xor x30, x28, x30
+xor x13, x26, x1
+xor x22, x22, x14
+xor x2, x23, x6
+xor x14, x6, x24
+xor x20, x0, x24
+xor x2, x27, x16
+xor x15, x5, x0
+xor x24, x28, x3
+xor x20, x2, x9
+xor x24, x4, x23
+xor x26, x7, x5
+xor x30, x29, x30
+xor x12, x21, x13
+xor x1, x25, x0
+xor x24, x27, x5
+xor x22, x6, x1
+xor x13, x5, x7
+xor x30, x24, x10
+xor x13, x28, x1
+
+
+
+
+## desc = tests to cover proper slt writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 0
+##expect[2] = 0
+##expect[3] = 0
+##expect[4] = 0
+##expect[5] = 0
+##expect[6] = 0
+##expect[7] = 0
+##expect[8] = 0
+##expect[9] = 0
+##expect[10] = 0
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+## testing slt on each register
+
+slt x0, x0, x31
+slt x1, x1, x0
+slt x2, x2, x1
+slt x3, x3, x2
+slt x4, x4, x3
+slt x5, x5, x4
+slt x6, x6, x5
+slt x7, x7, x6
+slt x8, x8, x7
+slt x9, x9, x8
+slt x10, x10, x9
+slt x11, x11, x10
+slt x12, x12, x11
+slt x13, x13, x12
+slt x14, x14, x13
+slt x15, x15, x14
+slt x16, x16, x15
+slt x17, x17, x16
+slt x18, x18, x17
+slt x19, x19, x18
+slt x20, x20, x19
+slt x21, x21, x20
+slt x22, x22, x21
+slt x23, x23, x22
+slt x24, x24, x23
+slt x25, x25, x24
+slt x26, x26, x25
+slt x27, x27, x26
+slt x28, x28, x27
+slt x29, x29, x28
+slt x30, x30, x29
+slt x31, x31, x30
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for slt
+## cycles = 10
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 1
+##expect[7] = 1
+##expect[8] = 0
+##expect[9] = 0
+##expect[10] = 0
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1
+addi x2, x0, 2
+addi x3, x0, 3
+addi x4, x0, 4
+addi x5, x0, 5
+
+## base cases begin here
+## testing small numbers with the slt operation
+
+slt x6, x1, x2	# x6 = 1
+slt x7, x2, x3	# x7 = 1
+slt x8, x5, x4	# x8 = 0
+slt x9, x4, x3	# x9 = 0
+slt x10, x3, x3	# x10 = 0
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for slt operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = 0
+##expect[2] = 1
+##expect[3] = -1059365371
+##expect[4] = 1
+##expect[5] = 2119148435
+##expect[6] = -1070162760
+##expect[7] = 0
+##expect[8] = 0
+##expect[9] = -1685567641
+##expect[10] = -1753041290
+##expect[11] = 170249390
+##expect[12] = 1
+##expect[13] = 0
+##expect[14] = 1441457470
+##expect[15] = -894718961
+##expect[16] = 1018624828
+##expect[17] = 570490109
+##expect[18] = 0
+##expect[19] = 526380540
+##expect[20] = -1308382463
+##expect[21] = -859672025
+##expect[22] = 0
+##expect[23] = 1075773749
+##expect[24] = 0
+##expect[25] = 1
+##expect[26] = -868245608
+##expect[27] = -1751872031
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = -1961270769
+##expect[31] = -376677006
+
+## setting random start values for each register
+
+# x1 = 1399633023
+lui x1, 341707
+addi x1, x1, 1151
+# x2 = -1142493196
+lui x2, -278929
+addi x2, x2, -12
+# x3 = -1059365371
+lui x3, -258634
+addi x3, x3, -507
+# x4 = 2094698334
+lui x4, 511401
+addi x4, x4, -162
+# x5 = 2119148435
+lui x5, 517370
+addi x5, x5, 915
+# x6 = -1070162760
+lui x6, -261270
+addi x6, x6, -840
+# x7 = -6052352
+lui x7, -1478
+addi x7, x7, 1536
+# x8 = 736172065
+lui x8, 179730
+addi x8, x8, -2015
+# x9 = -1685567641
+lui x9, -411516
+addi x9, x9, 1895
+# x10 = -1753041290
+lui x10, -427989
+addi x10, x10, 1654
+# x11 = 170249390
+lui x11, 41565
+addi x11, x11, -850
+# x12 = 1300312647
+lui x12, 317459
+addi x12, x12, 583
+# x13 = 1581991914
+lui x13, 386228
+addi x13, x13, 2026
+# x14 = 1441457470
+lui x14, 351918
+addi x14, x14, 1342
+# x15 = -894718961
+lui x15, -218437
+addi x15, x15, -1009
+# x16 = 1018624828
+lui x16, 248688
+addi x16, x16, -1220
+# x17 = 570490109
+lui x17, 139280
+addi x17, x17, -771
+# x18 = -362887893
+lui x18, -88596
+addi x18, x18, 1323
+# x19 = 526380540
+lui x19, 128511
+addi x19, x19, -516
+# x20 = -1308382463
+lui x20, -319429
+addi x20, x20, -1279
+# x21 = -859672025
+lui x21, -209881
+addi x21, x21, 551
+# x22 = 2041099473
+lui x22, 498315
+addi x22, x22, 1233
+# x23 = 1075773749
+lui x23, 262640
+addi x23, x23, 309
+# x24 = 611225314
+lui x24, 149225
+addi x24, x24, -286
+# x25 = -1313595025
+lui x25, -320702
+addi x25, x25, 367
+# x26 = -868245608
+lui x26, -211974
+addi x26, x26, -104
+# x27 = -1751872031
+lui x27, -427703
+addi x27, x27, -543
+# x28 = 498127504
+lui x28, 121613
+addi x28, x28, 656
+# x29 = -1459107460
+lui x29, -356227
+addi x29, x29, -1668
+# x30 = -1961270769
+lui x30, -478826
+addi x30, x30, 527
+# x31 = -376677006
+lui x31, -91962
+addi x31, x31, -654
+
+## testing slt on randomly chosen registers
+
+slt x28, x4, x24
+slt x0, x17, x16
+slt x12, x6, x8
+slt x18, x14, x11
+slt x29, x15, x10
+slt x4, x29, x0
+slt x22, x12, x21
+slt x18, x16, x19
+slt x4, x7, x29
+slt x7, x4, x12
+slt x13, x25, x7
+slt x28, x4, x30
+slt x24, x1, x3
+slt x8, x18, x3
+slt x13, x22, x26
+slt x25, x0, x16
+slt x1, x3, x30
+slt x2, x1, x4
+slt x0, x29, x17
+slt x12, x27, x6
+
+
+
+
+## desc = tests to cover proper sll writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 4
+##expect[4] = 16
+##expect[5] = 65536
+##expect[6] = 1
+##expect[7] = 2
+##expect[8] = 4
+##expect[9] = 16
+##expect[10] = 65536
+##expect[11] = 1
+##expect[12] = 2
+##expect[13] = 4
+##expect[14] = 16
+##expect[15] = 65536
+##expect[16] = 1
+##expect[17] = 2
+##expect[18] = 4
+##expect[19] = 16
+##expect[20] = 65536
+##expect[21] = 1
+##expect[22] = 2
+##expect[23] = 4
+##expect[24] = 16
+##expect[25] = 65536
+##expect[26] = 1
+##expect[27] = 2
+##expect[28] = 4
+##expect[29] = 16
+##expect[30] = 65536
+##expect[31] = 1
+
+## setting initial values
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+## testing sll on each register
+
+sll x0, x0, x31
+sll x1, x1, x0
+sll x2, x2, x1
+sll x3, x3, x2
+sll x4, x4, x3
+sll x5, x5, x4
+sll x6, x6, x5
+sll x7, x7, x6
+sll x8, x8, x7
+sll x9, x9, x8
+sll x10, x10, x9
+sll x11, x11, x10
+sll x12, x12, x11
+sll x13, x13, x12
+sll x14, x14, x13
+sll x15, x15, x14
+sll x16, x16, x15
+sll x17, x17, x16
+sll x18, x18, x17
+sll x19, x19, x18
+sll x20, x20, x19
+sll x21, x21, x20
+sll x22, x22, x21
+sll x23, x23, x22
+sll x24, x24, x23
+sll x25, x25, x24
+sll x26, x26, x25
+sll x27, x27, x26
+sll x28, x28, x27
+sll x29, x29, x28
+sll x30, x30, x29
+sll x31, x31, x30
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for sll
+## cycles = 10
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 4
+##expect[7] = 16
+##expect[8] = 80
+##expect[9] = 32
+##expect[10] = 24
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1	# 0b001
+addi x2, x0, 2	# 0b010
+addi x3, x0, 3	# 0b011
+addi x4, x0, 4	# 0b100
+addi x5, x0, 5	# 0b101
+
+## base cases begin here
+## testing small numbers with the sll operation
+
+sll x6, x1, x2	# x6 = 0b0000100
+sll x7, x2, x3	# x7 = 0b0010000
+sll x8, x5, x4	# x8 = 0b1010000
+sll x9, x4, x3	# x9 = 0b0100000
+sll x10, x3, x3	# x10 = 0b0011000
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for sll operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = 1385585984
+##expect[2] = -724926464
+##expect[3] = 239075328
+##expect[4] = -99874995
+##expect[5] = -725533639
+##expect[6] = -99874995
+##expect[7] = -738197504
+##expect[8] = 124659433
+##expect[9] = 1383858176
+##expect[10] = -663287439
+##expect[11] = 954204160
+##expect[12] = -1852818402
+##expect[13] = -1852818402
+##expect[14] = 1049937007
+##expect[15] = -666894967
+##expect[16] = -1703512394
+##expect[17] = 38480683
+##expect[18] = -74176151
+##expect[19] = 2072441681
+##expect[20] = -1632968506
+##expect[21] = -296534016
+##expect[22] = -375689536
+##expect[23] = -1798307840
+##expect[24] = 1204725332
+##expect[25] = -2104037906
+##expect[26] = -725533639
+##expect[27] = 663166976
+##expect[28] = -663287439
+##expect[29] = 1538766848
+##expect[30] = -1594125104
+##expect[31] = -593151948
+
+## setting random start values for each register
+
+# x1 = 0b1010010100101100101110101000000
+lui x1, 338278
+addi x1, x1, -704
+# x2 = 0b10011110010010000110100000111010
+lui x2, -400249
+addi x2, x2, -1990
+# x3 = 0b11001100111010100010100100111110
+lui x3, -209245
+addi x3, x3, -1730
+# x4 = 0b1010100001001110011001110001110
+lui x4, 344691
+addi x4, x4, 910
+# x5 = 0b11010100110000010011110000111001
+lui x5, -177132
+addi x5, x5, -967
+# x6 = 0b11111010000011000000011101001101
+lui x6, -24384
+addi x6, x6, 1869
+# x7 = 0b110000110111010101111111110011
+lui x7, 200150
+addi x7, x7, -13
+# x8 = 0b111011011100010011011101001
+lui x8, 30434
+addi x8, x8, 1769
+# x9 = 0b11101101010111111000101010011011
+lui x9, -76295
+addi x9, x9, -1381
+# x10 = 0b11011000011101110000100101110001
+lui x10, -161935
+addi x10, x10, -1679
+# x11 = 0b11001000100111011111101110011110
+lui x11, -226848
+addi x11, x11, -1122
+# x12 = 0b110101101101111000011111100010
+lui x12, 220024
+addi x12, x12, 2018
+# x13 = 0b10010001100100000011110000011110
+lui x13, -452348
+addi x13, x13, -994
+# x14 = 0b111110100101001100010001101111
+lui x14, 256332
+addi x14, x14, 1135
+# x15 = 0b11011000001111111111110110001001
+lui x15, -162816
+addi x15, x15, -631
+# x16 = 0b10011010011101100111011010110110
+lui x16, -415897
+addi x16, x16, 1718
+# x17 = 0b10010010110010101100101011
+lui x17, 9395
+addi x17, x17, -1237
+# x18 = 0b11111011100101000010100101101001
+lui x18, -18109
+addi x18, x18, -1687
+# x19 = 0b1111011100001101111001101010001
+lui x19, 505967
+addi x19, x19, 849
+# x20 = 0b10011110101010101110000011000110
+lui x20, -398674
+addi x20, x20, 198
+# x21 = 0b10001100101001001000110110111010
+lui x21, -472503
+addi x21, x21, -582
+# x22 = 0b11101001100110110110111011000000
+lui x22, -91721
+addi x22, x22, -320
+# x23 = 0b100001001110000000000100010011
+lui x23, 136064
+addi x23, x23, 275
+# x24 = 0b1000111110011101010011001010100
+lui x24, 294122
+addi x24, x24, 1620
+# x25 = 0b10000010100101101110110111101110
+lui x25, -513681
+addi x25, x25, -530
+# x26 = 0b100101110110010011100101
+lui x26, 2422
+addi x26, x26, 1253
+# x27 = 0b11100110010100100101011000010111
+lui x27, -105179
+addi x27, x27, 1559
+# x28 = 0b10110101101000001010010001101010
+lui x28, -304630
+addi x28, x28, 1130
+# x29 = 0b1010101101100101011011011000101
+lui x29, 351019
+addi x29, x29, 1733
+# x30 = 0b10100000111110111001010011010000
+lui x30, -389191
+addi x30, x30, 1232
+# x31 = 0b11011100101001010011100000110100
+lui x31, -144812
+addi x31, x31, -1996
+
+## testing sll on randomly chosen registers
+
+sll x21, x14, x20
+sll x11, x4, x24
+sll x4, x8, x23
+sll x9, x19, x19
+sll x29, x21, x23
+sll x23, x30, x30
+sll x9, x3, x10
+sll x29, x25, x28
+sll x4, x7, x18
+sll x20, x20, x0
+sll x7, x28, x5
+sll x0, x20, x23
+sll x26, x5, x1
+sll x21, x30, x28
+sll x12, x13, x21
+sll x28, x10, x9
+sll x4, x6, x7
+sll x27, x26, x4
+sll x3, x5, x16
+sll x2, x24, x6
+
+
+
+
+## desc = tests to cover proper sra writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 0
+##expect[3] = 1
+##expect[4] = 0
+##expect[5] = 1
+##expect[6] = 0
+##expect[7] = 1
+##expect[8] = 0
+##expect[9] = 1
+##expect[10] = 0
+##expect[11] = 1
+##expect[12] = 0
+##expect[13] = 1
+##expect[14] = 0
+##expect[15] = 1
+##expect[16] = 0
+##expect[17] = 1
+##expect[18] = 0
+##expect[19] = 1
+##expect[20] = 0
+##expect[21] = 1
+##expect[22] = 0
+##expect[23] = 1
+##expect[24] = 0
+##expect[25] = 1
+##expect[26] = 0
+##expect[27] = 1
+##expect[28] = 0
+##expect[29] = 1
+##expect[30] = 0
+##expect[31] = 1
+
+## setting initial values
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+## testing sra on each register
+
+sra x0, x0, x31
+sra x1, x1, x0
+sra x2, x2, x1
+sra x3, x3, x2
+sra x4, x4, x3
+sra x5, x5, x4
+sra x6, x6, x5
+sra x7, x7, x6
+sra x8, x8, x7
+sra x9, x9, x8
+sra x10, x10, x9
+sra x11, x11, x10
+sra x12, x12, x11
+sra x13, x13, x12
+sra x14, x14, x13
+sra x15, x15, x14
+sra x16, x16, x15
+sra x17, x17, x16
+sra x18, x18, x17
+sra x19, x19, x18
+sra x20, x20, x19
+sra x21, x21, x20
+sra x22, x22, x21
+sra x23, x23, x22
+sra x24, x24, x23
+sra x25, x25, x24
+sra x26, x26, x25
+sra x27, x27, x26
+sra x28, x28, x27
+sra x29, x29, x28
+sra x30, x30, x29
+sra x31, x31, x30
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for sra
+## cycles = 10
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 0
+##expect[7] = 1
+##expect[8] = 1
+##expect[9] = 1
+##expect[10] = 1
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1	# 0b001
+addi x2, x0, 2	# 0b010
+addi x3, x0, 3	# 0b011
+addi x4, x0, 4	# 0b100
+addi x5, x0, 5	# 0b101
+
+## base cases begin here
+## testing small numbers with the sra operation
+
+sra x6, x1, x1	# x6 = 0b0
+sra x7, x2, x1	# x7 = 0b1
+sra x8, x5, x2	# x8 = 0b1
+sra x9, x4, x2	# x9 = 0b1
+sra x10, x3, x1	# x10 = 0b1
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for sra operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = -1412026979
+##expect[2] = -23
+##expect[3] = 976969068
+##expect[4] = 88677603
+##expect[5] = -1412026979
+##expect[6] = -3
+##expect[7] = -2665219
+##expect[8] = -1547036398
+##expect[9] = 711365251
+##expect[10] = 709420827
+##expect[11] = 1702
+##expect[12] = -1060
+##expect[13] = 1785649353
+##expect[14] = -1734722395
+##expect[15] = -1603195438
+##expect[16] = 1573270914
+##expect[17] = 0
+##expect[18] = -367923718
+##expect[19] = -7
+##expect[20] = 1737957572
+##expect[21] = 1654831532
+##expect[22] = -388040496
+##expect[23] = -913390921
+##expect[24] = -6
+##expect[25] = -1490025788
+##expect[26] = -1487960556
+##expect[27] = -682295910
+##expect[28] = 2043740249
+##expect[29] = -28
+##expect[30] = 3394448
+##expect[31] = -1975224794
+
+## setting random start values for each register
+
+# x1 = 0b10101011110101100010110110011101
+lui x1, -344733
+addi x1, x1, -611
+# x2 = 0b10011101101011100110110010000100
+lui x2, -402713
+addi x2, x2, -892
+# x3 = 0b111010001110110101110101101100
+lui x3, 238518
+addi x3, x3, -660
+# x4 = 0b10011111001000010111011111101001
+lui x4, -396777
+addi x4, x4, 2025
+# x5 = 0b110011000101010000011101101000
+lui x5, 209232
+addi x5, x5, 1896
+# x6 = 0b1001111100011010010110000101000
+lui x6, 325843
+addi x6, x6, -984
+# x7 = 0b110100100011011101100001001111
+lui x7, 215262
+addi x7, x7, -1969
+# x8 = 0b10100011110010100001100100010010
+lui x8, -377694
+addi x8, x8, -1774
+# x9 = 0b101010011001101001001010000011
+lui x9, 173673
+addi x9, x9, 643
+# x10 = 0b101010010010001110011100011011
+lui x10, 173198
+addi x10, x10, 1819
+# x11 = 0b1010000011110111010010101011011
+lui x11, 329658
+addi x11, x11, 1371
+# x12 = 0b11011111010011100000100110101001
+lui x12, -133919
+addi x12, x12, -1623
+# x13 = 0b1101010011011101101100011001001
+lui x13, 435950
+addi x13, x13, -1847
+# x14 = 0b10011000100110100011110010100101
+lui x14, -423516
+addi x14, x14, -859
+# x15 = 0b10100000011100010010110111010010
+lui x15, -391405
+addi x15, x15, -558
+# x16 = 0b1011101110001100011010110000010
+lui x16, 384099
+addi x16, x16, 1410
+# x17 = 0b10100101010110101111111111101001
+lui x17, -371280
+addi x17, x17, -23
+# x18 = 0b11101010000100011110110111111010
+lui x18, -89825
+addi x18, x18, -518
+# x19 = 0b100011011001000001001010110101
+lui x19, 144961
+addi x19, x19, 693
+# x20 = 0b1100111100101110010000011000100
+lui x20, 424306
+addi x20, x20, 196
+# x21 = 0b1100010101000101011100110101100
+lui x21, 404012
+addi x21, x21, -1620
+# x22 = 0b11101000110111101111100011010000
+lui x22, -94736
+addi x22, x22, -1840
+# x23 = 0b11001001100011101100001010110111
+lui x23, -222996
+addi x23, x23, 695
+# x24 = 0b11101111011100011010111100100101
+lui x24, -67813
+addi x24, x24, -219
+# x25 = 0b10100111001100000000001011000100
+lui x25, -363776
+addi x25, x25, 708
+# x26 = 0b10100111010011111000011000010100
+lui x26, -363272
+addi x26, x26, 1556
+# x27 = 0b11010111010101001111110110011010
+lui x27, -166576
+addi x27, x27, -614
+# x28 = 0b1111001110100010000000001011001
+lui x28, 498960
+addi x28, x28, 89
+# x29 = 0b101101111011000111011101100110
+lui x29, 188103
+addi x29, x29, 1894
+# x30 = 0b1100000111101011100010100110011
+lui x30, 397148
+addi x30, x30, 1331
+# x31 = 0b10001010010001000111011000100110
+lui x31, -482233
+addi x31, x31, 1574
+
+## testing sra on randomly chosen registers
+
+sra x30, x20, x17
+sra x7, x27, x5
+sra x19, x2, x17
+sra x12, x24, x15
+sra x24, x23, x17
+sra x4, x11, x0
+sra x0, x6, x28
+sra x4, x10, x9
+sra x11, x13, x26
+sra x2, x17, x18
+sra x19, x14, x12
+sra x24, x25, x12
+sra x6, x9, x1
+sra x17, x0, x1
+sra x5, x22, x11
+sra x5, x1, x17
+sra x0, x25, x19
+sra x6, x27, x12
+sra x29, x23, x28
+sra x0, x5, x27
+
+
+
+
+## desc = tests to cover proper addi writes to all registers
+## cycles = 32
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 1
+##expect[3] = 1
+##expect[4] = 1
+##expect[5] = 1
+##expect[6] = 1
+##expect[7] = 1
+##expect[8] = 1
+##expect[9] = 1
+##expect[10] = 1
+##expect[11] = 1
+##expect[12] = 1
+##expect[13] = 1
+##expect[14] = 1
+##expect[15] = 1
+##expect[16] = 1
+##expect[17] = 1
+##expect[18] = 1
+##expect[19] = 1
+##expect[20] = 1
+##expect[21] = 1
+##expect[22] = 1
+##expect[23] = 1
+##expect[24] = 1
+##expect[25] = 1
+##expect[26] = 1
+##expect[27] = 1
+##expect[28] = 1
+##expect[29] = 1
+##expect[30] = 1
+##expect[31] = 1
+
+## testing addi on each register
+
+addi x0, x0, 1
+addi x1, x1, 1
+addi x2, x2, 1
+addi x3, x3, 1
+addi x4, x4, 1
+addi x5, x5, 1
+addi x6, x6, 1
+addi x7, x7, 1
+addi x8, x8, 1
+addi x9, x9, 1
+addi x10, x10, 1
+addi x11, x11, 1
+addi x12, x12, 1
+addi x13, x13, 1
+addi x14, x14, 1
+addi x15, x15, 1
+addi x16, x16, 1
+addi x17, x17, 1
+addi x18, x18, 1
+addi x19, x19, 1
+addi x20, x20, 1
+addi x21, x21, 1
+addi x22, x22, 1
+addi x23, x23, 1
+addi x24, x24, 1
+addi x25, x25, 1
+addi x26, x26, 1
+addi x27, x27, 1
+addi x28, x28, 1
+addi x29, x29, 1
+addi x30, x30, 1
+addi x31, x31, 1
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for addi
+## cycles = 5
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 0
+##expect[7] = 1
+##expect[8] = 1
+##expect[9] = 1
+##expect[10] = 1
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## base cases begin here
+## testing small numbers with the addi operation
+
+addi x1, x0, 1
+addi x2, x0, 2
+addi x3, x0, 3
+addi x4, x0, 4
+addi x5, x0, 5
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for addi operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = 1548235570
+##expect[2] = -748156833
+##expect[3] = 1536528883
+##expect[4] = -1366393777
+##expect[5] = -1366395084
+##expect[6] = 1104691049
+##expect[7] = -584926644
+##expect[8] = 51349616
+##expect[9] = -2036770534
+##expect[10] = -2122062252
+##expect[11] = -1442221204
+##expect[12] = -99694372
+##expect[13] = 2118773434
+##expect[14] = -1366394667
+##expect[15] = -986372406
+##expect[16] = 1536526788
+##expect[17] = 888101388
+##expect[18] = -1307560318
+##expect[19] = -1017952197
+##expect[20] = -2036769858
+##expect[21] = -2122060411
+##expect[22] = -1366394455
+##expect[23] = -584925897
+##expect[24] = 1536526526
+##expect[25] = -1114294789
+##expect[26] = -986373174
+##expect[27] = 1104691963
+##expect[28] = -99693415
+##expect[29] = 156056815
+##expect[30] = -392539061
+##expect[31] = -622676256
+
+## setting random start values for each register
+
+# x1 = 1548235570
+lui x1, 377987
+addi x1, x1, 818
+# x2 = -748156833
+lui x2, -182655
+addi x2, x2, -1953
+# x3 = -1861107813
+lui x3, -454372
+addi x3, x3, -101
+# x4 = 1484022007
+lui x4, 362310
+addi x4, x4, 247
+# x5 = 98690108
+lui x5, 24094
+addi x5, x5, 1084
+# x6 = 536116802
+lui x6, 130888
+addi x6, x6, -446
+# x7 = 1998164833
+lui x7, 487833
+addi x7, x7, 865
+# x8 = 51349616
+lui x8, 12537
+addi x8, x8, -1936
+# x9 = 1602282465
+lui x9, 391182
+addi x9, x9, 993
+# x10 = -2122062252
+lui x10, -518082
+addi x10, x10, 1620
+# x11 = -1442221204
+lui x11, -352105
+addi x11, x11, 876
+# x12 = -99694372
+lui x12, -24339
+addi x12, x12, -1828
+# x13 = 2118773434
+lui x13, 517279
+addi x13, x13, -1350
+# x14 = -1366394667
+lui x14, -333592
+addi x14, x14, -1835
+# x15 = -1817939167
+lui x15, -443833
+addi x15, x15, 801
+# x16 = 137616082
+lui x16, 33598
+addi x16, x16, -1326
+# x17 = 888101388
+lui x17, 216822
+addi x17, x17, -1524
+# x18 = -1307560318
+lui x18, -319229
+addi x18, x18, 1666
+# x19 = -1017952197
+lui x19, -248523
+addi x19, x19, -1989
+# x20 = -2036769858
+lui x20, -497258
+addi x20, x20, -1090
+# x21 = -986373272
+lui x21, -240814
+addi x21, x21, 872
+# x22 = -332525466
+lui x22, -81183
+addi x22, x22, 102
+# x23 = -584925897
+lui x23, -142804
+addi x23, x23, -713
+# x24 = -1379710447
+lui x24, -336843
+addi x24, x24, -1519
+# x25 = -1114294789
+lui x25, -272045
+addi x25, x25, 1531
+# x26 = -610585976
+lui x26, -149069
+addi x26, x26, 648
+# x27 = 1104691963
+lui x27, 269700
+addi x27, x27, 763
+# x28 = 1536527242
+lui x28, 375129
+addi x28, x28, -1142
+# x29 = 156056815
+lui x29, 38100
+addi x29, x29, -785
+# x30 = -392539061
+lui x30, -95835
+addi x30, x30, 1099
+# x31 = -622676256
+lui x31, -152021
+addi x31, x31, 1760
+
+## testing addi on randomly chosen registers
+
+addi x9, x9, 1266
+addi x22, x17, 1819
+addi x3, x28, 1641
+addi x15, x15, -1069
+addi x15, x21, 866
+addi x7, x10, -1631
+addi x4, x12, 993
+addi x7, x3, -1041
+addi x5, x14, -417
+addi x16, x20, -486
+addi x22, x14, 212
+addi x9, x20, -676
+addi x16, x28, -454
+addi x24, x28, -716
+addi x28, x12, 957
+addi x26, x21, 98
+addi x7, x23, -747
+addi x6, x27, -914
+addi x4, x22, 678
+addi x21, x10, 1841
+
+
+
+
+## desc = tests to cover proper andi writes to all registers
+## cycles = 64
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 1
+##expect[3] = 1
+##expect[4] = 1
+##expect[5] = 1
+##expect[6] = 1
+##expect[7] = 1
+##expect[8] = 1
+##expect[9] = 1
+##expect[10] = 1
+##expect[11] = 1
+##expect[12] = 1
+##expect[13] = 1
+##expect[14] = 1
+##expect[15] = 1
+##expect[16] = 1
+##expect[17] = 1
+##expect[18] = 1
+##expect[19] = 1
+##expect[20] = 1
+##expect[21] = 1
+##expect[22] = 1
+##expect[23] = 1
+##expect[24] = 1
+##expect[25] = 1
+##expect[26] = 1
+##expect[27] = 1
+##expect[28] = 1
+##expect[29] = 1
+##expect[30] = 1
+##expect[31] = 1
+
+## setting initial values
+
+addi x0, x0, 3
+addi x1, x1, 3
+addi x2, x2, 3
+addi x3, x3, 3
+addi x4, x4, 3
+addi x5, x5, 3
+addi x6, x6, 3
+addi x7, x7, 3
+addi x8, x8, 3
+addi x9, x9, 3
+addi x10, x10, 3
+addi x11, x11, 3
+addi x12, x12, 3
+addi x13, x13, 3
+addi x14, x14, 3
+addi x15, x15, 3
+addi x16, x16, 3
+addi x17, x17, 3
+addi x18, x18, 3
+addi x19, x19, 3
+addi x20, x20, 3
+addi x21, x21, 3
+addi x22, x22, 3
+addi x23, x23, 3
+addi x24, x24, 3
+addi x25, x25, 3
+addi x26, x26, 3
+addi x27, x27, 3
+addi x28, x28, 3
+addi x29, x29, 3
+addi x30, x30, 3
+addi x31, x31, 3
+
+## testing andi on each register
+
+andi x0, x0, 1
+andi x1, x1, 1
+andi x2, x2, 1
+andi x3, x3, 1
+andi x4, x4, 1
+andi x5, x5, 1
+andi x6, x6, 1
+andi x7, x7, 1
+andi x8, x8, 1
+andi x9, x9, 1
+andi x10, x10, 1
+andi x11, x11, 1
+andi x12, x12, 1
+andi x13, x13, 1
+andi x14, x14, 1
+andi x15, x15, 1
+andi x16, x16, 1
+andi x17, x17, 1
+andi x18, x18, 1
+andi x19, x19, 1
+andi x20, x20, 1
+andi x21, x21, 1
+andi x22, x22, 1
+andi x23, x23, 1
+andi x24, x24, 1
+andi x25, x25, 1
+andi x26, x26, 1
+andi x27, x27, 1
+andi x28, x28, 1
+andi x29, x29, 1
+andi x30, x30, 1
+andi x31, x31, 1
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for andi
+## cycles = 10
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 1
+##expect[7] = 2
+##expect[8] = 4
+##expect[9] = 2
+##expect[10] = 4
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1	# 0b001
+addi x2, x0, 2	# 0b010
+addi x3, x0, 3	# 0b011
+addi x4, x0, 4	# 0b100
+addi x5, x0, 5	# 0b101
+
+## base cases begin here
+## testing small numbers with the andi operation
+
+andi x6, x1, 7	# x6 = 0b001
+andi x7, x2, 7	# x7 = 0b010
+andi x8, x4, 7	# x8 = 0b100
+andi x9, x3, 6	# x9 = 0b010
+andi x10, x5, 6	# x10 = 0b100
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for andi operation
+## cycles = 84
+
+##expect[x0] = 0
+##expect[1] = -701547171
+##expect[2] = -626778971
+##expect[3] = 1515947313
+##expect[4] = 266998713
+##expect[5] = -701548224
+##expect[6] = 2049640633
+##expect[7] = 2049640841
+##expect[8] = 514
+##expect[9] = 2049641913
+##expect[10] = 1536227597
+##expect[11] = -1116170519
+##expect[12] = 0
+##expect[13] = -1605368832
+##expect[14] = 1024
+##expect[15] = -542952255
+##expect[16] = -1274117856
+##expect[17] = 1072
+##expect[18] = 1216
+##expect[19] = -1305810932
+##expect[20] = 2049641480
+##expect[21] = -359893784
+##expect[22] = -1274116750
+##expect[23] = 1127210273
+##expect[24] = -5174260
+##expect[25] = 129
+##expect[26] = -5174036
+##expect[27] = 514
+##expect[28] = -1574031558
+##expect[29] = -533031077
+##expect[30] = -115458146
+##expect[31] = 1284883229
+
+## setting random start values for each register
+
+# x1 = 0b11010110001011110011110101011101
+lui x1, -171276
+addi x1, x1, -675
+# x2 = 0b11011010101001000001110010100101
+lui x2, -153022
+addi x2, x2, -859
+# x3 = 0b1011010010110111000010100110001
+lui x3, 370104
+addi x3, x3, 1329
+# x4 = 0b1111111010100001001110111001
+lui x4, 65185
+addi x4, x4, 953
+# x5 = 0b11101001010100001011011000001001
+lui x5, -92917
+addi x5, x5, 1545
+# x6 = 0b11000110001110100100001011101010
+lui x6, -236636
+addi x6, x6, 746
+# x7 = 0b1101010100010100110000011111010
+lui x7, 436390
+addi x7, x7, 250
+# x8 = 0b11110100011110011000101100110011
+lui x8, -47207
+addi x8, x8, -1229
+# x9 = 0b1111010001010110000110110111001
+lui x9, 500401
+addi x9, x9, -583
+# x10 = 0b1011011100100001111100100001101
+lui x10, 375056
+addi x10, x10, -1779
+# x11 = 0b10111101011110001001011011101001
+lui x11, -272503
+addi x11, x11, 1769
+# x12 = 0b11011101110110000100110001011000
+lui x12, -139899
+addi x12, x12, -936
+# x13 = 0b10100000010100000000010000000000
+lui x13, -391936
+addi x13, x13, 1024
+# x14 = 0b10010111111011001111011101010
+lui x14, 77786
+addi x14, x14, -278
+# x15 = 0b11011111101000110011010011000001
+lui x15, -132557
+addi x15, x15, 1217
+# x16 = 0b1101100001111011010101000110110
+lui x16, 443355
+addi x16, x16, -1482
+# x17 = 0b1110010001111101111001110010111
+lui x17, 467951
+addi x17, x17, 919
+# x18 = 0b1110100101011111110000001001011
+lui x18, 477950
+addi x18, x18, 75
+# x19 = 0b10110010001010101110100000001100
+lui x19, -318801
+addi x19, x19, -2036
+# x20 = 0b11011000100100110010011001000101
+lui x20, -161486
+addi x20, x20, 1605
+# x21 = 0b11101010100011000111010011101000
+lui x21, -87865
+addi x21, x21, 1256
+# x22 = 0b10110100000011101000010101110010
+lui x22, -311064
+addi x22, x22, 1394
+# x23 = 0b1000011001011111101110100100001
+lui x23, 275198
+addi x23, x23, -735
+# x24 = 0b10000111111111100100011001011101
+lui x24, -491548
+addi x24, x24, 1629
+# x25 = 0b10110001011100000111011110001011
+lui x25, -321785
+addi x25, x25, 1931
+# x26 = 0b11111111101100010000110011101100
+lui x26, -1263
+addi x26, x26, -788
+# x27 = 0b11000001111111011011001001000010
+lui x27, -253989
+addi x27, x27, 578
+# x28 = 0b10100010001011100010111100111010
+lui x28, -384285
+addi x28, x28, -198
+# x29 = 0b11100000001110101001011101011011
+lui x29, -130135
+addi x29, x29, 1883
+# x30 = 0b11111001000111100011111110011110
+lui x30, -28188
+addi x30, x30, -98
+# x31 = 0b1001100100101011100001100011101
+lui x31, 313692
+addi x31, x31, 797
+
+## testing andi on randomly chosen registers
+
+andi x24, x5, 1472
+andi x20, x1, 1813
+andi x7, x9, -1585
+andi x17, x25, 828
+andi x5, x1, -1088
+andi x27, x27, 667
+andi x25, x2, 731
+andi x17, x3, 1142
+andi x20, x9, -1016
+andi x14, x7, 1647
+andi x0, x0, 1008
+andi x0, x11, 1714
+andi x6, x9, -1351
+andi x18, x15, 1732
+andi x16, x6, 1946
+andi x16, x22, -1115
+andi x14, x24, 1222
+andi x8, x27, -422
+andi x24, x26, -228
+andi x12, x0, 1436
+
+
+
+
+## desc = tests to cover proper sw and lw writes to all registers
+## cycles = 96
+
+##expect[0] = 0
+##expect[1] = 30
+##expect[2] = 29
+##expect[3] = 28
+##expect[4] = 27
+##expect[5] = 26
+##expect[6] = 25
+##expect[7] = 24
+##expect[8] = 23
+##expect[9] = 22
+##expect[10] = 21
+##expect[11] = 20
+##expect[12] = 19
+##expect[13] = 18
+##expect[14] = 17
+##expect[15] = 16
+##expect[16] = 15
+##expect[17] = 14
+##expect[18] = 13
+##expect[19] = 12
+##expect[20] = 11
+##expect[21] = 10
+##expect[22] = 9
+##expect[23] = 8
+##expect[24] = 7
+##expect[25] = 6
+##expect[26] = 5
+##expect[27] = 4
+##expect[28] = 3
+##expect[29] = 2
+##expect[30] = 1
+##expect[31] = 0
+
+## setting initial values
+
+addi x0, x0, 0
+addi x1, x1, 1
+addi x2, x2, 2
+addi x3, x3, 3
+addi x4, x4, 4
+addi x5, x5, 5
+addi x6, x6, 6
+addi x7, x7, 7
+addi x8, x8, 8
+addi x9, x9, 9
+addi x10, x10, 10
+addi x11, x11, 11
+addi x12, x12, 12
+addi x13, x13, 13
+addi x14, x14, 14
+addi x15, x15, 15
+addi x16, x16, 16
+addi x17, x17, 17
+addi x18, x18, 18
+addi x19, x19, 19
+addi x20, x20, 20
+addi x21, x21, 21
+addi x22, x22, 22
+addi x23, x23, 23
+addi x24, x24, 24
+addi x25, x25, 25
+addi x26, x26, 26
+addi x27, x27, 27
+addi x28, x28, 28
+addi x29, x29, 29
+addi x30, x30, 30
+addi x31, x31, 31
+
+## testing sw on each register
+
+sw x0, 0(x0)
+sw x1, 4(x0)
+sw x2, 8(x0)
+sw x3, 12(x0)
+sw x4, 16(x0)
+sw x5, 20(x0)
+sw x6, 24(x0)
+sw x7, 28(x0)
+sw x8, 32(x0)
+sw x9, 36(x0)
+sw x10, 40(x0)
+sw x11, 44(x0)
+sw x12, 48(x0)
+sw x13, 52(x0)
+sw x14, 56(x0)
+sw x15, 60(x0)
+sw x16, 64(x0)
+sw x17, 68(x0)
+sw x18, 72(x0)
+sw x19, 76(x0)
+sw x20, 80(x0)
+sw x21, 84(x0)
+sw x22, 88(x0)
+sw x23, 92(x0)
+sw x24, 96(x0)
+sw x25, 100(x0)
+sw x26, 104(x0)
+sw x27, 108(x0)
+sw x28, 112(x0)
+sw x29, 116(x0)
+sw x30, 120(x0)
+sw x31, 124(x0)
+
+## testing lw on each register
+
+lw x31, 0(x0)
+lw x30, 4(x0)
+lw x29, 8(x0)
+lw x28, 12(x0)
+lw x27, 16(x0)
+lw x26, 20(x0)
+lw x25, 24(x0)
+lw x24, 28(x0)
+lw x23, 32(x0)
+lw x22, 36(x0)
+lw x21, 40(x0)
+lw x20, 44(x0)
+lw x19, 48(x0)
+lw x18, 52(x0)
+lw x17, 56(x0)
+lw x16, 60(x0)
+lw x15, 64(x0)
+lw x14, 68(x0)
+lw x13, 72(x0)
+lw x12, 76(x0)
+lw x11, 80(x0)
+lw x10, 84(x0)
+lw x9, 88(x0)
+lw x8, 92(x0)
+lw x7, 96(x0)
+lw x6, 100(x0)
+lw x5, 104(x0)
+lw x4, 108(x0)
+lw x3, 112(x0)
+lw x2, 116(x0)
+lw x1, 120(x0)
+lw x0, 124(x0)
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for lw and sw
+## cycles = 15
+
+##expect[0] = 0
+##expect[1] = 0
+##expect[2] = 4
+##expect[3] = 8
+##expect[4] = 12
+##expect[5] = 16
+##expect[6] = 12
+##expect[7] = 0
+##expect[8] = 8
+##expect[9] = 16
+##expect[10] = 4
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 0
+addi x2, x0, 4
+addi x3, x0, 8
+addi x4, x0, 12
+addi x5, x0, 16
+
+## base cases begin here
+## testing small numbers with the lw and sw operation
+
+sw x1, 0(x1)
+sw x2, 0(x2)
+sw x3, 0(x3)
+sw x4, 0(x4)
+sw x5, 0(x5)
+lw x6, 12(x0)	# x6 = 12
+lw x7, 0(x0)	# x7 = 0
+lw x8, 8(x0)	# x8 = 8
+lw x9, 16(x0)	# x9 = 16
+lw x10, 4(x0)	# x10 = 4
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for lw and sw operationa
+## cycles = 150
+
+##expect[1] = 361192250
+##expect[2] = 148195846
+##expect[3] = -1738519596
+##expect[4] = -423595077
+##expect[5] = 1054720235
+##expect[6] = -1715185695
+##expect[7] = -204929724
+##expect[8] = 1028152018
+##expect[9] = -1488891227
+##expect[10] = -1727594106
+##expect[11] = 1354753952
+##expect[12] = 1971378999
+##expect[13] = 1814106855
+##expect[14] = -1245828724
+##expect[15] = -1804510824
+##expect[16] = 1882
+##expect[17] = 630
+##expect[18] = 1850
+##expect[19] = 1969
+##expect[20] = 844
+##expect[21] = 89
+##expect[22] = 717
+##expect[23] = 1500
+##expect[24] = 522
+##expect[25] = 788
+##expect[26] = 5
+##expect[27] = 1967
+##expect[28] = 684
+##expect[29] = 1958
+##expect[30] = 1596
+##expect[31] = 1518
+
+## setting random start values for each register
+
+# x1 = 361192250
+lui x1, 88182
+addi x1, x1, -1222
+# x2 = 148195846
+lui x2, 36181
+addi x2, x2, -1530
+# x3 = -1738519596
+lui x3, -424443
+addi x3, x3, -1068
+# x4 = -423595077
+lui x4, -103417
+addi x4, x4, 955
+# x5 = 1054720235
+lui x5, 257500
+addi x5, x5, 235
+# x6 = -1715185695
+lui x6, -418747
+addi x6, x6, 2017
+# x7 = -204929724
+lui x7, -50032
+addi x7, x7, 1348
+# x8 = 1028152018
+lui x8, 251014
+addi x8, x8, -1326
+# x9 = -1488891227
+lui x9, -363499
+addi x9, x9, 677
+# x10 = -1727594106
+lui x10, -421776
+addi x10, x10, 390
+# x11 = 1354753952
+lui x11, 330750
+addi x11, x11, 1952
+# x12 = 1971378999
+lui x12, 481294
+addi x12, x12, -1225
+# x13 = 1814106855
+lui x13, 442897
+addi x13, x13, 743
+# x14 = -1245828724
+lui x14, -304157
+addi x14, x14, -1652
+# x15 = -1804510824
+lui x15, -440554
+addi x15, x15, -1640
+# x16 = 1882
+addi x16, x16, 1882
+# x17 = 630
+addi x17, x17, 630
+# x18 = 1850
+addi x18, x18, 1850
+# x19 = 1969
+addi x19, x19, 1969
+# x20 = 844
+addi x20, x20, 844
+# x21 = 89
+addi x21, x21, 89
+# x22 = 717
+addi x22, x22, 717
+# x23 = 1500
+addi x23, x23, 1500
+# x24 = 522
+addi x24, x24, 522
+# x25 = 788
+addi x25, x25, 788
+# x26 = 5
+addi x26, x26, 5
+# x27 = 1967
+addi x27, x27, 1967
+# x28 = 684
+addi x28, x28, 684
+# x29 = 1958
+addi x29, x29, 1958
+# x30 = 1596
+addi x30, x30, 1596
+# x31 = 1518
+addi x31, x31, 1518
+
+## testing sw and lw on randomly chosen registers
+
+sw x5, 250(x16)
+lw x5, 250(x16)
+sw x7, 664(x28)
+lw x7, 664(x28)
+sw x8, 1247(x22)
+lw x8, 1247(x22)
+sw x4, 1651(x21)
+lw x4, 1651(x21)
+sw x11, 1270(x29)
+lw x11, 1270(x29)
+sw x7, 1522(x16)
+lw x7, 1522(x16)
+sw x13, 1067(x22)
+lw x13, 1067(x22)
+sw x10, 960(x30)
+lw x10, 960(x30)
+sw x3, 1980(x23)
+lw x3, 1980(x23)
+sw x7, 854(x29)
+lw x7, 854(x29)
+sw x6, 134(x31)
+lw x6, 134(x31)
+sw x5, 431(x19)
+lw x5, 431(x19)
+sw x1, 1470(x18)
+lw x1, 1470(x18)
+sw x4, 422(x31)
+lw x4, 422(x31)
+sw x0, 12(x20)
+lw x0, 12(x20)
+sw x8, 287(x19)
+lw x8, 287(x19)
+sw x11, 319(x26)
+lw x11, 319(x26)
+sw x9, 433(x27)
+lw x9, 433(x27)
+sw x5, 1337(x27)
+lw x5, 1337(x27)
+sw x1, 1648(x25)
+lw x1, 1648(x25)
+
+
+
+
+## desc = tests to cover proper sb and lb writes to all registers
+## cycles = 96
+
+##expect[0] = 0
+##expect[1] = 30
+##expect[2] = 29
+##expect[3] = 28
+##expect[4] = 27
+##expect[5] = 26
+##expect[6] = 25
+##expect[7] = 24
+##expect[8] = 23
+##expect[9] = 22
+##expect[10] = 21
+##expect[11] = 20
+##expect[12] = 19
+##expect[13] = 18
+##expect[14] = 17
+##expect[15] = 16
+##expect[16] = 15
+##expect[17] = 14
+##expect[18] = 13
+##expect[19] = 12
+##expect[20] = 11
+##expect[21] = 10
+##expect[22] = 9
+##expect[23] = 8
+##expect[24] = 7
+##expect[25] = 6
+##expect[26] = 5
+##expect[27] = 4
+##expect[28] = 3
+##expect[29] = 2
+##expect[30] = 1
+##expect[31] = 0
+
+## setting initial values
+
+addi x0, x0, 0
+addi x1, x1, 1
+addi x2, x2, 2
+addi x3, x3, 3
+addi x4, x4, 4
+addi x5, x5, 5
+addi x6, x6, 6
+addi x7, x7, 7
+addi x8, x8, 8
+addi x9, x9, 9
+addi x10, x10, 10
+addi x11, x11, 11
+addi x12, x12, 12
+addi x13, x13, 13
+addi x14, x14, 14
+addi x15, x15, 15
+addi x16, x16, 16
+addi x17, x17, 17
+addi x18, x18, 18
+addi x19, x19, 19
+addi x20, x20, 20
+addi x21, x21, 21
+addi x22, x22, 22
+addi x23, x23, 23
+addi x24, x24, 24
+addi x25, x25, 25
+addi x26, x26, 26
+addi x27, x27, 27
+addi x28, x28, 28
+addi x29, x29, 29
+addi x30, x30, 30
+addi x31, x31, 31
+
+## testing sb on each register
+
+sb x0, 0(x0)
+sb x1, 1(x0)
+sb x2, 2(x0)
+sb x3, 3(x0)
+sb x4, 4(x0)
+sb x5, 5(x0)
+sb x6, 6(x0)
+sb x7, 7(x0)
+sb x8, 8(x0)
+sb x9, 9(x0)
+sb x10, 10(x0)
+sb x11, 11(x0)
+sb x12, 12(x0)
+sb x13, 13(x0)
+sb x14, 14(x0)
+sb x15, 15(x0)
+sb x16, 16(x0)
+sb x17, 17(x0)
+sb x18, 18(x0)
+sb x19, 19(x0)
+sb x20, 20(x0)
+sb x21, 21(x0)
+sb x22, 22(x0)
+sb x23, 23(x0)
+sb x24, 24(x0)
+sb x25, 25(x0)
+sb x26, 26(x0)
+sb x27, 27(x0)
+sb x28, 28(x0)
+sb x29, 29(x0)
+sb x30, 30(x0)
+sb x31, 31(x0)
+
+## testing lb on each register
+
+lb x31, 0(x0)
+lb x30, 1(x0)
+lb x29, 2(x0)
+lb x28, 3(x0)
+lb x27, 4(x0)
+lb x26, 5(x0)
+lb x25, 6(x0)
+lb x24, 7(x0)
+lb x23, 8(x0)
+lb x22, 9(x0)
+lb x21, 10(x0)
+lb x20, 11(x0)
+lb x19, 12(x0)
+lb x18, 13(x0)
+lb x17, 14(x0)
+lb x16, 15(x0)
+lb x15, 16(x0)
+lb x14, 17(x0)
+lb x13, 18(x0)
+lb x12, 19(x0)
+lb x11, 20(x0)
+lb x10, 21(x0)
+lb x9, 22(x0)
+lb x8, 23(x0)
+lb x7, 24(x0)
+lb x6, 25(x0)
+lb x5, 26(x0)
+lb x4, 27(x0)
+lb x3, 28(x0)
+lb x2, 29(x0)
+lb x1, 30(x0)
+lb x0, 31(x0)
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = base cases for lb and sb
+## cycles = 15
+
+##expect[0] = 0
+##expect[1] = 1
+##expect[2] = 2
+##expect[3] = 3
+##expect[4] = 4
+##expect[5] = 5
+##expect[6] = 4
+##expect[7] = 1
+##expect[8] = 3
+##expect[9] = 5
+##expect[10] = 2
+##expect[11] = 0
+##expect[12] = 0
+##expect[13] = 0
+##expect[14] = 0
+##expect[15] = 0
+##expect[16] = 0
+##expect[17] = 0
+##expect[18] = 0
+##expect[19] = 0
+##expect[20] = 0
+##expect[21] = 0
+##expect[22] = 0
+##expect[23] = 0
+##expect[24] = 0
+##expect[25] = 0
+##expect[26] = 0
+##expect[27] = 0
+##expect[28] = 0
+##expect[29] = 0
+##expect[30] = 0
+##expect[31] = 0
+
+## setting initial values
+
+addi x1, x0, 1
+addi x2, x0, 2
+addi x3, x0, 3
+addi x4, x0, 4
+addi x5, x0, 5
+
+## base cases begin here
+## testing small numbers with the lb and sb operation
+
+sb x1, 0(x1)
+sb x2, 0(x2)
+sb x3, 0(x3)
+sb x4, 0(x4)
+sb x5, 0(x5)
+lb x6, 4(x0)	# x6 = 4
+lb x7, 1(x0)	# x7 = 1
+lb x8, 3(x0)	# x8 = 3
+lb x9, 5(x0)	# x9 = 5
+lb x10, 2(x0)	# x10 = 2
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = random test cases for sb and lb operation
+## cycles = 150
+
+##expect[0] = 0
+##expect[1] = 106
+##expect[2] = -11
+##expect[3] = -730703532
+##expect[4] = -69
+##expect[5] = 1922093462
+##expect[6] = -2141425671
+##expect[7] = -116
+##expect[8] = -588025972
+##expect[9] = -1076380514
+##expect[10] = 103
+##expect[11] = 30
+##expect[12] = 121
+##expect[13] = -658359722
+##expect[14] = -53
+##expect[15] = 342381533
+##expect[16] = 565
+##expect[17] = 1585
+##expect[18] = 1540
+##expect[19] = 722
+##expect[20] = 393
+##expect[21] = 493
+##expect[22] = 604
+##expect[23] = 1362
+##expect[24] = 974
+##expect[25] = 1960
+##expect[26] = 1403
+##expect[27] = 185
+##expect[28] = 1018
+##expect[29] = 822
+##expect[30] = 5
+##expect[31] = 427
+
+## setting random start values for each register
+
+# x1 = 802745450
+lui x1, 195983
+addi x1, x1, -918
+# x2 = 1941226997
+lui x2, 473932
+addi x2, x2, 1525
+# x3 = -730703532
+lui x3, -178394
+addi x3, x3, -1708
+# x4 = -1821290565
+lui x4, -444651
+addi x4, x4, -69
+# x5 = 1922093462
+lui x5, 469261
+addi x5, x5, 406
+# x6 = -2141425671
+lui x6, -522809
+addi x6, x6, -7
+# x7 = 1277217932
+lui x7, 311821
+addi x7, x7, -884
+# x8 = -588025972
+lui x8, -143561
+addi x8, x8, -116
+# x9 = -1076380514
+lui x9, -262788
+addi x9, x9, -866
+# x10 = 813534311
+lui x10, 198617
+addi x10, x10, -921
+# x11 = -1217619682
+lui x11, -297270
+addi x11, x11, -1762
+# x12 = -1200872071
+lui x12, -293182
+addi x12, x12, 1401
+# x13 = -658359722
+lui x13, -160732
+addi x13, x13, -1450
+# x14 = -7561781
+lui x14, -1846
+addi x14, x14, -565
+# x15 = 342381533
+lui x15, 83589
+addi x15, x15, 989
+# x16 = 565
+addi x16, x16, 565
+# x17 = 1585
+addi x17, x17, 1585
+# x18 = 1540
+addi x18, x18, 1540
+# x19 = 722
+addi x19, x19, 722
+# x20 = 393
+addi x20, x20, 393
+# x21 = 493
+addi x21, x21, 493
+# x22 = 604
+addi x22, x22, 604
+# x23 = 1362
+addi x23, x23, 1362
+# x24 = 974
+addi x24, x24, 974
+# x25 = 1960
+addi x25, x25, 1960
+# x26 = 1403
+addi x26, x26, 1403
+# x27 = 185
+addi x27, x27, 185
+# x28 = 1018
+addi x28, x28, 1018
+# x29 = 822
+addi x29, x29, 822
+# x30 = 5
+addi x30, x30, 5
+# x31 = 427
+addi x31, x31, 427
+
+## testing sb and lb on randomly chosen registers
+
+sb x0, 824(x20)
+lb x0, 824(x20)
+sb x14, 1743(x22)
+lb x14, 1743(x22)
+sb x12, 1837(x20)
+lb x12, 1837(x20)
+sb x14, 1071(x18)
+lb x14, 1071(x18)
+sb x7, 1345(x25)
+lb x7, 1345(x25)
+sb x2, 956(x17)
+lb x2, 956(x17)
+sb x2, 1073(x29)
+lb x2, 1073(x29)
+sb x1, 502(x24)
+lb x1, 502(x24)
+sb x14, 1201(x30)
+lb x14, 1201(x30)
+sb x10, 1490(x25)
+lb x10, 1490(x25)
+sb x12, 1562(x30)
+lb x12, 1562(x30)
+sb x2, 2013(x23)
+lb x2, 2013(x23)
+sb x10, 909(x17)
+lb x10, 909(x17)
+sb x14, 1266(x25)
+lb x14, 1266(x25)
+sb x14, 1676(x29)
+lb x14, 1676(x29)
+sb x11, 434(x22)
+lb x11, 434(x22)
+sb x7, 1182(x27)
+lb x7, 1182(x27)
+sb x4, 1243(x20)
+lb x4, 1243(x20)
+sb x12, 1674(x20)
+lb x12, 1674(x20)
+sb x12, 2038(x30)
+lb x12, 2038(x30)
+
+
+
+
+## desc = tests to cover proper lui writes to all registers
+## cycles = 32
+
+##expect[0] = 4096
+##expect[1] = 4096
+##expect[2] = 4096
+##expect[3] = 4096
+##expect[4] = 4096
+##expect[5] = 4096
+##expect[6] = 4096
+##expect[7] = 4096
+##expect[8] = 4096
+##expect[9] = 4096
+##expect[10] = 4096
+##expect[11] = 4096
+##expect[12] = 4096
+##expect[13] = 4096
+##expect[14] = 4096
+##expect[15] = 4096
+##expect[16] = 4096
+##expect[17] = 4096
+##expect[18] = 4096
+##expect[19] = 4096
+##expect[20] = 4096
+##expect[21] = 4096
+##expect[22] = 4096
+##expect[23] = 4096
+##expect[24] = 4096
+##expect[25] = 4096
+##expect[26] = 4096
+##expect[27] = 4096
+##expect[28] = 4096
+##expect[29] = 4096
+##expect[30] = 4096
+##expect[31] = 4096
+
+## testing lui on each register
+
+lui x0, 1
+lui x1, 1
+lui x2, 1
+lui x3, 1
+lui x4, 1
+lui x5, 1
+lui x6, 1
+lui x7, 1
+lui x8, 1
+lui x9, 1
+lui x10, 1
+lui x11, 1
+lui x12, 1
+lui x13, 1
+lui x14, 1
+lui x15, 1
+lui x16, 1
+lui x17, 1
+lui x18, 1
+lui x19, 1
+lui x20, 1
+lui x21, 1
+lui x22, 1
+lui x23, 1
+lui x24, 1
+lui x25, 1
+lui x26, 1
+lui x27, 1
+lui x28, 1
+lui x29, 1
+lui x30, 1
+lui x31, 1
+
+## concentrated lui random tests were not conducted, since lui was randomly tested in the testing of all other operations
+
+
+
+
+##-----------------------------------------------------------------------------------------------------------------------------------##
+
+## desc = edge test cases for all operations
+## cycles = 80
+
+## setting start values for each register
+
+addi x1, x0, 2047
+addi x2, x0, -2048
+addi x3, x0, 1
+addi x4, x0, -1
+
+## edge case testing begins here
+
+add x5, x5, x31 # zero + zero
+add x6, x1, x1 # max + max
+add x7, x2, x2 # min + min 
+add x8, x1, x2 # max + min
+add x9, x1, x3 # max + 1
+add x10, x2, x4 # min + (-1)
+
+addi x5, x5, 0 # zero + zero
+addi x6, x1, 2047 # max + max
+addi x7, x2, -2048 # min + min 
+addi x8, x1, -2048 # max + min
+addi x9, x1, 1 # max + 1
+addi x10, x2, -1 # min + (-1)
+
+sub x5, x1, x1 # max - max
+sub x6, x1, x2 # max - min
+sub x7, x1, x4 # max - (-1)
+sub x8, x2, x2 # min - min
+sub x9, x2, x1 # min - max
+sub x10, x2, x3 # min - 1
+
+slt x5, x0, x1	#0 < 1
+slt x6, x4, x3	#-1 < 1
+slt x7, x2, x1	#min < max
+slt x8, x0, x0	#0 < 0
+slt x9, x1, x1	#max < max
+slt x10, x2, x2	#min < min
+
+addi x1, x0, 170	#10101010
+addi x2, x0, 85	#01010101
+addi x3, x0, 240	#11110000
+addi x4, x0, 15	#00001111
+
+and x5, x1, x1	#10101010 & 10101010
+and x6, x2, x2	#01010101 & 01010101
+and x7, x1, x2	#10101010 & 01010101
+and x8, x3, x4	#11110000 & 00001111
+
+andi x5, x1, 170	#10101010 & 10101010
+andi x6, x2, 85	#01010101 & 01010101
+andi x7, x1, 85	#10101010 & 01010101
+andi x8, x3, 15	#11110000 & 00001111
+
+or x5, x1, x1	#10101010 | 10101010
+or x6, x2, x2	#01010101 | 01010101
+or x7, x1, x2	#10101010 | 01010101
+or x8, x3, x4	#11110000 | 00001111
+
+xor x5, x1, x1	#10101010 ^ 10101010
+xor x6, x2, x2	#01010101 ^ 01010101
+xor x7, x1, x2	#10101010 ^ 01010101
+xor x8, x3, x4	#11110000 ^ 00001111
+
+addi x1, x0, 1	#00000001
+addi x2, x0, 254	#11111110
+addi x3, x0, 240	#11110000
+addi x4, x0, 15	#00001111
+addi x5, x0, 4
+addi x6, x0, 7
+
+sll x7, x1, x6 	#shifting a one
+sll x8, x2, x6 	#shifting a zero
+sll x9, x4, x5 	#shifting a group of ones
+sll x10, x3, x5	#shifting a group of zeros
+
+addi x1, x0, 128	#10000000
+addi x2, x0, 127	#01111111
+addi x3, x0, 240	#11110000
+addi x4, x0, 15	#00001111
+addi x5, x0, 4
+addi x6, x0, 7
+
+sra x7, x1, x6 	#shifting a one
+sra x8, x2, x6 	#shifting a zero
+sra x9, x3, x5 	#shifting a group of ones
+sra x10, x4, x5	#shifting a group of zeros
+
+lui x1, 1		#min positive load
+lui x2, -1		#min negative load
+lui x3, 524287	#max positive load
+lui x4, -524288	#max negative load
