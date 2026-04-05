@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorador de Universidades</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Explorador de Universidades</h1>
+            <p class="description">Descubra universidades em todo o mundo. Digite o nome de um país em inglês para buscar suas instituições de ensino superior.</p>
+        </header>
+        
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Digite o nome de um país (ex: Brazil)">
+            <button id="search-button">Buscar Universidades</button>
+        </div>
+        
+        <div class="instructions">
+            <h2>Como usar:</h2>
+            <ul>
+                <li>Digite o nome de um país em inglês (ex: Brazil, Germany, Japan)</li>
+                <li>Clique em "Buscar Universidades" ou pressione Enter</li>
+                <li>Os resultados serão exibidos abaixo</li>
+                <li>Clique no nome da universidade para visitar seu site (se disponível)</li>
+            </ul>
+        </div>
+        
+        <div id="results"></div>
+        
+        <footer>
+            <p>Desenvolvido para a disciplina de Programação 4 - Universidade Federal de Mato Grosso</p>
+            <p>Dados fornecidos por <a href="http://universities.hipolabs.com/" target="_blank">Hipo Labs University API</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
