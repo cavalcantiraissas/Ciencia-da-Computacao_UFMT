@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscrição - Evento UFMT</title>
+    <style>
+        body {
+            background-color: #d0e4f7;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Formulário de Inscrição para Evento</h2>
+
+    <form action="formulario_evento.html" method="post">
+        
+        <label for="nome">Nome completo:</label>
+        <input type="text" id="nome" name="nome" required autofocus aria-required="true">
+
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" placeholder="exemplo@dominio.com" required autocomplete="off">
+
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" required autocomplete="off">
+
+        <label for="nascimento">Data de nascimento:</label>
+        <input type="date" id="nascimento" name="nascimento" required>
+
+        <fieldset>
+            <legend>Sexo:</legend>
+            <input type="radio" id="sexo_m" name="sexo" value="M" required>
+            <label for="sexo_m">Masculino</label>
+            <input type="radio" id="sexo_f" name="sexo" value="F">
+            <label for="sexo_f">Feminino</label>
+        </fieldset>
+
+        <label for="site">Site pessoal:</label>
+        <input type="url" id="site" name="site" placeholder="https://meusite.com">
+
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required>
+
+        <label for="escolaridade">Escolaridade:</label>
+        <input list="escolaridades" id="escolaridade" name="escolaridade">
+        <datalist id="escolaridades">
+            <option value="Sem Ensino">
+            <option value="Ensino Fundamental">
+            <option value="Ensino Médio">
+            <option value="Ensino Superior">
+        </datalist>
+
+        <fieldset>
+            <legend>Interesses:</legend>
+            <input type="checkbox" id="musica" name="interesses" value="musica">
+            <label for="musica">Música</label>
+            <input type="checkbox" id="filmes" name="interesses" value="filmes">
+            <label for="filmes">Cinema</label>
+            <input type="checkbox" id="esportes" name="interesses" value="esportes">
+            <label for="esportes">Esportes</label>
+            <input type="checkbox" id="games" name="interesses" value="games">
+            <label for="games">Videogames</label>
+        </fieldset>
+
+        <label for="chegada">Horário de chegada:</label>
+        <input type="time" id="chegada" name="chegada">
+
+        <br><br>
+        <button type="submit">Enviar Inscrição</button>
+
+    </form>
+</body>
+</html>
