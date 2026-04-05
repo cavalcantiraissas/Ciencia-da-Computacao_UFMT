@@ -27,14 +27,6 @@ Capacitar o desenvolvedor na análise e seleção de estruturas adequadas para p
 
 # Estrutura de Dados II
 
-Repositório avançado focado em estruturas de dados complexas, algoritmos de busca em grafos e otimização de grandes volumes de informação.
-
-## Informações Gerais
-* Instituição: Universidade Federal de Mato Grosso
-* Docente: Robson da Silva Lopes
-* Período: 2024/1
-* Carga Horária: 64 horas
-
 ## Objetivos
 Estudo de estruturas avançadas indispensáveis para o desenvolvimento de sistemas de alta performance, como bancos de dados, redes e motores de busca.
 
