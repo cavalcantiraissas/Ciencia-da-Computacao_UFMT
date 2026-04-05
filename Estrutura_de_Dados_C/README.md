@@ -1,68 +1,52 @@
-# Estrutura de Dados I - Ciência da Computação (UFMT)
+# Estrutura de Dados I
 
-Este repositório reúne os materiais, códigos e exercícios desenvolvidos ao longo da disciplina **Estrutura de Dados I**, cursada no Bacharelado em Ciência da Computação da **Universidade Federal de Mato Grosso (UFMT)**.
+Este diretório contém a implementação de estruturas de dados elementares, utilizando a linguagem C como base para o gerenciamento de memória e eficiência algorítmica.
 
-A disciplina é voltada ao estudo e implementação das principais estruturas de dados utilizando a linguagem **C**, com foco em representação, manipulação e análise de algoritmos.
+## Informações Gerais
+* Instituição: Universidade Federal de Mato Grosso
+* Docente: Ivairton Monteiro Santos
+* Período: 2024/2
+* Carga Horária: 96 horas
 
----
+## Objetivos
+Capacitar o desenvolvedor na análise e seleção de estruturas adequadas para problemas computacionais, garantindo a manipulação eficiente de dados em memória primária.
 
-##  Ementa
+## Conteúdo Programático
+* Tipos Abstratos de Dados (TAD)
+* Introdução à análise de complexidade de algoritmos
+* Listas Lineares: Encadeadas, duplamente encadeadas e circulares
+* Pilhas e Filas: Conceitos e implementações
+* Algoritmos de Ordenação (Sorting)
+* Manipulação de arquivos e tipos de armazenamento
+* Estruturas Não Lineares: Árvores binárias e Heaps
 
-> Estudo da linguagem de programação C para posterior implementação das estruturas de dados.  
-> Tipos abstratos de dados.  
-> Introdução à análise de algoritmos.  
-> Listas lineares: encadeadas, duplamente encadeadas e circulares.  
-> Pilhas.  
-> Filas.  
-> Algoritmos de ordenação.  
-> Manipulação de arquivos.  
-> Heap.  
-> Listas não lineares: árvores binárias e com múltiplos filhos.
+## Bibliografia Principal
+* TENENBAUM, A. M. Estruturas de Dados Usando C
+* ZIVIANI, N. Projeto de Algoritmos com implementações em Pascal e C
+* CORMEN, T. H. Algoritmos: Teoria e Prática
 
----
+# Estrutura de Dados II
 
-##  Justificativa
+Repositório avançado focado em estruturas de dados complexas, algoritmos de busca em grafos e otimização de grandes volumes de informação.
 
-A disciplina de **Estrutura de Dados I** aborda conteúdos essenciais para a formação do cientista da computação.  
-O domínio de estruturas de dados elementares é **fundamental para o desenvolvimento eficiente de sistemas computacionais**, além de ser aplicado em diversas outras disciplinas técnicas ao longo do curso.
+## Informações Gerais
+* Instituição: Universidade Federal de Mato Grosso
+* Docente: Robson da Silva Lopes
+* Período: 2024/1
+* Carga Horária: 64 horas
 
-Essa base permite compreender como organizar, armazenar e manipular informações de forma otimizada — competências indispensáveis para a atuação em **desenvolvimento de software, análise de algoritmos, banco de dados, inteligência artificial e engenharia de dados.**
+## Objetivos
+Estudo de estruturas avançadas indispensáveis para o desenvolvimento de sistemas de alta performance, como bancos de dados, redes e motores de busca.
 
-##  Tecnologias e Ferramentas
+## Conteúdo Programático
+* Tabelas de Dispersão (Hash) e funções de espalhamento
+* Árvores Balanceadas: AVL, Vermelho Preto, Árvore B e B+
+* Teoria dos Grafos: Representação e busca (DFS e BFS)
+* Algoritmos de Caminho Mínimo: Dijkstra
+* Árvores Geradoras Mínimas: Prim e Kruskal
+* Fluxo Máximo e problemas de coloração
 
-<div align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" height="40" alt="C" />
-  &nbsp;&nbsp;
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" height="40" alt="VSCode" />
-  &nbsp;&nbsp;
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" height="40" alt="Git" />
-</div>
-
----
-
-## Habilidades Desenvolvidas
-
-- Implementação de estruturas de dados em C  
-- Análise de complexidade de algoritmos  
-- Raciocínio lógico e abstração computacional  
-- Modularização e boas práticas de programação  
-- Manipulação de memória e ponteiros  
-- Persistência de dados em arquivos  
-
----
-
-## Autora
-
-**Raissa Cavalcanti**  
-Estudante de Ciência da Computação — UFMT  
-📫 [LinkedIn](https://www.linkedin.com/in/cavalcantiraissa/) | 📧 Cavalcanti.c.raissa@gmail.com
-
----
-
-## Observações
-
-Os códigos e anotações contidos neste repositório foram desenvolvidos com fins educacionais, como parte das atividades da disciplina **Estrutura de Dados I**.  
-O repositório serve como base de estudo e prática para algoritmos e estruturas fundamentais da Computação.
-
-
-
+## Bibliografia Principal
+* CORMEN, Thomas H. Algoritmos: teoria e prática
+* TENENBAUM, Aaron M. Estruturas de dados usando C
+* KNUTH, Donald E. The art of computer programming
