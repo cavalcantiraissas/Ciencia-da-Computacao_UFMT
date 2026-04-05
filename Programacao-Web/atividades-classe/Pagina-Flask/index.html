@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Bem-vindo ao Sistema de Gerenciamento de Produtos</h1>
+<div class="row">
+    <div class="col-md-8">
+        <p class="lead">Este sistema permite gerenciar seus produtos de forma simples e eficiente.</p>
+        <p>Utilize a barra de navegação acima para:</p>
+        <ul>
+            <li><strong>Cadastrar</strong> novos produtos no sistema</li>
+            <li><strong>Listar</strong> todos os produtos cadastrados</li>
+        </ul>
+        <div class="alert alert-info mt-4">
+            <h5>Funcionalidades:</h5>
+            <ul>
+                <li>Cadastro de produtos com nome, marca e valor</li>
+                <li>Visualização de todos os produtos em formato de tabela</li>
+                <li>Interface responsiva e intuitiva</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Estatísticas</h5>
+                <p class="card-text">
+                    {% with conn = sqlite3.connect(DATABASE) %}
+                        {% set cursor = conn.cursor() %}
+                        {% set cursor.execute('SELECT COUNT(*) FROM produtos') %}
+                        {% set total_produtos = cursor.fetchone()[0] %}
+                        Total de produtos cadastrados: <strong>{{ total_produtos }}</strong>
+                    {% endwith %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
