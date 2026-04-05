@@ -1,41 +1,25 @@
-# Programação III — Ciência da Computação (UFMT)
+# Programação III
 
-Disciplina do curso de **Ciência da Computação** da **Universidade Federal de Mato Grosso (UFMT)**, voltada ao desenvolvimento de aplicações em **Java**, com foco em práticas de programação orientada a objetos, interfaces gráficas, persistência de dados e uso de APIs.
+Desenvolvimento de aplicações utilizando a plataforma Java, abrangendo desde a lógica de objetos até a persistência de dados e interfaces gráficas.
 
----
+## Informações Gerais
+* Instituição: Universidade Federal de Mato Grosso
+* Docente: Taina Isabela Monteiro da Silva
+* Período: 2025/3
+* Carga Horária: 64 horas
 
-## 📘 Ementa
+## Objetivos
+Projetar e implementar sistemas escaláveis e modernos, integrando interfaces interativas com processamento multitarefa e bancos de dados.
 
-- Programação utilizando a linguagem **Java**  
-- Estudo da **plataforma Java** e suas principais bibliotecas  
-- **Programação de interfaces gráficas (GUI)** interativas  
-- **Multithreading** e processamento concorrente  
-- **Persistência de dados** em arquivos e bancos de dados  
-- **Tratamento de exceções**  
-- **Coleções** e estruturas de dados  
-- **APIs** e integração com ferramentas externas  
-- Utilização de **ferramentas de desenvolvimento** (IDEs, depuradores, gerenciadores de dependências)  
-- **Estudos de caso** aplicando os conceitos aprendidos  
+## Conteúdo Programático
+* Plataforma Java e Máquina Virtual (JVM)
+* Interface Gráfica com Swing e JavaFX
+* Programação Multithread e computação assíncrona
+* Persistência de dados via JDBC (Java Database Connectivity)
+* Frameworks de coleções e fluxos de dados
+* Tratamento avançado de exceções e depuração
 
----
-
-## 🧩 Objetivos
-
-- Dominar os conceitos e práticas da **programação orientada a objetos em Java**.  
-- Desenvolver aplicações **robustas, escaláveis e interativas**.  
-- Aplicar **boas práticas de design**, modularização e reuso de código.  
-- Integrar aplicações com **bancos de dados** e **APIs externas**.  
-- Compreender o funcionamento de **threads**, **coleções** e **tratamento de exceções** no ecossistema Java.
-
----
-
-## 🛠️ Tecnologias e Ferramentas
-
-- **Java SE 17+**
-- **VSCODE**
-
----
-## 📄 Licença
-
-Este repositório é destinado **exclusivamente para fins acadêmicos**.  
-O conteúdo pode ser utilizado para estudo e referência, desde que citada a fonte original.
+## Bibliografia Principal
+* DEITEL, H. M. Java: Como programar
+* SANTOS, Rafael. Introdução à Programação Orientada a Objetos Usando Java
+* SCHILDT, Herbert. Java: A Referência Completa
