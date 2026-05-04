@@ -1,67 +1,51 @@
 # Ciência da Computação - UFMT
 
-Repositório pessoal de estudos, atividades e projetos desenvolvidos durante o curso de **Ciência da Computação** na **Universidade Federal de Mato Grosso (UFMT)**.  
-Aqui estão reunidos trabalhos práticos, exercícios de programação, anotações e projetos paralelos relacionados às disciplinas cursadas ao longo da graduação.
+Repositório acadêmico do curso de Bacharelado em Ciência da Computação pela Universidade Federal de Mato Grosso (UFMT). Reúne atividades, trabalhos, projetos e materiais de estudo produzidos ao longo da graduação, organizados por disciplina.
 
----
-
-## Objetivo
-
-Organizar e documentar o aprendizado adquirido em sala de aula e em estudos independentes, consolidando o conhecimento nas diversas áreas da **Computação**
+O conteúdo é atualizado continuamente conforme o progresso do curso. Cada pasta corresponde a uma disciplina e contém os arquivos, códigos e documentações produzidos naquele contexto.
 
 ---
 
 ## Estrutura do Repositório
-Cada pasta contém seus próprios arquivos, relatórios, códigos e documentações, com um `README.md` específico descrevendo a atividade ou projeto.
+
+| Disciplina | Descrição | Conteúdo |
+|---|---|---|
+| [Arquitetura de Computadores](./Arquitetura-Computadores) | Estudo da organização interna de sistemas computacionais: hierarquia de memória, pipeline, conjunto de instruções e desempenho de processadores | Assembly, análise de desempenho, relatórios |
+| [Banco de Dados](./Banco-de-dados) | Fundamentos de banco de dados relacionais: modelagem ER, normalização, SQL e projeto de schemas | SQL, modelagem, diagramas ER |
+| [Engenharia de Software / Sistemas](./Engenharia_Software) | Ciclo de vida de software, requisitos, modelagem UML, padrões de projeto e metodologias ágeis | UML, diagramas, documentação |
+| [Estrutura de Dados em C](./Estrutura_de_Dados_C) | Implementação das principais estruturas de dados - listas, pilhas, filas, árvores e grafos — em linguagem C | C, algoritmos, estruturas de dados |
+| [Laboratório de Banco de Dados](./Lab_Banco-Dados) | Atividades práticas de banco de dados: criação de schemas, consultas SQL avançadas e modelagem aplicada | SQL, MySQL, exercícios práticos |
+| [Organização de Computadores](./Organizacao-computadores) | Arquitetura de von Neumann, representação de dados, lógica digital, circuitos combinacionais e sequenciais | Lógica digital, circuitos, relatórios |
+| [Programação para Dispositivos Móveis](./Programacao-Disp-Moveis) | Desenvolvimento de aplicações móveis: layouts, componentes, ciclo de vida e integração com APIs | Android, Java/Kotlin |
+| [Programação Web](./Programacao-Web) | Desenvolvimento front-end e back-end para a web: HTML, CSS, JavaScript e integração com servidores | HTML, CSS, JS, PHP |
+| [Programação em C++](./Programacao_C++) | Paradigma orientado a objetos em C++: classes, herança, polimorfismo, templates e STL | C++ |
+| [Programação em Java](./Programacao_Java) | Orientação a objetos em Java: encapsulamento, interfaces, coleções, tratamento de exceções e padrões de projeto | Java |
+| [Projeto de Software](./Projeto-Software) | Desenvolvimento de um projeto de software completo: especificação, arquitetura, implementação e entrega | Documentação, código, apresentação |
+| [Sistemas Operacionais](./Sistemas-Operacionaisl) | Gerenciamento de processos, escalonamento, memória virtual, sistemas de arquivos e sincronização | C, shell scripts, relatórios |
 
 ---
 
-## Conteúdos Principais
+## Tecnologias Presentes no Repositório
 
-- **Atividades em Sala:** exercícios propostos nas disciplinas  
-- **Trabalhos Práticos:** projetos avaliativos e implementações completas  
-- **Projetos Paralelos:** aplicações e experimentos fora da grade curricular  
-- **Anotações e Resumos:** sínteses de conteúdos e conceitos importantes  
-
----
-
-## Tecnologias e Linguagens Utilizadas
-
-Durante o curso e nos projetos desenvolvidos, utilizo diversas tecnologias, como:
-
-- **Linguagens:** Java, Python, C, JavaScript, SQL, C++  
-- **Frameworks e Ferramentas:** JavaFX, Flask, React, Spring Boot, Node.js  
-- **Banco de Dados:** MySQL, PostgreSQL, SQLite  
-- **Controle de Versão:** Git e GitHub  
-- **Ambientes de Desenvolvimento:** VS Code
+![C](https://img.shields.io/badge/C-00599C?style=flat-square&logo=c&logoColor=white)
+![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=cplusplus&logoColor=white)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=flat-square&logo=mysql&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 
 ---
 
-## Aprendizados e Metas
+## Sobre o Curso
 
-Este repositório também serve como um diário de progresso, refletindo minha evolução como desenvolvedora e pesquisadora na área de Computação.  
-Os principais objetivos são:
-
-- Fortalecer fundamentos teóricos e práticos  
-- Documentar o processo de aprendizado  
-- Compartilhar conhecimento com colegas e comunidade
+**Instituição:** Universidade Federal de Mato Grosso (UFMT)  
+**Curso:** Bacharelado em Ciência da Computação  
+**Status:** Em andamento
 
 ---
 
-## Sobre
+## Autora
 
-- **Raissa Caroline Cavalcanti da Silva**
-- **Curso:** Bacharelado em Ciência da Computação  
-- **Universidade:** Universidade Federal de Mato Grosso (UFMT)  
-- **Contato:** cavalcanti.c.raissa@gmail.com 
-
----
-
-## Licença
-
-Este repositório é de uso **pessoal e educacional**, podendo ser utilizado como referência para fins acadêmicos.  
-Sinta-se à vontade para estudar, adaptar e contribuir com ideias!
-
----
-
-*Se este repositório te ajudou, não esqueça de deixar uma estrela!*
+**Raissa Cavalcanti** - [GitHub](https://github.com/cavalcantiraissas) · [LinkedIn](https://www.linkedin.com/in/cavalcantiraissa/)
