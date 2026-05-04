@@ -1,44 +1,28 @@
-# Estrutura de Dados I
+# Estrutura de Dados em C
 
-Este diretório contém a implementação de estruturas de dados elementares, utilizando a linguagem C como base para o gerenciamento de memória e eficiência algorítmica.
+Atividades, exercícios, trabalhos e exemplos desenvolvidos ao longo das disciplinas de Estrutura de Dados I e II, cursadas no Bacharelado em Ciência da Computação da Universidade Federal de Mato Grosso (UFMT).
 
-## Informações Gerais
-* Instituição: Universidade Federal de Mato Grosso
-* Docente: Ivairton Monteiro Santos
-* Período: 2024/2
-* Carga Horária: 96 horas
+O conteúdo abrange desde a implementação das estruturas lineares fundamentais até estruturas avançadas como árvores balanceadas e algoritmos de grafos, todos implementados em linguagem C.
 
-## Objetivos
-Capacitar o desenvolvedor na análise e seleção de estruturas adequadas para problemas computacionais, garantindo a manipulação eficiente de dados em memória primária.
+---
 
-## Conteúdo Programático
-* Tipos Abstratos de Dados (TAD)
-* Introdução à análise de complexidade de algoritmos
-* Listas Lineares: Encadeadas, duplamente encadeadas e circulares
-* Pilhas e Filas: Conceitos e implementações
-* Algoritmos de Ordenação (Sorting)
-* Manipulação de arquivos e tipos de armazenamento
-* Estruturas Não Lineares: Árvores binárias e Heaps
+## Tecnologia
 
-## Bibliografia Principal
-* TENENBAUM, A. M. Estruturas de Dados Usando C
-* ZIVIANI, N. Projeto de Algoritmos com implementações em Pascal e C
-* CORMEN, T. H. Algoritmos: Teoria e Prática
+![C](https://img.shields.io/badge/C-00599C?style=flat-square&logo=c&logoColor=white)
 
-# Estrutura de Dados II
+---
 
-## Objetivos
-Estudo de estruturas avançadas indispensáveis para o desenvolvimento de sistemas de alta performance, como bancos de dados, redes e motores de busca.
+## Estrutura do Repositório
 
-## Conteúdo Programático
-* Tabelas de Dispersão (Hash) e funções de espalhamento
-* Árvores Balanceadas: AVL, Vermelho Preto, Árvore B e B+
-* Teoria dos Grafos: Representação e busca (DFS e BFS)
-* Algoritmos de Caminho Mínimo: Dijkstra
-* Árvores Geradoras Mínimas: Prim e Kruskal
-* Fluxo Máximo e problemas de coloração
+| Pasta | Descrição |
+|---|---|
+| [Atividades_de_Classe](./Atividades_de_Classe) | Exercícios e atividades práticas realizadas em sala - listas, filas, pilhas, heap e ordenação |
+| [ED2](./ED2) | Estrutura de Dados II - estruturas avançadas, árvores balanceadas e algoritmos de grafos |
+| [Exemplos_de_Codigo](./Exemplos_de_Codigo) | Biblioteca de implementações de referência: árvores, tabela hash, ponteiros, listas e ordenação |
+| [Pseudo-Codigos](./Pseudo-Codigos) | Implementações dos principais algoritmos de ordenação em C |
+| [Trabalho_Analise-Lista-Estatica-e-Dinamica](./Trabalho_Analise-Lista-Estatica-e-Dinamica) | Trabalho comparativo entre alocação estática e dinâmica em listas encadeadas |
+| [Trabalho_Aplicacao-de-listas-pilha-fila](./Trabalho_Aplicacao-de-listas-pilha-fila) | Trabalho prático de aplicação integrada de listas, pilhas e filas |
 
-## Bibliografia Principal
-* CORMEN, Thomas H. Algoritmos: teoria e prática
-* TENENBAUM, Aaron M. Estruturas de dados usando C
-* KNUTH, Donald E. The art of computer programming
+---
+
+[Voltar ao repositório principal](https://github.com/cavalcantiraissas/Ciencia-da-Computacao_UFMT)
