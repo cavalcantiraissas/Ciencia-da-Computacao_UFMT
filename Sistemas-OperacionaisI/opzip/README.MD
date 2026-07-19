@@ -3,9 +3,9 @@
 Sincronização produtor-consumidor com pthreads aplicada a compressão RLE.
 
 **Autores:** Luiz Henrique Ribeiro Torres, Raissa Caroline Cavalcanti da Silva
-**Disciplina:** Sistemas Operacionais I — Prof. Dr. Maxweel Silva Carmo
-**Instituição:** Universidade Federal de Mato Grosso — Campus Araguaia — ICET
-**Local/data:** Barra do Garças, MT — julho de 2026
+**Disciplina:** Sistemas Operacionais I | Prof. Dr. Maxweel Silva Carmo
+**Instituição:** Universidade Federal de Mato Grosso | Campus Araguaia | ICET
+**Local/data:** Barra do Garças, MT | julho de 2026
 
 ## Sumário
 
@@ -24,7 +24,7 @@ Sincronização produtor-consumidor com pthreads aplicada a compressão RLE.
 
 ## Introdução
 
-O opzip é uma variante paralela de compressão run-length encoding (RLE) baseada em pthreads. O trabalho aprofunda o uso de threads POSIX — em particular mutexes e condition variables — na construção de um pipeline produtor-consumidor real, no qual blocos comprimidos são escritos no arquivo de saída assim que ficam prontos, respeitando a ordem original do arquivo, por meio de um buffer circular limitado compartilhado entre threads produtoras e uma única thread consumidora (escritora).
+O opzip é uma variante paralela de compressão run-length encoding (RLE) baseada em pthreads. O trabalho aprofunda o uso de threads POSIX - em particular mutexes e condition variables — na construção de um pipeline produtor-consumidor real, no qual blocos comprimidos são escritos no arquivo de saída assim que ficam prontos, respeitando a ordem original do arquivo, por meio de um buffer circular limitado compartilhado entre threads produtoras e uma única thread consumidora (escritora).
 
 Diferentemente do modelo fork-join clássico (em que cada thread comprime seu pedaço isoladamente e os resultados são concatenados ao final), o opzip mantém sincronização contínua durante toda a execução, o que exige cuidado adicional de projeto para equilibrar paralelismo e ordem de escrita.
 
