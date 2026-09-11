@@ -19,6 +19,13 @@ Projetar e implementar sistemas escaláveis e modernos, integrando interfaces in
 * Frameworks de coleções e fluxos de dados
 * Tratamento avançado de exceções e depuração
 
+## Projetos
+
+| Pasta | Descrição |
+|---|---|
+| [Atividades_Classe](./Atividades_Classe) | Exercícios práticos realizados em sala: POO, coleções, arquivos e interfaces gráficas com Swing |
+| [Trabalho_Final](./Trabalho_Final) | Sistema de gerenciamento de itens (livros e filmes) com interface gráfica Swing |
+
 ## Bibliografia Principal
 * DEITEL, H. M. Java: Como programar
 * SANTOS, Rafael. Introdução à Programação Orientada a Objetos Usando Java
