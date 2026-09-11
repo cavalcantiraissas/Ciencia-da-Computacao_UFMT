@@ -18,7 +18,13 @@ Apresentar a evolução e os conceitos básicos da arquitetura de sistemas opera
 * Concorrência e Problemas Clássicos
 * Implementação de chamadas de sistema (System Calls) e programas concorrentes
 
+## Projetos
+
+| Projeto | Descrição |
+|---|---|
+| [opzip](./opzip) | Compressor RLE paralelo com pthreads, sincronização produtor-consumidor e escrita ordenada via buffer circular |
+
 ## Bibliografia Principal
 * TANENBAUM, Andrew S. Sistemas operacionais modernos
-* TANENBAUM, A. S.; WOODHULL, A. S. Operating Systems Design and Implementation 
-* SILVA DE OLIVEIRA, R. et al.Sistemas Operacionais
+* TANENBAUM, A. S.; WOODHULL, A. S. Operating Systems Design and Implementation
+* SILVA DE OLIVEIRA, R. et al. Sistemas Operacionais
