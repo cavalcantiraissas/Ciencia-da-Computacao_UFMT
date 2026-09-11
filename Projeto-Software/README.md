@@ -15,11 +15,11 @@ Proporcionar a capacidade de projetar sistemas de software robustos e de fácil 
 * Princípios de Design: SOLID, DRY, KISS, YAGNI, Coesão e Acoplamento
 * Padrões de Projeto (Design Patterns): Criacionais, Estruturais e Comportamentais 
 * Estilos Arquiteturais: Camadas (MVC), Arquitetura Hexagonal e Microsserviços 
-* Modelagem com UML e versionamento com Git/GitHub [cite: 531]
+* Modelagem com UML e versionamento com Git/GitHub
 * Metodologias Ágeis: Scrum e Kanban
 
 ## Bibliografia Principal
 * BRAUDE, E. Projeto de Software: da Programação à Arquitetura
 * SOMMERVILLE, Ian. Engenharia de software
 * FOWLER, M. UML essencial 
-* GAMMA, E. et al.Padrões de Projetos: Soluções Reutilizáveis de Software Orientados a Objetos 
+* GAMMA, E. et al. Padrões de Projetos: Soluções Reutilizáveis de Software Orientados a Objetos
