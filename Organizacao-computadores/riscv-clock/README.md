@@ -41,11 +41,14 @@ O projeto implementa um relógio digital funcional inteiramente em Assembly RISC
 
 ```
 riscv-clock/
-├── clock.S       # Código-fonte Assembly (único arquivo de código)
-├── link.ld       # Linker script — mapeia seções a partir de 0x80000000
-├── Makefile      # Regras de build e execução
-├── Dockerfile    # Ambiente Ubuntu 22.04 com toolchain + QEMU
-└── README.md     # Este arquivo
+├── clock.S                   # Código-fonte Assembly (único arquivo de código)
+├── link.ld                   # Linker script — mapeia seções a partir de 0x80000000
+├── Makefile                  # Regras de build e execução
+├── Dockerfile                # Ambiente Ubuntu 22.04 com toolchain + QEMU
+├── trabalho_2.pdf            # Enunciado do trabalho
+├── riscv-clock_codigo.pdf    # Explicação detalhada do código
+├── riscv-clock_relatório.pdf # Relatório técnico do trabalho
+└── README.md                 # Este arquivo
 ```
 
 ### clock.S — Funções implementadas
