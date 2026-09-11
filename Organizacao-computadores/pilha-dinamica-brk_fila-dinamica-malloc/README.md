@@ -144,8 +144,7 @@ qemu-riscv64 -L /usr/riscv64-linux-gnu ./fila_malloc
 ├── pilha_brk.s        # Parte 1 — Pilha LIFO com syscall brk
 ├── fila_malloc.s      # Parte 2 — Fila FIFO com malloc/free
 ├── README.md          # Este arquivo
-├── EXPLICACAO.md      # Explicação detalhada dos conceitos e implementação
-└── relatorio.docx     # Relatório acadêmico formal
+└── explicacao.md      # Explicação detalhada dos conceitos e implementação
 ```
 
 ---
