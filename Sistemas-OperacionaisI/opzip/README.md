@@ -10,6 +10,7 @@ Sincronização produtor-consumidor com pthreads aplicada a compressão RLE.
 ## Sumário
 
 - [Introdução](#introdução)
+- [Como compilar e executar](#como-compilar-e-executar)
 - [Fundamentação teórica](#fundamentação-teórica-e-relação-com-sistemas-operacionais)
 - [Arquitetura do sistema](#arquitetura-do-sistema)
 - [Detalhamento do código](#detalhamento-do-código)
@@ -27,6 +28,24 @@ Sincronização produtor-consumidor com pthreads aplicada a compressão RLE.
 O opzip é uma variante paralela de compressão run-length encoding (RLE) baseada em pthreads. O trabalho aprofunda o uso de threads POSIX - em particular mutexes e condition variables — na construção de um pipeline produtor-consumidor real, no qual blocos comprimidos são escritos no arquivo de saída assim que ficam prontos, respeitando a ordem original do arquivo, por meio de um buffer circular limitado compartilhado entre threads produtoras e uma única thread consumidora (escritora).
 
 Diferentemente do modelo fork-join clássico (em que cada thread comprime seu pedaço isoladamente e os resultados são concatenados ao final), o opzip mantém sincronização contínua durante toda a execução, o que exige cuidado adicional de projeto para equilibrar paralelismo e ordem de escrita.
+
+## Como compilar e executar
+
+```bash
+make                                    # gera os binários opzip e ounzip
+./opzip [-t N] [-b TAM_BLOCO] [-k K] entrada.txt > saida.oz   # comprime
+./ounzip saida.oz > saida.txt                                 # descomprime
+
+make tsan       # build com ThreadSanitizer (detecção de data races)
+make clean      # remove os binários gerados
+```
+
+Arquivos de apoio incluídos no repositório:
+
+- [`benchmark.py`](./benchmark.py) — mede o speedup em função do número de threads (seção [Speedup versus número de threads](#speedup-versus-número-de-threads)).
+- [`benchmark_contencao.py`](./benchmark_contencao.py) — mede o impacto da contenção entre mutex global e mutex por posição do buffer (seção [Mutex global versus mutex por posição](#mutex-global-versus-mutex-por-posição-do-buffer)).
+- [`opzip_relatorio.pdf`](./opzip_relatorio.pdf) — relatório completo do trabalho.
+- `teste.oz`, `teste.txt`, `teste_grande.txt`, `arquivo_grande.oz` — arquivos de entrada/saída usados nos testes de correção e desempenho.
 
 ## Fundamentação teórica e relação com Sistemas Operacionais
 
