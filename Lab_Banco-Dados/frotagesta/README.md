@@ -10,15 +10,10 @@ Sistema desktop de controle de frota e manutenção preventiva, desenvolvido par
 
 Uma transportadora local possui uma frota de caminhões, vans e carros e precisa controlar o uso dos veículos, registrar viagens e ser alertada automaticamente sobre manutenções preventivas (troca de óleo, pastilhas etc.) antes que os veículos quebrem em rota. O FrotaGesta resolve esse problema com um banco de dados PostgreSQL que concentra as regras de negócio críticas (restrições, *triggers* e um procedimento armazenado) e uma interface desktop em Python para uso no setor operacional e na oficina.
 
-Documentação completa disponível em:
-- `relatorio_academico.pdf` — relatório em formato ABNT (contexto, objetivos, metodologia e resultados).
-- `relatorio_tecnico.pdf` — documentação técnica detalhada de todo o código SQL e Python, com análise do DER e evidências de execução.
-
 ## Estrutura do projeto
 
 ```
 frotagesta/
-├── master.sql                  # executa todos os scripts sql/*.sql em ordem
 ├── sql/
 │   ├── 00_criar_banco.sql       # cria o banco de dados
 │   ├── 01_tabelas.sql           # cria as 5 tabelas com constraints e FKs
@@ -29,7 +24,6 @@ frotagesta/
 │   ├── 05_views.sql             # views vw_painel_veiculos e vw_historico_viagens
 │   ├── 06_seed.sql              # dados de teste iniciais
 │   └── 07_testes.sql            # testes funcionais de todas as regras de negócio
-├── diagrama.png                 # DER do banco de dados
 └── app/
     ├── main.py                  # ponto de entrada da aplicação desktop
     ├── db/
@@ -46,7 +40,7 @@ frotagesta/
         └── validacoes.py          # validação de CPF e placa
 ```
 
-> **Atenção:** garanta que os scripts `.sql` numerados estejam dentro de uma pasta `sql/` na raiz do projeto (ao lado do `master.sql`), pois é esse o caminho relativo que o `master.sql` espera (`\i sql/01_tabelas.sql` etc.).
+> **Atenção:** execute os scripts a partir da raiz do projeto (onde está a pasta `sql/`), na ordem numérica, pois scripts posteriores dependem de tabelas e objetos criados pelos anteriores.
 
 ## Requisitos
 
@@ -83,10 +77,10 @@ CREATE DATABASE frotagesta ENCODING='UTF8' TEMPLATE=template0;
 
 ### 4. Executar os scripts SQL
 
-A partir da **raiz do projeto** (onde está o `master.sql`):
+A partir da **raiz do projeto**, execute os scripts de `sql/` em ordem (00 a 06 criam e populam o banco):
 ```bash
 cd frotagesta
-psql -d frotagesta -f master.sql
+for f in sql/0{0,1,2,3a,3b,4,5,6}_*.sql; do psql -d frotagesta -f "$f"; done
 ```
 
 Para rodar os testes funcionais das regras de negócio:
