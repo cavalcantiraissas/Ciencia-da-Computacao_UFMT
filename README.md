@@ -12,6 +12,7 @@ O conteúdo é atualizado continuamente conforme o progresso do curso. Cada past
 |---|---|---|
 | [Arquitetura de Computadores](./Arquitetura-Computadores) | Estudo da organização interna de sistemas computacionais: hierarquia de memória, pipeline, conjunto de instruções e desempenho de processadores | Assembly, análise de desempenho, relatórios |
 | [Banco de Dados](./Banco-de-dados) | Fundamentos de banco de dados relacionais: modelagem ER, normalização, SQL e projeto de schemas | SQL, modelagem, diagramas ER |
+| [Compiladores](./Compiladores) | Construção de compiladores: análise léxica, sintática, semântica e geração de código | C |
 | [Engenharia de Software / Sistemas](./Engenharia_Software) | Ciclo de vida de software, requisitos, modelagem UML, padrões de projeto e metodologias ágeis | UML, diagramas, documentação |
 | [Estrutura de Dados em C](./Estrutura_de_Dados_C) | Implementação das principais estruturas de dados - listas, pilhas, filas, árvores e grafos — em linguagem C | C, algoritmos, estruturas de dados |
 | [Laboratório de Banco de Dados](./Lab_Banco-Dados) | Atividades práticas de banco de dados: criação de schemas, consultas SQL avançadas e modelagem aplicada | SQL, MySQL, exercícios práticos |
@@ -21,7 +22,7 @@ O conteúdo é atualizado continuamente conforme o progresso do curso. Cada past
 | [Programação em C++](./Programacao_C++) | Paradigma orientado a objetos em C++: classes, herança, polimorfismo, templates e STL | C++ |
 | [Programação em Java](./Programacao_Java) | Orientação a objetos em Java: encapsulamento, interfaces, coleções, tratamento de exceções e padrões de projeto | Java |
 | [Projeto de Software](./Projeto-Software) | Desenvolvimento de um projeto de software completo: especificação, arquitetura, implementação e entrega | Documentação, código, apresentação |
-| [Sistemas Operacionais](./Sistemas-Operacionaisl) | Gerenciamento de processos, escalonamento, memória virtual, sistemas de arquivos e sincronização | C, shell scripts, relatórios |
+| [Sistemas Operacionais](./Sistemas-OperacionaisI) | Gerenciamento de processos, escalonamento, memória virtual, sistemas de arquivos e sincronização | C, shell scripts, relatórios |
 
 ---
 
