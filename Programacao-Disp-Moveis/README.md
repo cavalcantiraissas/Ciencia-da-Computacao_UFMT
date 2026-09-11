@@ -19,6 +19,6 @@ Capacitar o estudante na compreensão de infraestruturas e frameworks para o des
 * Design de interfaces (UX/UI) para dispositivos móveis 
 
 ## Bibliografia Principal
-* LEE, V.; SCHENEIDER, H.; [cite_start]SCHELL, R. Aplicações móveis: arquitetura, projeto e desenvolvimento 
-* GLAUBER, N. Dominando o Android: do Básico ao Avançado 
-* LECHETA, R. R. Google Android: Aprenda a criar aplicações para dispositivos móveis 
+* LEE, V.; SCHNEIDER, H.; SCHELL, R. Aplicações móveis: arquitetura, projeto e desenvolvimento
+* GLAUBER, N. Dominando o Android: do Básico ao Avançado
+* LECHETA, R. R. Google Android: Aprenda a criar aplicações para dispositivos móveis
