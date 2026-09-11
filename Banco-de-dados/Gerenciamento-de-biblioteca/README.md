@@ -1,4 +1,4 @@
-#  Sistema de Gerenciamento de Biblioteca Digital
+# Sistema de Gerenciamento de Biblioteca Digital
 
 > Banco de Dados Relacional para gerenciamento completo de acervo, usuários, empréstimos, reservas e multas de uma biblioteca digital. Desenvolvido como projeto acadêmico de Banco de Dados.
 
@@ -7,9 +7,11 @@
 ![Normalização](https://img.shields.io/badge/normalização-3FN-orange)
 ![Consultas](https://img.shields.io/badge/consultas%20SQL-10-purple)
 
+**Autores:** Raissa Caroline Cavalcanti da Silva e Gabriel Nunes
+
 ---
 
-##  Índice
+## Índice
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Modelo de Dados](#modelo-de-dados)
@@ -60,7 +62,7 @@ Usuario    1 ──── N    Reserva
 Emprestimo 1 ──── N    Multa
 ```
 
-O DER completo está disponível no arquivo [`DER.html`](./DER.html) — abra no navegador para visualização interativa.
+O DER completo está disponível no arquivo [`DER_v2.html`](./DER_v2.html) — abra no navegador para visualização interativa.
 
 ---
 
@@ -79,7 +81,7 @@ O DER completo está disponível no arquivo [`DER.html`](./DER.html) — abra no
 ├── 📄 DDL.sql                  # CREATE TABLE, constraints e índices
 ├── 📄 DML.sql                  # INSERT INTO com dados de teste
 ├── 📄 Consultas.sql            # RC001 a RC010 — queries analíticas
-├── 📊 DER.html                 # Diagrama Entidade-Relacionamento interativo
+├── 📊 DER_v2.html              # Diagrama Entidade-Relacionamento interativo
 ├── 📋 Esquema_Logico.html      # Esquema relacional lógico detalhado
 ├── 📊 resultados_1.csv         # RC001 — Livros em atraso
 ├── 📊 resultados_2.csv         # RC002 — Análise de acervo por editora
@@ -88,9 +90,11 @@ O DER completo está disponível no arquivo [`DER.html`](./DER.html) — abra no
 ├── 📊 resultados_5.csv         # RC005 — View V_EmprestimosAtivos
 ├── 📊 resultados_6.csv         # RC006 — Álgebra relacional (Ano > 2020)
 ├── 📊 resultados_7.csv         # RC007 — Ranking últimos 6 meses
+├── 📊 resultados_8.csv         # RC007 — Ranking últimos 6 meses (execução alternativa)
 ├── 📊 resultados_9.csv         # RC008 — Relatório de inadimplência
 ├── 📊 resultados_10.csv        # RC009 — Reservas pendentes
 ├── 📊 resultados_11.csv        # RC010 — Próximo na fila
+├── 📕 relatório-código.pdf     # Explicação detalhada do código (DDL, DML e consultas)
 └── 📖 README.md                # Este arquivo
 ```
 
