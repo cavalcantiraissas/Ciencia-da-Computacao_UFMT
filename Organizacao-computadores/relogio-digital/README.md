@@ -33,17 +33,14 @@ relogio-riscv/
 │   ├── timer.c      # Driver CLINT + lógica do relógio
 │   ├── trap.c       # Despachador geral de interrupções
 │   └── plic.c       # Driver PLIC (roteamento de IRQ externo)
-├── include/
-│   ├── types.h      # Tipos básicos + macros de CSR
-│   ├── uart.h
-│   ├── timer.h
-│   ├── trap.h
-│   └── plic.h
 ├── linker.ld        # Script de ligação
 ├── Makefile
 ├── Dockerfile
 ├── build.sh         # Script para compilar
-└── run.sh           # Script para executar no QEMU
+├── run.sh           # Script para executar no QEMU
+├── relatorio.md          # Relatório do trabalho em Markdown
+├── relatorio_tecnico.pdf # Relatório técnico detalhado
+└── trabalho_2.pdf        # Enunciado do trabalho
 ```
 
 ---
