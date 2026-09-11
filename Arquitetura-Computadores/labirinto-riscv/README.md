@@ -1,4 +1,15 @@
-# Compilação para Emulsiv
+# Labirinto RISC-V
+
+Jogo de labirinto implementado em Assembly RISC-V para execução no emulador [Emulsiv](https://github.com/lecplacard/emulsiv).
+
+## Arquivos do projeto
+
+- `startup.s` — rotina de inicialização (stack, seções) usada na ligação do binário.
+- `emulsiv.ld` — linker script do Emulsiv.
+- `jogo.elf` / `jogo.hex` / `jogo.o` — binário do jogo já compilado e seus artefatos intermediários.
+- `layout.excalidraw` — esboço do layout do labirinto.
+
+## Compilação para Emulsiv
 
 Para compilar o seu código assembly para o Emulsiv, você precisará de um compilador RISC-V. Para este trabalho utilizaremos o `riscv64-unknown-elf-gcc`.
 
