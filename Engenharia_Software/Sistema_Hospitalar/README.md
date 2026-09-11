@@ -1,4 +1,4 @@
-#  Sistema Hospitalar - Estudo de Caso POO
+# Sistema Hospitalar - Estudo de Caso POO
 
 Este projeto implementa o Estudo de Caso do Domínio do Sistema Hospitalar, seguindo os princípios de Programação Orientada a Objetos (POO), com foco na modelagem de domínio.
 
