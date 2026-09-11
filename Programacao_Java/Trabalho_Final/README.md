@@ -21,12 +21,14 @@ Sistema que permite cadastrar, listar, buscar, exportar e importar informações
 ### Estrutura de Pacotes
 
 ```text
-src/
-├── exceptions/          # Exceções personalizadas
-├── model/              # Modelos de dados
-├── service/            # Lógica de negócio
-└── gui/                # Interface gráfica
+Trabalho_Final/
+└── src/
+    ├── exceptions/      # Exceções personalizadas
+    ├── model/           # Modelos de dados
+    ├── service/         # Lógica de negócio
+    └── gui/             # Interface gráfica
 ```
+
 ## Pré-requisitos
 
 - Java JDK 8 ou superior
@@ -36,26 +38,27 @@ src/
 
 ### Camada de Apresentação (GUI)
 
-ItemManagerGUI: Interface gráfica principal com Swing
+`ItemManagerGUI`: Interface gráfica principal com Swing
 - Formulários para cadastro de livros e filmes
 - Área de exibição de resultados
 - Controles de busca e navegação
--  Camada de Serviço
 
-### GerenciadorItens: Núcleo do sistema
+### Camada de Serviço
+
+`GerenciadorItens`: Núcleo do sistema
 - CRUD de itens
 - Busca e ordenação
 - Importação/exportação
 - Estatísticas
 
 ### Camada de Modelo
-- Item: Classe abstrata base
-- Livro: Especialização para livros
-- Filme: Especialização para filmes
+- `Item`: Classe abstrata base
+- `Livro`: Especialização para livros
+- `Filme`: Especialização para filmes
 
 ### Camada de Exceções
-- CampoVazioException: Campos obrigatórios não preenchidos
-- DuplicadoException: Itens com títulos duplicados
+- `CampoVazioException`: Campos obrigatórios não preenchidos
+- `DuplicadoException`: Itens com títulos duplicados
 
 ### Formato de Dados
 
@@ -65,19 +68,20 @@ Livro|Título|Descrição|2024-01-15|Autor|300
 Filme|Título|Descrição|2024-01-15|Diretor|120
 ```
 
-Campos por Tipo
-Livro:
+#### Campos por Tipo
 
-Título*
-Descrição*
-Autor*
-Número de Páginas*
-Filme:
+**Livro:**
+- Título*
+- Descrição*
+- Autor*
+- Número de Páginas*
 
-Título*
-Descrição*
-Diretor*
-Duração (minutos)*
+**Filme:**
+- Título*
+- Descrição*
+- Diretor*
+- Duração (minutos)*
+
 *Campos obrigatórios
 
 ## Padrões e Boas Práticas
@@ -88,38 +92,39 @@ Duração (minutos)*
 - Interface Gráfica: Separada da lógica de negócio
 - Documentação: Código comentado e organizado
 
-##  Fluxo de Dados
+## Fluxo de Dados
 ```text
 Interface → Validação → Serviço → Modelo
     ↑           ↑          ↑        ↑
    Exibição   Exceções  Regras   Persistência
 ```
- 
-# Informações
- - Desenvolvedora: Raissa  Cavalcanti 
- - Tecnologias: Java, Swing, Programação Orientada a Objetos
- - Data: 10 de Outubro de 2025
+
+## Informações
+- Desenvolvedora: Raissa Cavalcanti
+- Tecnologias: Java, Swing, Programação Orientada a Objetos
+- Data: 10 de Outubro de 2025
 
 ## Licença
 - Este projeto foi desenvolvido para fins educacionais como parte de um trabalho acadêmico.
 
 ## Exemplo de Uso
-- Cadastrar Livro:
 
-Selecione "Livro" no tipo
-Preencha título, descrição, autor e páginas
-Clique em "Adicionar"
-Buscar Item:
+**Cadastrar Livro:**
+1. Selecione "Livro" no tipo
+2. Preencha título, descrição, autor e páginas
+3. Clique em "Adicionar"
 
-Digite parte do título no campo de busca
-Clique em "Filtrar"
-Exportar Dados:
+**Buscar Item:**
+1. Digite parte do título no campo de busca
+2. Clique em "Filtrar"
 
-Clique em "Exportar Dados"
-Escolha o local e nome do arquivo
-Os dados serão salvos em formato texto
-Ver Estatísticas:
+**Exportar Dados:**
+1. Clique em "Exportar Dados"
+2. Escolha o local e nome do arquivo
+3. Os dados serão salvos em formato texto
 
-Clique em "Listar Todos"
-Veja a contagem por tipo no final da listagem
+**Ver Estatísticas:**
+1. Clique em "Listar Todos"
+2. Veja a contagem por tipo no final da listagem
+
 Sistema robusto e intuitivo para gerenciamento completo de acervo de livros e filmes!
