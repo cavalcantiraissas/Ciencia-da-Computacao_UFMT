@@ -19,6 +19,14 @@ Compreender a arquitetura do conjunto de instruções (ISA) e desenvolver habili
 * Tratamento de exceções e interrupções de hardware
 * Gerenciamento de memória: Paginação e segmentação
 
+## Projetos
+
+| Projeto | Descrição |
+|---|---|
+| [pilha-dinamica-brk_fila-dinamica-malloc](./pilha-dinamica-brk_fila-dinamica-malloc) | Pilha (syscall `brk`) e fila (`malloc`/`free`) dinâmicas implementadas em Assembly RISC-V 64-bit |
+| [relogio-digital](./relogio-digital) | Relógio digital bare metal em C para RISC-V 64 bits, com interrupções de timer e UART |
+| [riscv-clock](./riscv-clock) | Relógio digital bare metal em Assembly RISC-V, executando sobre QEMU virt |
+
 ## Bibliografia Principal
 * TANENBAUM, Andrew S. Organização Estruturada de Computadores
 * HENNESSY, John L.; PATTERSON, David A. Organização e Projeto de Computadores
