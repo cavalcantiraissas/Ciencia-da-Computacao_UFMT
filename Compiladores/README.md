@@ -37,3 +37,4 @@ A disciplina é conduzida de forma incremental, em ciclos: a cada ciclo, o proce
 
 - [analisador_sintatico.c](analisador_sintatico.c) — analisador sintático descendente recursivo para expressões aritméticas (soma, subtração, multiplicação e divisão), com precedência de operadores e detecção de erros de sintaxe.
 - [gerador_codigo_registradores.c](gerador_codigo_registradores.c) — evolução do analisador sintático anterior, com geração de código para uma máquina com registradores (LOAD/ADD/SUB/MUL/DIV), gravado no arquivo `codigo.asm`.
+- [inclusao_lexico/](inclusao_lexico) — compilador modularizado (léxico, sintático, gerador de código e `main` separados), com leitura do código-fonte a partir de arquivo, precedência de `*`/`/` sobre `+`/`-` e mensagens de erro léxico/sintático.

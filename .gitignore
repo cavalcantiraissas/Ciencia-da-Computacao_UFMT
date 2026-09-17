@@ -1,2 +1,7 @@
 # Artefatos de compilação Java
 *.class
+
+# Artefatos de compilação C
+*.o
+Compiladores/inclusao_lexico/compiler
+Compiladores/inclusao_lexico/tstLexCompiler
