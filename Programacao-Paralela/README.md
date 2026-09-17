@@ -32,7 +32,9 @@ Em caso de impossibilidade de realizar todas as atividades presenciais, dada a r
 
 ## Conteúdo do repositório
 
-_Em construção — os arquivos serão adicionados conforme as atividades da disciplina forem desenvolvidas._
+| Pasta | Descrição |
+|---|---|
+| [NotificationSystem](NotificationSystem/README.md) | Sistema de notificações paralelo com `ThreadPoolExecutor` e monitoramento via `ScheduledExecutorService` |
 
 ---
 
