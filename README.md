@@ -17,6 +17,7 @@ O conteúdo é atualizado continuamente conforme o progresso do curso. Cada past
 | [Estrutura de Dados em C](./Estrutura_de_Dados_C) | Implementação das principais estruturas de dados - listas, pilhas, filas, árvores e grafos — em linguagem C | C, algoritmos, estruturas de dados |
 | [Laboratório de Banco de Dados](./Lab_Banco-Dados) | Atividades práticas de banco de dados: criação de schemas, consultas SQL avançadas e modelagem aplicada | SQL, MySQL, exercícios práticos |
 | [Organização de Computadores](./Organizacao-computadores) | Arquitetura de von Neumann, representação de dados, lógica digital, circuitos combinacionais e sequenciais | Lógica digital, circuitos, relatórios |
+| [Programação Paralela](./Programacao-Paralela) | Avaliação de desempenho, programação com memória compartilhada, passagem de mensagem e programação para GPU | C, OpenMP, MPI |
 | [Programação para Dispositivos Móveis](./Programacao-Disp-Moveis) | Desenvolvimento de aplicações móveis: layouts, componentes, ciclo de vida e integração com APIs | Android, Java/Kotlin |
 | [Programação Web](./Programacao-Web) | Desenvolvimento front-end e back-end para a web: HTML, CSS, JavaScript e integração com servidores | HTML, CSS, JS, PHP |
 | [Programação em C++](./Programacao_C++) | Paradigma orientado a objetos em C++: classes, herança, polimorfismo, templates e STL | C++ |
