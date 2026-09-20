@@ -10,7 +10,7 @@ início
 	fim se
 
 	enquanto (salto >= 1) faça
-		para (i<-1, j<-salto, enquanto j < tamanho, passo i<-i+1, j<-j+1) faça
+		para (i<-0, j<-salto, enquanto j < tamanho, passo i<-i+1, j<-j+1) faça
 			se (vetor[i] > vetor[j]) então
 				auxValor <- vetor[i]
 				vetor[i] <- vetor[j]
