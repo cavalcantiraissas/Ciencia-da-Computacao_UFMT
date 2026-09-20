@@ -26,6 +26,8 @@ Funcao quickSort(vetor[], inteiro: inicio, inteiro: fim)
 			aux <- vetor[i]
 			vetor[i] <- vetor[j]
 			vetor[j] <- aux
+			i <- i+1
+			j <- j-1
 		
 	
 	//Verifica e faz a chamada recursiva
