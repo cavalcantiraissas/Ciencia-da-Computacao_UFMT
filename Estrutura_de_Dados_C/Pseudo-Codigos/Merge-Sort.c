@@ -6,7 +6,7 @@ inicio
     se (tamanho > 1) então
         meio <- tamanho/2
         merge_sort( vetor["1a posicao"], meio)
-        merge_sort( vetor[meio], "novo tamanho")
+        merge_sort( vetor[meio], tamanho - meio)
         merge(vetor[], tamanho)
     fim se
 fim
@@ -18,7 +18,7 @@ inicio
   	aloca um vetor auxiliar vetAux de tamanho "tamanho"
   	inteiro: i, j, meio, posVetAux	//i aponta para o início do vetor, e j e meio para a metade
 
-  	meio <- j <- tam/2
+  	meio <- j <- tamanho/2
   	i <- 0
   	posAux <- 0
 
@@ -47,7 +47,7 @@ inicio
   	fim enquanto
 
     //Copia o vetor auxiliar para o vetor original
-  	para i <- 0 enquanto i < tam passo 1 faça
+  	para i <- 0 enquanto i < tamanho passo 1 faça
   		vetor[i] <- vetAux[i]
     fim para
     Desaloca da memória VetAux
