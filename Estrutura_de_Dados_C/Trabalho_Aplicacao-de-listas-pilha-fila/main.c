@@ -55,6 +55,7 @@ int main() {
                     alterarStatus(filaInicio->pedido, "pronto");
                     pilha = empilhar(pilha, filaInicio->pedido);
                     filaInicio = desenfileirar(&filaInicio);
+                    if (!filaInicio) filaFim = NULL;
                 }
                 break;
             case 4:
