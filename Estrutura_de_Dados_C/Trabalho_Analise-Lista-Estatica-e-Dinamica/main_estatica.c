@@ -18,8 +18,8 @@ int main() {
      clock_t tempo;
      tempo = clock(); 
   
-    tipoLista lista; 
-    InicializaLista(&lista, tam); 
+    tipoLista lista = {0};
+    InicializaLista(&lista, tam);
       for (int i = 0; i < 3333; i++){ 
     numeros =  rand() %99999; 
        InsereInicio(&lista, numeros);
