@@ -76,7 +76,7 @@ void imprimeFilaEnc(tipo_no *fila) {
 }
 
 int qtdvalores(tipo_no *fila){
-    int qtd;
+    int qtd = 0;
     while (fila != NULL){
         qtd++;
         fila = fila->prox;
