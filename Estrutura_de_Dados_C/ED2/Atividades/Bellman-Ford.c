@@ -91,6 +91,7 @@ int *dijkstra(GRAFO *g, int s, int *p) {
                 u = j;
             }
         }
+        if (u == -1 || dist[u] == INT_MAX) break; // vertices restantes sao inalcancaveis
         visitado[u] = true;
 
         for (ADJACENCIA *adj = g->adj[u].cab; adj != NULL; adj = adj->prox) {
