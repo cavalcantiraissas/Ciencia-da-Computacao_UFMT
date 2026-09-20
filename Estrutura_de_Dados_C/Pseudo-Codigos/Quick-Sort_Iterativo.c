@@ -22,7 +22,7 @@ inicio
     
     i <- esq
     //Este laço coloca todos os valores menores que pivo à esquerda e maiores à direita
-    para j <- esq, enquanto j < (dir-1), passo 1 faça
+    para j <- esq, enquanto j < dir, passo 1 faça
         se (vetor[j] <= pivo) então
             troque vetor[i] com vetor[j]
             i <- i + 1
