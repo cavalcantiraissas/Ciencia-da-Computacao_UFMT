@@ -63,6 +63,12 @@ void Jogo::selecionarDificuldade() {
 
 void Jogo::iniciarBatalha() {
     std::cout << "\nIniciando a batalha...\n";
+
+    if (jogadorPokemons.empty()) {
+        carregarPokemons(jogadorPokemons);
+        std::vector<Ataque> ataquesJogador;
+        for (auto& p : jogadorPokemons) carregarAtaques(ataquesJogador, p);
+    }
     escolherPokemonInicial();
 
     carregarPokemons(cpuPokemons);
@@ -80,8 +86,8 @@ void Jogo::iniciarBatalha() {
     } else {
         std::cout << "Parabéns! Você venceu a batalha!\n";
         int pontosGanhos = (dificuldade == Facil) ? 10 : (dificuldade == Medio) ? 20 : 30;
-        pontuacao += pontosGanhos; 
-        atualizarRanking(nickname, pontuacao, true); 
+        pontuacao += pontosGanhos;
+        atualizarRanking(nickname, pontosGanhos, true);
     }
 
     salvarRanking(caminhoArquivoRanking); 
@@ -179,7 +185,7 @@ void Jogo::escolherNovoPokemon() {
     std::cout << "Você escolheu: " << jogadorPokemons[0].nome << " para continuar a batalha!\n";
 }
 
-void Jogo::atualizarRanking(const std::string& jogador, int pontuacao, bool vitoria) {
+void Jogo::atualizarRanking(const std::string& jogador, int pontosGanhos, bool vitoria) {
     std::string jogadorLower = jogador;
     std::transform(jogadorLower.begin(), jogadorLower.end(), jogadorLower.begin(), ::tolower);  // Converte para minúsculas
 
@@ -188,7 +194,7 @@ void Jogo::atualizarRanking(const std::string& jogador, int pontuacao, bool vito
     if (it != ranking.end()) {
         if (vitoria) {
             it->second.vitorias++;
-            it->second.pontuacao += pontuacao;
+            it->second.pontuacao += pontosGanhos;
         } else {
             it->second.derrotas++;
         }
@@ -196,7 +202,7 @@ void Jogo::atualizarRanking(const std::string& jogador, int pontuacao, bool vito
         Jogador novoJogador;
         novoJogador.vitorias = vitoria ? 1 : 0;
         novoJogador.derrotas = vitoria ? 0 : 1;
-        novoJogador.pontuacao = vitoria ? pontuacao : 0;
+        novoJogador.pontuacao = vitoria ? pontosGanhos : 0;
         ranking[jogadorLower] = novoJogador;
     }
 
