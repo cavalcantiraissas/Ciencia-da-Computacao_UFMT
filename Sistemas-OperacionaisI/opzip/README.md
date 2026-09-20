@@ -45,7 +45,11 @@ Arquivos de apoio incluídos no repositório:
 - [`benchmark.py`](./benchmark.py) — mede o speedup em função do número de threads (seção [Speedup versus número de threads](#speedup-versus-número-de-threads)).
 - [`benchmark_contencao.py`](./benchmark_contencao.py) — mede o impacto da contenção entre mutex global e mutex por posição do buffer (seção [Mutex global versus mutex por posição](#mutex-global-versus-mutex-por-posição-do-buffer)).
 - [`opzip_relatorio.pdf`](./opzip_relatorio.pdf) — relatório completo do trabalho.
-- `teste.oz`, `teste.txt`, `teste_grande.txt`, `arquivo_grande.oz` — arquivos de entrada/saída usados nos testes de correção e desempenho.
+- `teste.oz`, `teste.txt` — arquivos de entrada/saída usados nos testes de correção.
+- `teste_grande.txt`, `arquivo_grande.oz` — entrada/saída usadas nos testes de desempenho. Não versionados por serem grandes (10 MB) e gerados; recrie `teste_grande.txt` com:
+  ```bash
+  python3 -c "import random; open('teste_grande.txt','wb').write(bytes(random.choice(b'abcd') for _ in range(10_000_000)))"
+  ```
 
 ## Fundamentação teórica e relação com Sistemas Operacionais
 

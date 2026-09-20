@@ -1,7 +1,17 @@
 # Artefatos de compilação Java
 *.class
+bin/
 
 # Artefatos de compilação C
 *.o
+*.elf
+*.hex
 Compiladores/inclusao_lexico/compiler
 Compiladores/inclusao_lexico/tstLexCompiler
+
+# Arquivos de sistema
+.DS_Store
+
+# Arquivos de teste grandes/gerados (ver README para regenerar)
+Sistemas-OperacionaisI/opzip/teste_grande.txt
+Sistemas-OperacionaisI/opzip/arquivo_grande.oz
