@@ -66,6 +66,12 @@ void InsereFim(No **lista, int num){
 
 void InserePos(No **lista, int num, int pos) {
     No *aux = *lista;
+
+    if (pos <= 0 || *lista == NULL) {
+        InsereInicio(lista, num);
+        return;
+    }
+
     No *novo = malloc(sizeof(No));
 
     if (!novo) {
@@ -74,11 +80,6 @@ void InserePos(No **lista, int num, int pos) {
     }
 
     novo->valor = num;
-
-    if (pos <= 0 || *lista == NULL) {
-        InsereInicio(lista, num);
-        return;
-    }
 
     for (int i = 0; aux && i < pos - 1; i++) {
         aux = aux->proximo;
