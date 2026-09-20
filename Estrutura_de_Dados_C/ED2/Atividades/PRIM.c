@@ -158,11 +158,13 @@ int encontraArvoreGeradoraMinimaPrim(GRAFO *grafo, const char *arquivoSaida) {
     int numVertices = grafo->numVertices;
     int *chave = (int *) malloc(numVertices * sizeof(int));
     int *pai = (int *) malloc(numVertices * sizeof(int));
+    int *posicao = (int *) malloc(numVertices * sizeof(int));
     int *naFila = (int *) malloc(numVertices * sizeof(int));
 
     for (int i = 0; i < numVertices; i++) {
         chave[i] = INFINITY;
         pai[i] = -1;
+        posicao[i] = i; // posicao inicial de cada vertice no heap
         naFila[i] = 1;
     }
 
@@ -176,7 +178,7 @@ int encontraArvoreGeradoraMinimaPrim(GRAFO *grafo, const char *arquivoSaida) {
     }
 
     while (fila->tamanho != 0) {
-        int u = extraiMinimo(fila, naFila, chave);
+        int u = extraiMinimo(fila, posicao, chave);
         naFila[u] = 0;
 
         ADJACENCIA *adj = grafo->adj[u].cab;
@@ -187,7 +189,7 @@ int encontraArvoreGeradoraMinimaPrim(GRAFO *grafo, const char *arquivoSaida) {
             if (naFila[v] && peso < chave[v]) {
                 pai[v] = u;
                 chave[v] = peso;
-                diminuiChave(fila, v, peso, naFila, chave);
+                diminuiChave(fila, v, peso, posicao, chave);
             }
             adj = adj->prox;
         }
@@ -210,6 +212,7 @@ int encontraArvoreGeradoraMinimaPrim(GRAFO *grafo, const char *arquivoSaida) {
 
     free(chave);
     free(pai);
+    free(posicao);
     free(naFila);
 
     return custoTotal;
