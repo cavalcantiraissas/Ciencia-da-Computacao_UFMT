@@ -18,7 +18,7 @@ TARGET  := clock
 #   Atomic, Compressed + Zicsr (CSR instructions).
 # medany: modelo de código adequado para endereços em qualquer
 #   região de 4 GB (necessário para 0x80000000).
-MARCH   := rv64imac
+MARCH   := rv64imac_zicsr
 MABI    := lp64
 
 CFLAGS  := -march=$(MARCH)       \
