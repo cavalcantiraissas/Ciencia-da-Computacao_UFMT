@@ -63,7 +63,9 @@ def run_simulation():
     print("-" * 30)
 
     # 5. Visualizar Comportamentos (Lógica interna da Entidade)
-    print(f"Consultas e Procedimentos de {paciente1.nome}: {len(paciente1.visualizar_consultas())}")
+    print(f"Consultas de {paciente1.nome}: {len(paciente1.visualizar_consultas())}")
+    print(f"Procedimentos de {paciente1.nome}: {len(paciente1.visualizar_procedimentos())}")
+    print(f"Consultas de {medico1.nome}: {len(medico1.consultar_consultas())}")
     print(f"Procedimentos de {medico1.nome}: {len(medico1.consultar_procedimentos())}")
     print("-" * 30)
 
