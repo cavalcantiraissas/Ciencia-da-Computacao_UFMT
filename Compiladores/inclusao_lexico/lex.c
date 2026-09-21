@@ -61,13 +61,21 @@ type_token *getToken() {
 
     // Verifica se NUMERO
     if ( isdigit(string[pos]) ) {
-        // constroi buffer com os digitos
-        while ( isdigit(string[pos]) ) {
+        // constroi buffer com os digitos, respeitando o limite de MAX_CHAR-1
+        while ( isdigit(string[pos]) && pos_buffer < MAX_CHAR - 1 ) {
             buffer[pos_buffer++] = string[pos++];
         }
         buffer[pos_buffer] = '\0';
-        token->tag = NUM;
-        strcpy( token->lexema, buffer ); //copia buffer para lexema
+        if ( isdigit(string[pos]) ) {
+            // numero excede o tamanho maximo suportado: reporta erro lexico
+            token->tag = ERROR;
+            strcpy( token->lexema, buffer );
+            fprintf(stderr, "Erro lexico na posicao %d: numero excede %d digitos\n", start, MAX_CHAR - 1);
+            while ( isdigit(string[pos]) ) pos++; // consome o restante do numero
+        } else {
+            token->tag = NUM;
+            strcpy( token->lexema, buffer ); //copia buffer para lexema
+        }
     }
     //Verifica se PLUS (+)
     else if (string[pos] == PLUS) {
