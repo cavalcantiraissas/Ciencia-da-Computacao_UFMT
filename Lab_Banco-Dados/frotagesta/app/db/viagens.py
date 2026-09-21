@@ -15,6 +15,12 @@ def em_andamento():
     """, fetch=True)
 
 def iniciar(motorista_id, veiculo_id, km_inicial):
+    rows = executar("SELECT km_atual FROM veiculos WHERE id=%s", (veiculo_id,), fetch=True)
+    km_atual = rows[0]["km_atual"] if rows else None
+    if km_atual is not None and km_inicial < km_atual:
+        raise ValueError(
+            f"KM inicial ({km_inicial}) não pode ser menor que o odômetro atual do veículo ({km_atual}).")
+
     executar("INSERT INTO viagens (motorista_id, veiculo_id, km_inicial, status) VALUES (%s,%s,%s,'Em andamento')",
              (motorista_id, veiculo_id, km_inicial))
     executar("UPDATE veiculos SET status='Em rota' WHERE id=%s", (veiculo_id,))
