@@ -42,7 +42,8 @@ class Paciente(Pessoa):
         self._cpf = cpf
         self._plano = plano
         self._consultas: List[Consulta] = [] # Tipo de referência cruzada
-    
+        self._procedimentos: List[Procedimento] = [] # Tipo de referência cruzada
+
     @staticmethod
     def cadastrar(paciente):
         # Lógica de persistência
@@ -52,9 +53,16 @@ class Paciente(Pessoa):
     def visualizar_consultas(self):
         # Comportamento: O paciente deve conseguir visualizar suas consultas
         return self._consultas
-    
+
     def add_consulta(self, consulta):
         self._consultas.append(consulta)
+
+    def visualizar_procedimentos(self):
+        # Comportamento: O paciente deve conseguir visualizar seus procedimentos
+        return self._procedimentos
+
+    def add_procedimento(self, procedimento):
+        self._procedimentos.append(procedimento)
 
     @property
     def cpf(self):
@@ -68,6 +76,7 @@ class Medico(Pessoa):
         self._especialidades = especialidades
         self._valor_hora = valor_hora
         self._procedimentos: List[Procedimento] = [] # Tipo de referência cruzada
+        self._consultas: List[Consulta] = [] # Tipo de referência cruzada
 
     @staticmethod
     def cadastrar(medico):
@@ -77,9 +86,16 @@ class Medico(Pessoa):
     def consultar_procedimentos(self):
         # Comportamento: os médicos consultarem seus procedimentos
         return self._procedimentos
-    
+
     def add_procedimento(self, procedimento):
         self._procedimentos.append(procedimento)
+
+    def consultar_consultas(self):
+        # Comportamento: os médicos consultarem suas consultas
+        return self._consultas
+
+    def add_consulta(self, consulta):
+        self._consultas.append(consulta)
 
     @property
     def crm(self):
@@ -99,6 +115,7 @@ class Consulta:
         # Cria a nova instância e estabelece a associação
         nova_consulta = Consulta(paciente, medico, data, valor=valor)
         paciente.add_consulta(nova_consulta) # Associa ao Paciente
+        medico.add_consulta(nova_consulta) # Associa ao Médico
         REPOSITORIO_HOSPITALAR['consultas'].append(nova_consulta)
         print(f"Consulta marcada para {paciente.nome} com Dr(a). {medico.nome} em {data}.")
         return nova_consulta
