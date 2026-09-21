@@ -14,6 +14,7 @@ fmt_entrada:  .asciz "Valor a empilhar: "
 fmt_scan_d:   .asciz "%d"
 fmt_push_ok:  .asciz "   >> PUSH(%d) realizado.\n   >> brk: 0x%lx -> 0x%lx  (+4 bytes alocados)\n"
 fmt_pop_ok:   .asciz "   >> POP() = %d\n   >> brk: 0x%lx -> 0x%lx  (-4 bytes liberados)\n"
+fmt_pilha_vazia: .asciz "   >> Pilha vazia! Nada a desempilhar.\n"
 fmt_sep:      .asciz "----------------------------------------\n"
 fmt_invalido: .asciz "   >> Opcao invalida.\n"
 
@@ -21,6 +22,7 @@ fmt_invalido: .asciz "   >> Opcao invalida.\n"
 .align 3
 buf_opcao: .space 4
 buf_valor: .space 4
+break_inicial: .quad 0
 
 .section .text
 .global main
@@ -106,6 +108,12 @@ main:
     la   a0, fmt_titulo3
     call printf
 
+    # Guarda o break inicial (antes de qualquer push) para
+    # detectar pilha vazia em .op_pop
+    call get_brk
+    la   t0, break_inicial
+    sd   a0, 0(t0)
+
 .menu_loop:
     la   a0, fmt_menu
     call printf
@@ -167,6 +175,11 @@ main:
     call get_brk
     mv   s0, a0             # s0 = break antes
 
+    # Pilha vazia se break atual == break inicial (nenhum push feito)
+    la   t0, break_inicial
+    ld   t1, 0(t0)
+    beq  s0, t1, .pop_vazia
+
     call desempilha
     mv   s1, a0             # s1 = valor desempilhado
 
@@ -180,6 +193,13 @@ main:
     mv   a3, s2             # %lx = break depois
     call printf
 
+    la   a0, fmt_sep
+    call printf
+    j    .menu_loop
+
+.pop_vazia:
+    la   a0, fmt_pilha_vazia
+    call printf
     la   a0, fmt_sep
     call printf
     j    .menu_loop
