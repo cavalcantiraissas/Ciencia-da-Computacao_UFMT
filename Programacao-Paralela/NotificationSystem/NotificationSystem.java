@@ -13,6 +13,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class NotificationSystem {
 
@@ -20,10 +21,12 @@ public class NotificationSystem {
 
         // ThreadPoolExecutor com fila limitada e política de rejeição
         BlockingQueue<Runnable> filaDeTarefas = new ArrayBlockingQueue<>(20);
+        AtomicInteger notificacoesRejeitadas = new AtomicInteger(0);
 
         RejectedExecutionHandler politicaDeRejeicao = new RejectedExecutionHandler() {
             @Override
             public void rejectedExecution(Runnable tarefaRejeitada, ThreadPoolExecutor executor) {
+                notificacoesRejeitadas.incrementAndGet();
                 System.out.println("[ALERTA] Notificação rejeitada! Pool e fila estão no limite máximo. "
                         + "Ativas: " + executor.getActiveCount()
                         + " | Fila: " + executor.getQueue().size());
@@ -72,6 +75,12 @@ public class NotificationSystem {
         monitorService.shutdown();
         monitorService.awaitTermination(1, TimeUnit.MINUTES);
 
-        System.out.println("Todas as notificações foram processadas. Sistema encerrado sem vazamento de threads.");
+        int totalRejeitadas = notificacoesRejeitadas.get();
+        if (totalRejeitadas > 0) {
+            System.out.println("Sistema encerrado sem vazamento de threads, porém " + totalRejeitadas
+                    + " de 40 notificação(ões) foram REJEITADAS e NÃO foram enviadas.");
+        } else {
+            System.out.println("Todas as notificações foram processadas. Sistema encerrado sem vazamento de threads.");
+        }
     }
 }
