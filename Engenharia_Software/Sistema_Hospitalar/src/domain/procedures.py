@@ -35,7 +35,7 @@ class Procedimento(ABC):
         procedimento._data = data
         
         # Adicionar o procedimento ao paciente e ao médico (lógica de domínio)
-        paciente.add_consulta(procedimento) # Procedimento também é uma 'consulta'
+        paciente.add_procedimento(procedimento)
         medico.add_procedimento(procedimento)
         
         REPOSITORIO_HOSPITALAR['procedimentos'].append(procedimento)
