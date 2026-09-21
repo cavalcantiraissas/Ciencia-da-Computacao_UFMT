@@ -78,18 +78,18 @@ int listR() {
     if ( lookahead->tag == PLUS ) {
         test1 = match(PLUS);
         test2 = term();
+        if (!test1 || !test2)
+            return false;
         genAdd(); //Geracao de codigo por meio de funcao do GERADOR
-        if (test1 && test2)
-            return listR();
-        return false;
+        return listR();
     } //Verifica ocorrencia de terminal '-'
     else if ( lookahead->tag == MINUS ) {
         test1 = match(MINUS);
         test2 = term();
+        if (!test1 || !test2)
+            return false;
         genSub(); //Geracao de codigo por meio de funcao do GERADOR
-        if (test1 && test2)
-            return listR();
-        return false;
+        return listR();
     } //Verifica se fim de entrada
     else {
         if ( lookahead->tag == ENDTOKEN )
@@ -124,18 +124,18 @@ int termR() {
     if ( lookahead->tag == TIMES ) {
         test1 = match(TIMES);
         test2 = digit();
+        if (!test1 || !test2)
+            return false;
         genMul(); //Geracao de codigo por meio de funcao do GERADOR
-        if (test1 && test2)
-            return termR();
-        return false;
+        return termR();
     } //Verifica ocorrencia de terminal '/'
     else if ( lookahead->tag == DIVIDE ) {
         test1 = match(DIVIDE);
         test2 = digit();
+        if (!test1 || !test2)
+            return false;
         genDiv(); //Geracao de codigo por meio de funcao do GERADOR
-        if (test1 && test2)
-            return termR();
-        return false;
+        return termR();
     } //Producao vazia: quem chamou (LISTR) trata o token seguinte
     else {
         return true;
