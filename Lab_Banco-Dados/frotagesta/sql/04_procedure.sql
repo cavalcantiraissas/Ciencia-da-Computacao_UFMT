@@ -50,6 +50,12 @@ BEGIN
             p_km_final, v_viagem.km_inicial;
     END IF;
 
+    IF p_km_final < (SELECT km_atual FROM veiculos WHERE id = v_viagem.veiculo_id) THEN
+        RAISE EXCEPTION
+            'Quilometragem final (% km) não pode ser menor que o odômetro atual do veículo (% km).',
+            p_km_final, (SELECT km_atual FROM veiculos WHERE id = v_viagem.veiculo_id);
+    END IF;
+
     -- -------------------------------------------------------------------------
     -- 3. Atualiza odômetro e devolve veículo ao status Disponível
     --    ANTES de encerrar a viagem, para que a trigger leia km_atual correto
