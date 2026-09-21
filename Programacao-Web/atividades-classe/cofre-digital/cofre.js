@@ -27,17 +27,24 @@ const meuCofre = (function () {
         if (bloqueado) {
           return "Cofre bloqueado. Depósito não permitido.";
         }
+        if (typeof valor !== "number" || !(valor > 0)) {
+          return "Valor de depósito inválido.";
+        }
         saldo += valor;
       },
-  
+
       sacar(senhaFornecida, valor) {
         const resultado = verificarSenha(senhaFornecida);
         if (!resultado.ok) return resultado.mensagem;
-  
+
+        if (typeof valor !== "number" || !(valor > 0)) {
+          return "Valor de saque inválido.";
+        }
+
         if (valor > saldo) {
           return "Saldo insuficiente.";
         }
-  
+
         saldo -= valor;
         return `Saque de R$${valor} realizado com sucesso.`;
       },
