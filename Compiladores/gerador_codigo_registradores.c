@@ -267,7 +267,7 @@ int main() {
     fprintf(outFile, "; -------------------------------------------\n");
 
     printf("Informe uma cadeia: ");
-    scanf("%s", string); //leitura da cadeia
+    scanf("%63s", string); //leitura da cadeia (limitada a MAX_CHAR-1 para evitar overflow)
 
     lookahead = string[0]; //inicializacao do lookahead
 
