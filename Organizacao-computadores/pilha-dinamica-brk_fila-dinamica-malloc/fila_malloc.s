@@ -97,12 +97,11 @@ remove_fila:
     sd   zero, 0(t2)        # tail = NULL (fila ficou vazia)
 
 .rm_free:
-    mv   t3, s0             # guarda endereço para retornar
     mv   a0, s0
-    call free
+    call free               # s0 é callee-saved: sobrevive à chamada
 
     mv   a0, s1             # retorna valor
-    mv   a1, t3             # retorna endereço liberado
+    mv   a1, s0             # retorna endereço liberado
     j    .rm_fim
 
 .rm_vazia:
