@@ -35,6 +35,7 @@ Em caso de impossibilidade de realizar todas as atividades presenciais, dada a r
 | Pasta | Descrição |
 |---|---|
 | [NotificationSystem](NotificationSystem/README.md) | Sistema de notificações paralelo com `ThreadPoolExecutor` e monitoramento via `ScheduledExecutorService` |
+| [Armazem](Armazem/README.md) | Problema Produtor-Consumidor com monitor (`synchronized`, `wait` e `notifyAll`) sobre um armazém de capacidade limitada |
 
 ---
 
