@@ -6,8 +6,13 @@ bin/
 *.o
 *.elf
 *.hex
+*.bin
 Compiladores/inclusao_lexico/compiler
 Compiladores/inclusao_lexico/tstLexCompiler
+
+# Artefatos de compilação Python
+__pycache__/
+*.pyc
 
 # Arquivos de sistema
 .DS_Store
