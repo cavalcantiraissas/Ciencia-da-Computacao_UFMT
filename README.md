@@ -23,6 +23,7 @@ O conteúdo é atualizado continuamente conforme o progresso do curso. Cada past
 | [Programação em C++](./Programacao_C++) | Paradigma orientado a objetos em C++: classes, herança, polimorfismo, templates e STL | C++ |
 | [Programação em Java](./Programacao_Java) | Orientação a objetos em Java: encapsulamento, interfaces, coleções, tratamento de exceções e padrões de projeto | Java |
 | [Projeto de Software](./Projeto-Software) | Desenvolvimento de um projeto de software completo: especificação, arquitetura, implementação e entrega | Documentação, código, apresentação |
+| [Redes de Computadores](./Redes_Computadores) | Comunicação em rede com sockets: protocolos da camada de transporte (TCP), arquitetura cliente-servidor e protocolos de aplicação como WHOIS | Python, sockets |
 | [Sistemas Operacionais](./Sistemas-OperacionaisI) | Gerenciamento de processos, escalonamento, memória virtual, sistemas de arquivos e sincronização | C, shell scripts, relatórios |
 
 ---
@@ -32,6 +33,7 @@ O conteúdo é atualizado continuamente conforme o progresso do curso. Cada past
 ![C](https://img.shields.io/badge/C-00599C?style=flat-square&logo=c&logoColor=white)
 ![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=cplusplus&logoColor=white)
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-005C84?style=flat-square&logo=mysql&logoColor=white)
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
