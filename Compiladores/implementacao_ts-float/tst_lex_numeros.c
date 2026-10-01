@@ -1,10 +1,11 @@
 #include "lex.h"
 #include <stdio.h>
 
-int main() {
+int main(int argc, char *argv[]) {
     type_token *tok;
 
-    initLex("entrada_numeros.txt");
+    //Arquivo de entrada opcional; por padrao usa entrada_numeros.txt
+    initLex(argc > 1 ? argv[1] : "entrada_numeros.txt");
 
     do {
         tok = getToken();
@@ -16,7 +17,12 @@ int main() {
             printf("ENDTOKEN\n");
         else
             printf("outro tag=%d lexema='%s'\n", tok->tag, tok->lexema);
-    } while (tok->tag != ENDTOKEN);
+        if (tok->tag == ENDTOKEN) {
+            free(tok);
+            break;
+        }
+        free(tok);
+    } while (true);
 
     return 0;
 }
