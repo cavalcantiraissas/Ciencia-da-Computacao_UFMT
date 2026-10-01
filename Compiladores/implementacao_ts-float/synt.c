@@ -14,7 +14,7 @@
 type_token *lookahead;
 extern type_symbol_table_variables global_symbol_table_variables;
 extern type_symbol_table_string symbol_table_string;
-extern char output_file_name[MAX_CHAR];
+extern char output_file_name[FILENAME_MAX];
 extern FILE *output_file;
 
 /**
@@ -25,6 +25,7 @@ extern FILE *output_file;
  */
 int match(int token_tag) {
     if ( lookahead->tag == token_tag ) {
+        free(lookahead); //libera o token ja consumido
         lookahead = getToken(); //Pega o proximo token por meio do lexico
         return true;
     }
@@ -162,9 +163,16 @@ int main(int argc, char *argv[]) {
     } else {
         printSTVariables(&global_symbol_table_variables);
 
-        strcpy(output_file_name, argv[1]);
-        strcat(output_file_name, ".asm");
+        //snprintf limita a escrita ao tamanho do vetor (evita overflow)
+        if (snprintf(output_file_name, sizeof(output_file_name), "%s.asm", argv[1]) >= (int) sizeof(output_file_name)) {
+            printf("[ERRO] Nome do arquivo de entrada muito longo.\n");
+            return EXIT_FAILURE;
+        }
         output_file = fopen(output_file_name, "w+");
+        if (output_file == NULL) {
+            printf("[ERRO] Nao foi possivel criar o arquivo de saida: %s\n", output_file_name);
+            return EXIT_FAILURE;
+        }
         gen_data_section(); //Gera codigo da secao de dados
         fclose(output_file);
         return EXIT_SUCCESS;
