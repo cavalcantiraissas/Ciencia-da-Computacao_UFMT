@@ -13,6 +13,32 @@
 // Variaveis globais
 int pos;
 FILE *input_file;
+
+// Pilha de caracteres devolvidos ao fluxo de entrada. O padrao C so garante
+// um caractere de 'ungetc', mas o caso "7." precisa devolver dois.
+static int pushback[2];
+static int n_pushback = 0;
+
+static int nextChar(void) {
+    if (n_pushback > 0)
+        return pushback[--n_pushback];
+    return fgetc(input_file);
+}
+
+static void backChar(int c) {
+    if (c != EOF && n_pushback < 2)
+        pushback[n_pushback++] = c;
+}
+
+// Adiciona caractere ao buffer apenas se houver espaco (evita overflow).
+// Retorna false quando o lexema excede MAX_CHAR-1 caracteres.
+static int addChar(char *buffer, int *pos_buffer, int c) {
+    if (*pos_buffer < MAX_CHAR - 1) {
+        buffer[(*pos_buffer)++] = (char) c;
+        return true;
+    }
+    return false;
+}
 //Definicao e inicializacao de estrutura
 type_token key_words[] = {
     {IF, "if", 0},
@@ -20,11 +46,12 @@ type_token key_words[] = {
     {ELSE, "else", 0},
     {WHILE, "while", 0},
     {DO, "do", 0},
-    {NUM, "integer", 0},
+    {INT, "integer", 0},
     {READ, "read", 0},
     {WRITE, "write", 0},
     {INT, "int", 0},
-    {FLOAT, "float", 0}
+    {FLOAT, "float", 0},
+    {0, "", 0}  //sentinela: marca o fim da lista para keyWordFind
 };
 
 
@@ -52,16 +79,18 @@ type_token *getToken() {
     int pos_buffer;
     type_token *token;
     type_token *key_found;
-    char ch;
+    int ch; //int (e nao char) para comparar corretamente com EOF
     
+    int too_long = false;
+
     pos_buffer = 0;
     token = (type_token*) malloc(sizeof(type_token));
     strcpy(buffer, "");
-    ch = fgetc(input_file);
+    ch = nextChar();
 
     // Consome espacos, tabulacoes e quebras de linha
-    while ( ch == ' ' || ch == '\t' || ch == '\n') {
-        ch = fgetc(input_file);
+    while ( ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r') {
+        ch = nextChar();
     }
 
     // Verifica se NUMERO (inteiro ou com precisao/float)
@@ -70,45 +99,55 @@ type_token *getToken() {
 
         // constroi buffer com a parte inteira do numero
         while ( isdigit(ch) ) {
-            buffer[pos_buffer++] = ch;
-            ch = fgetc(input_file);
+            if (!addChar(buffer, &pos_buffer, ch)) too_long = true;
+            ch = nextChar();
         }
 
         // Verifica se ha parte fracionaria (ponto seguido de digito),
         // caracterizando um numeral de PRECISAO (float). Ex.: 3.14
         if ( ch == '.' ) {
-            char next_ch = fgetc(input_file);
+            int next_ch = nextChar();
             if ( isdigit(next_ch) ) {
                 isFloat = true;
-                buffer[pos_buffer++] = ch;       // guarda o '.'
+                if (!addChar(buffer, &pos_buffer, ch)) too_long = true;  // guarda o '.'
                 ch = next_ch;
                 while ( isdigit(ch) ) {           // guarda os digitos decimais
-                    buffer[pos_buffer++] = ch;
-                    ch = fgetc(input_file);
+                    if (!addChar(buffer, &pos_buffer, ch)) too_long = true;
+                    ch = nextChar();
                 }
             } else {
                 // Nao eh um float (ex.: "3." sem digito apos o ponto):
                 // devolve o caractere apos o ponto e tambem o proprio ponto
-                ungetc(next_ch, input_file);
+                backChar(next_ch);
             }
         }
 
-        ungetc(ch, input_file);
+        backChar(ch);
         buffer[pos_buffer] = '\0';
         token->tag = isFloat ? FLOAT_NUM : NUM;
         strcpy( token->lexema, buffer ); //copia buffer para lexema
+        token->value = 0;
+        if (too_long) {
+            printf("[ERRO] Numero excede %d caracteres: '%s...'\n", MAX_CHAR - 1, buffer);
+            token->tag = ERROR;
+        }
     } //Verifica se entrada eh um alfa-numerico (palavra reservada ou identificador)
     else if ( isalpha(ch) ) {
-        buffer[pos_buffer++] = ch;
-        ch = fgetc(input_file);
+        if (!addChar(buffer, &pos_buffer, ch)) too_long = true;
+        ch = nextChar();
         while( isalnum(ch) ) {
-            buffer[pos_buffer++] = ch;
-            ch = fgetc(input_file);
+            if (!addChar(buffer, &pos_buffer, ch)) too_long = true;
+            ch = nextChar();
         }
-        ungetc(ch, input_file);
+        backChar(ch);
         buffer[pos_buffer] = '\0';
         key_found = keyWordFind(buffer);
-        if (key_found != NULL) { //Palavra reservada
+        if (too_long) {
+            printf("[ERRO] Identificador excede %d caracteres: '%s...'\n", MAX_CHAR - 1, buffer);
+            token->tag = ERROR;
+            strcpy(token->lexema, buffer);
+            token->value = 0;
+        } else if (key_found != NULL) { //Palavra reservada
             token->tag = key_found->tag;
             strcpy(token->lexema, key_found->lexema);
             token->value = key_found->value;
@@ -165,11 +204,14 @@ type_token *getToken() {
     else if (ch == EOF) {
         token->tag = ENDTOKEN;
         strcpy(token->lexema, "\0");
+        token->value = 0;
     }
     //ERRO
     else {
         token->tag = ERROR;
-        strcpy(token->lexema, "");
+        token->lexema[0] = (char) ch; //guarda o caractere invalido para a mensagem de erro
+        token->lexema[1] = '\0';
+        token->value = 0;
     }
 
     return token;
