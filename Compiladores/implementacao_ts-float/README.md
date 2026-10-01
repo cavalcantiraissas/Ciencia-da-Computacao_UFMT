@@ -23,7 +23,8 @@ statement    -> ε
 | [symbols.h](symbols.h) / [symbols.c](symbols.c) | Tabela de símbolos de variáveis (nome, tipo, endereço e um `value` genérico do tipo `void*`, convertido conforme o tipo) e tabela de strings (rótulos `str0`, `str1`, ...). Inclui funções de busca, declaração, inicialização e impressão para depuração. O suporte a funções está esboçado em comentários. |
 | [synt.h](synt.h) / [synt.c](synt.c) | Analisador sintático descendente recursivo e `main`. Valida as declarações, detecta variável redeclarada e erros de sintaxe (falta de identificador ou de `;`), imprime a tabela de símbolos e grava o arquivo `<entrada>.asm`. |
 | [gen.h](gen.h) / [gen.c](gen.c) | Gerador de código. `gen_data_section()` emite a `section .data` com as strings de formato e uma entrada `dd` por variável (`dd 0` para `int`, `dd 0.0` para `float`). As funções `genAdd`, `genSub`, `genMult`, `genDiv` e `genNum` (pilha com `rax`/`rbx`) ainda não são usadas nesta etapa. |
-| [tst_lex_numeros.c](tst_lex_numeros.c) | Programa de teste do léxico: lê `entrada_numeros.txt` e imprime se cada token é `NUM` ou `FLOAT_NUM`. |
+| [tst_lex_numeros.c](tst_lex_numeros.c) | Programa de teste do léxico: lê `entrada_numeros.txt` (ou o arquivo passado como argumento) e imprime se cada token é `NUM` ou `FLOAT_NUM`. |
+| [entrada_numeros.txt](entrada_numeros.txt) | Entrada de exemplo para o teste do léxico, com inteiros, floats e casos de borda (`7.`, `10.x`, `1.2.3` e um número com mais de 31 dígitos). |
 
 ## Compilação e execução
 
@@ -32,9 +33,9 @@ statement    -> ε
 gcc -Wall -o compiler lex.c symbols.c gen.c synt.c
 ./compiler entrada.txt          # gera entrada.txt.asm
 
-# teste do léxico de números (precisa de entrada_numeros.txt na pasta atual)
+# teste do léxico de números (usa entrada_numeros.txt por padrão)
 gcc -Wall -o tst_lex_numeros tst_lex_numeros.c lex.c
-./tst_lex_numeros
+./tst_lex_numeros [arquivo]
 ```
 
 ### Exemplo
@@ -65,24 +66,28 @@ Casos de erro tratados:
 
 Em ambos os casos o programa termina com `FALHA NA COMPILACAO DO PROGRAMA` e código de saída `1`.
 
-## Análise do código
+## Análise do código e correções
 
-A compilação com `gcc -Wall -Wextra` não gera avisos, e os casos acima se comportam como esperado. Os testes manuais e o AddressSanitizer revelaram os seguintes pontos:
+A primeira versão compilava sem avisos e tratava corretamente os casos acima, mas os testes manuais e o AddressSanitizer revelaram os problemas abaixo, já corrigidos:
 
-### Problemas encontrados
+| Problema | Arquivo | Correção |
+|---|---|---|
+| `keyWordFind` lia além do fim de `key_words`, pois o vetor não tinha entrada sentinela (o AddressSanitizer acusava `global-buffer-overflow` em `int abc;`) | [lex.c](lex.c) | Sentinela `{0, "", 0}` no fim do vetor |
+| Identificadores ou números com mais de 31 caracteres estouravam `buffer[MAX_CHAR]` e abortavam o programa | [lex.c](lex.c) | Escrita limitada ao tamanho do buffer; lexema longo demais vira erro léxico com mensagem |
+| `ch` declarado como `char`: onde `char` não tem sinal (ex.: Linux em ARM), `EOF` nunca era detectado | [lex.c](lex.c) | `ch` passou a ser `int` |
+| No caso `7.`, eram feitos dois `ungetc` seguidos, mas o padrão C só garante um | [lex.c](lex.c) | Pilha própria de caracteres devolvidos (`nextChar`/`backChar`) |
+| Arquivos com quebra de linha CRLF (Windows) geravam erro | [lex.c](lex.c) | `\r` passa a ser tratado como espaço |
+| Token de erro tinha lexema vazio, o que tornava a mensagem inútil | [lex.c](lex.c) | O lexema guarda o caractere inválido |
+| A palavra `integer` era mapeada para `NUM` (tag de literal inteiro) | [lex.c](lex.c) | Mapeada para `INT`, como sinônimo de `int` |
+| `output_file_name[32]` estourava com caminhos longos, e o `fopen` da saída não era verificado | [gen.c](gen.c), [synt.c](synt.c) | Vetor com `FILENAME_MAX`, `snprintf` e verificação do `fopen` |
+| Tokens consumidos nunca eram liberados | [synt.c](synt.c) | `free` do token anterior em `match` |
+| `genMult` emitia `imult` (instrução inexistente), e `genDiv` usava `idiv rax,rbx` (`idiv` aceita um único operando) | [gen.c](gen.c) | `imul rax,rbx`; `cqo` seguido de `idiv rbx` |
+| Cópia de string sem limite em `sym_string_declare`, `sprintf` em vez de `snprintf`, e inicialização percorrendo 4096 posições quando só 64 são usadas | [symbols.c](symbols.c) | `strncpy`/`snprintf` com limite; laço até `MAX_STRINGS` |
+| `tst_lex_numeros.c` dependia de `entrada_numeros.txt`, que não existia | [tst_lex_numeros.c](tst_lex_numeros.c) | Arquivo de exemplo adicionado; o teste aceita outro arquivo como argumento e libera os tokens |
 
-1. **Leitura fora dos limites em `keyWordFind`** ([lex.c](lex.c)): o vetor `key_words` não termina com uma entrada sentinela (lexema vazio), mas o laço só para quando encontra `lexema[0] == '\0'`. Sempre que um identificador não é palavra reservada, a busca lê além do fim do vetor. O AddressSanitizer acusa `global-buffer-overflow` já em `int abc;`. Para corrigir, basta acrescentar `{0, "", 0}` ao final de `key_words`.
-2. **Estouro de buffer em `getToken`** ([lex.c](lex.c)): identificadores e números são copiados para `buffer[MAX_CHAR]` (32 bytes) sem verificar o tamanho. Um identificador com mais de 31 caracteres faz o programa abortar. A mesma correção já foi feita em `inclusao_lexico`.
-3. **Estouro de `output_file_name`** ([synt.c](synt.c)): o nome do arquivo de entrada mais `.asm` é copiado com `strcpy`/`strcat` para um vetor de 32 bytes. Caminhos com mais de 27 caracteres estouram o vetor. O retorno de `fopen` também não é verificado.
-4. **`ch` declarado como `char`** ([lex.c](lex.c)): `fgetc` retorna `int`. Em plataformas onde `char` não tem sinal (por exemplo, Linux em ARM), a comparação com `EOF` nunca é verdadeira.
-5. **Dois `ungetc` seguidos** ([lex.c](lex.c)): no caso `7.`, o léxico devolve dois caracteres ao fluxo, mas o padrão C só garante um caractere de *pushback*. Funciona no macOS e na glibc, mas não é portátil.
-6. **`\r` não é tratado como espaço**: arquivos com quebra de linha do Windows (CRLF) geram `Tipo desconhecido: -1`.
+Depois das correções, o código compila sem avisos com `gcc -Wall -Wextra` e roda sem erros com `-fsanitize=address,undefined`.
 
-### Observações menores
+### Limitações que permanecem (próximas etapas)
 
-- A palavra `integer` está mapeada para a tag `NUM` (a mesma de um literal inteiro). Provavelmente o correto seria `INT`, ou removê-la.
-- O valor de um `FLOAT_NUM` fica só no `lexema`. O campo `value` do token é `int` e não é preenchido para números.
-- `genMult` emite `imult`, que não é uma instrução x86 válida (o correto é `imul`). `genDiv` usa `idiv rax,rbx`, mas `idiv` aceita um único operando (dividendo em `rdx:rax`). Essas funções ainda não são chamadas.
-- Os tokens alocados com `malloc` em `getToken` nunca são liberados.
-- `initSymbolTableString` percorre `MAX_SYMBOLS` (4096) posições, mas o limite de strings é `MAX_STRINGS` (64). Não há estouro, só trabalho desnecessário.
-- `tst_lex_numeros.c` depende de `entrada_numeros.txt`, que não está na pasta.
+- O valor de um `FLOAT_NUM` fica só no `lexema`: o campo `value` do token é `int`.
+- `statements()` ainda não é chamado, e as funções `genAdd`/`genSub`/`genMult`/`genDiv`/`genNum` ainda não são usadas.
