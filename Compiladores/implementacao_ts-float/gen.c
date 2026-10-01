@@ -13,7 +13,7 @@
 // Inclusao explicita de variaveis globais de outro contexto (symbols.h)
 extern type_symbol_table_variables global_symbol_table_variables;
 extern type_symbol_table_string symbol_table_string;
-char output_file_name[MAX_CHAR];
+char output_file_name[FILENAME_MAX]; //comporta caminho completo + ".asm"
 FILE *output_file;
 
 /**
@@ -45,7 +45,7 @@ void genSub(void) {
 void genMult(void) {
     printf("pop rax\n");
     printf("pop rbx\n");
-    printf("imult rax,rbx\n");
+    printf("imul rax,rbx\n");
     printf("push rax\n");
 }
 
@@ -56,7 +56,8 @@ void genMult(void) {
 void genDiv(void) {
     printf("pop rbx\n");
     printf("pop rax\n");
-    printf("idiv rax,rbx\n");
+    printf("cqo\n");      //estende o sinal de rax para rdx:rax (dividendo)
+    printf("idiv rbx\n"); //idiv recebe so o divisor; quociente fica em rax
     printf("push rax\n");
 }
 
