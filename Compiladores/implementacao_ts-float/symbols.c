@@ -90,10 +90,12 @@ type_symbol_table_string_entry *sym_string_declare(char *s) {
     if ( symbol_table_string.n_strings < MAX_STRINGS ) {
         int n_str;
         char str_name[MAX_TOKSZ];
-        sprintf(str_name, "str%d", str_label_count);
+        snprintf(str_name, sizeof(str_name), "str%d", str_label_count);
         n_str = symbol_table_string.n_strings;
 
-        strcpy(symbol_table_string.string[n_str].value, s);
+        //limita a copia ao tamanho do campo (evita overflow com strings longas)
+        strncpy(symbol_table_string.string[n_str].value, s, MAX_STRINGSZ - 1);
+        symbol_table_string.string[n_str].value[MAX_STRINGSZ - 1] = '\0';
         strcpy(symbol_table_string.string[n_str].name, str_name);
         str_label_count++;
         symbol_table_string.n_strings++;
@@ -174,7 +176,7 @@ void initSymbolTableVariables(type_symbol_table_variables *stv) {
 void initSymbolTableString(void) {
     int i;
     symbol_table_string.n_strings = 0;
-    for (i = 0; i < MAX_SYMBOLS; i++) {
+    for (i = 0; i < MAX_STRINGS; i++) { //apenas MAX_STRINGS posicoes sao usadas
         strcpy(symbol_table_string.string[i].name, "");
         strcpy(symbol_table_string.string[i].value, "");
     }
