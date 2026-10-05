@@ -25,6 +25,7 @@ O conteúdo é atualizado continuamente conforme o progresso do curso. Cada past
 | [Projeto de Software](./Projeto-Software) | Desenvolvimento de um projeto de software completo: especificação, arquitetura, implementação e entrega | Documentação, código, apresentação |
 | [Redes de Computadores](./Redes_Computadores) | Comunicação em rede com sockets: protocolos da camada de transporte (TCP), arquitetura cliente-servidor e protocolos de aplicação como WHOIS | Python, sockets |
 | [Sistemas Operacionais](./Sistemas-OperacionaisI) | Gerenciamento de processos, escalonamento, memória virtual, sistemas de arquivos e sincronização | C, shell scripts, relatórios |
+| [Sistemas Operacionais II](./Sistemas-OperacionaisII) | Implementação de um sistema de arquivos (vsfs, do OSTEP): formato on-disk, alocação por bitmaps, inodes, diretórios e montagem via FUSE | Python, FUSE |
 
 ---
 
