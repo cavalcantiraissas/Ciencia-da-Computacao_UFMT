@@ -37,6 +37,7 @@ Em caso de impossibilidade de realizar todas as atividades presenciais, dada a r
 | [NotificationSystem](NotificationSystem/README.md) | Sistema de notificações paralelo com `ThreadPoolExecutor` e monitoramento via `ScheduledExecutorService` |
 | [Armazem](Armazem/README.md) | Problema Produtor-Consumidor com monitor (`synchronized`, `wait` e `notifyAll`) sobre um armazém de capacidade limitada |
 | [TestLinhaMontagem](TestLinhaMontagem/README.md) | Linha de montagem em pipeline (OperarioA → Montador → Embalador) com estações de trabalho sincronizadas por semáforos (`Semaphore`) |
+| [simulador_ingressos.py](simulador_ingressos.py) | Simulador de venda de ingressos em Python: compradores concorrentes protegem o estoque com `threading.Lock` e enviam eventos a uma thread logger via `queue.Queue`, com relatório final de consistência |
 
 ---
 
