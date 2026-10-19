@@ -384,10 +384,17 @@ class VSFS(Operations):
         O `.` e o `..` saem do disco como qualquer outro nome, porque no vsfs
         eles são entradas de verdade, gravadas pelo mkfs e pelo mkdir. Muitos
         sistemas de arquivos os sintetizam aqui em vez de guardá-los.
+
+        Cada nome vai junto com o número do inode que a entrada aponta. Com a
+        opção `use_ino` da montagem, a libfuse repassa esse número ao kernel;
+        sem ele, iria 0, e a glibc pula entradas de inode 0 por tratá-las como
+        apagadas, fazendo o diretório parecer vazio. O último 0 da tupla é o
+        offset: todos os nomes vão numa chamada só.
         """
-        return [entrada.name.decode() for entrada in self._entradas(
-            self._le_inode(self._resolve(path))
-        )]
+        return [
+            (entrada.name.decode(), {"st_ino": entrada.inum}, 0)
+            for entrada in self._entradas(self._le_inode(self._resolve(path)))
+        ]
 
     def read(self, path, size, offset, fh):
         """Os bytes de um arquivo, de `offset` até `offset + size`.
@@ -907,12 +914,17 @@ def main(argv):
     # nos inodes (as que o chmod muda) antes de cada acesso. Sem ela, o FUSE
     # deixa a conferência por conta do sistema de arquivos, e os bits rwx
     # seriam só decoração: um `chmod 000` não impediria ninguém de ler.
+    #
+    # use_ino faz a libfuse repassar ao kernel o st_ino que o getattr devolve.
+    # Sem ela, a libfuse inventa um número por caminho, e dois hard links do
+    # mesmo arquivo apareceriam com inodes diferentes no `ls -i`.
     FUSE(
         fs,
         args.ponto,
         foreground=args.foreground,
         nothreads=True,
         default_permissions=True,
+        use_ino=True,
     )
     return 0
 
