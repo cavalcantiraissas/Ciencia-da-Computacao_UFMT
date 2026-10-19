@@ -154,7 +154,12 @@ def marca_bit(bitmap, i):
 
 
 def limpa_bit(bitmap, i):
-    """Desliga o bit i. Quem chama é o unlink, ao devolver inode e blocos."""
+    """Desliga o bit i.
+
+    Quem chama é quem devolve inodes e blocos: o unlink, o rmdir e o rename
+    que sobrescreve um destino. Também o mkdir e o create, ao desfazer uma
+    alocação que não pôde ser concluída.
+    """
     bitmap[i // 8] &= ~(1 << (i % 8))
 
 
