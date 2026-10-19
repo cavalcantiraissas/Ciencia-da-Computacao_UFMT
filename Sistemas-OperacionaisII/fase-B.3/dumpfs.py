@@ -4,6 +4,10 @@ Cresce junto com o mkfs: todo pedaço novo que o mkfs aprende a gravar, o dumpfs
 aprende a ler. Se o dumpfs lê de volta o que o mkfs gravou, o formato fecha; se
 não lê, o erro está nas últimas linhas escritas.
 
+Com subdiretórios e hard links, a conferência percorre a árvore inteira, e não
+só a raiz: cada diretório precisa do `.` e do `..` certos, e o `nlink` de cada
+inode precisa bater com o número de nomes que o apontam.
+
 Um formato de disco é um contrato entre um escritor e um leitor. Desenvolver os
 dois como espelhos torna isso concreto.
 
@@ -247,6 +251,7 @@ def verifica(disco, sb):
             problemas.append(f"bloco {bloco}: apontado por um inode, mas livre no bitmap")
 
     problemas += _verifica_raiz(disco, sb)
+    problemas += _verifica_arvore(disco, sb, bitmap_inodes)
     return problemas
 
 
@@ -280,6 +285,128 @@ def _verifica_raiz(disco, sb):
     return problemas
 
 
+def _entradas_vivas(disco, sb, ino):
+    """As entradas ocupadas de um diretório, ignorando ponteiros inválidos.
+
+    Ponteiro fora da região de dados já é relatado pela varredura de inodes;
+    aqui ele é pulado para que a leitura não estoure numa imagem corrompida.
+    """
+    for bloco in ino.direct:
+        if not sb.data_region_start <= bloco < disco.num_blocks:
+            continue
+        for entrada in layout.entradas_do_bloco(disco.read_block(bloco)):
+            if entrada.inum != layout.FREE_INUM:
+                yield entrada
+
+
+def percorre_arvore(disco, sb):
+    """Gera (caminho, número do pai, número, inode, entradas) de cada diretório
+    alcançável a partir da raiz, em largura.
+
+    Cada diretório é visitado uma vez só. Um diretório que aparecesse de
+    novo seria um hard link para diretório (ou um ciclo), e seguir por ele
+    faria a varredura nunca terminar.
+    """
+    fila = [("/", sb.root_inum, sb.root_inum)]
+    visitados = {sb.root_inum}
+
+    while fila:
+        caminho, pai, inum = fila.pop(0)
+        ino = le_inode(disco, sb, inum)
+        entradas = list(_entradas_vivas(disco, sb, ino))
+        yield caminho, pai, inum, ino, entradas
+
+        for entrada in entradas:
+            if entrada.name in (b".", b"..") or entrada.inum in visitados:
+                continue
+            if not 0 < entrada.inum < sb.num_inodes:
+                continue  # relatado pela verificação da árvore
+            filho = le_inode(disco, sb, entrada.inum)
+            if stat.S_ISDIR(filho.mode):
+                visitados.add(entrada.inum)
+                nome = entrada.name.decode("utf-8", "replace")
+                fila.append((caminho.rstrip("/") + "/" + nome, inum, entrada.inum))
+
+
+def _verifica_arvore(disco, sb, bitmap_inodes):
+    """Confere a árvore inteira contra a tabela de inodes.
+
+    Três coisas que só aparecem olhando todos os diretórios juntos:
+
+    - Todo diretório tem `.` apontando para ele mesmo e `..` apontando para
+      o pai. É o que o mkdir grava e o rename de diretório precisa manter.
+    - Toda entrada aponta para um inode em uso. Um nome apontando para um
+      inode livre é o pior desacordo possível: o alocador vai entregar o
+      inode a outro arquivo, e o nome antigo passa a abrir o arquivo novo.
+    - O `nlink` de cada inode é igual ao número de entradas que o apontam,
+      contando `.` e `..`. Maior que isso, o arquivo nunca é liberado
+      (espaço perdido); menor, ele é liberado com nomes ainda apontando.
+      Um inode em uso que nenhuma entrada aponta é um órfão.
+    """
+    problemas = []
+    referencias = [0] * sb.num_inodes
+
+    for caminho, pai, inum, ino, entradas in percorre_arvore(disco, sb):
+        nomes = {}
+        for entrada in entradas:
+            nomes.setdefault(entrada.name, entrada.inum)
+            nome = entrada.name.decode("utf-8", "replace")
+            if not 0 < entrada.inum < sb.num_inodes:
+                problemas.append(
+                    f"{caminho}: {nome} aponta para o inode {entrada.inum}, "
+                    f"fora da tabela"
+                )
+                continue
+            if not layout.testa_bit(bitmap_inodes, entrada.inum):
+                problemas.append(
+                    f"{caminho}: {nome} aponta para o inode {entrada.inum}, "
+                    f"que está livre"
+                )
+            referencias[entrada.inum] += 1
+
+        if nomes.get(b".") != inum:
+            problemas.append(f"{caminho}: o . não aponta para o inode {inum}")
+        if nomes.get(b"..") != pai:
+            problemas.append(f"{caminho}: o .. não aponta para o pai (inode {pai})")
+
+    for inum, ino in percorre_inodes(disco, sb):
+        if inum == layout.FREE_INUM or ino.mode == 0:
+            continue
+        if referencias[inum] == 0:
+            problemas.append(
+                f"inode {inum}: em uso, mas nenhum diretório o aponta (órfão)"
+            )
+        elif referencias[inum] != ino.nlink:
+            problemas.append(
+                f"inode {inum}: nlink {ino.nlink}, mas {referencias[inum]} "
+                f"entrada(s) o apontam"
+            )
+    return problemas
+
+
+def imprime_arvore(disco, sb):
+    """Todos os caminhos da imagem, com o inode e o `nlink` de cada um.
+
+    Dois caminhos com o mesmo inode são hard links: é o `ls -i` da imagem
+    desmontada.
+    """
+    print("=== árvore ===")
+    for caminho, _, _, _, entradas in percorre_arvore(disco, sb):
+        for entrada in entradas:
+            if entrada.name in (b".", b".."):
+                continue
+            if not 0 < entrada.inum < sb.num_inodes:
+                continue
+            ino = le_inode(disco, sb, entrada.inum)
+            nome = caminho.rstrip("/") + "/" + entrada.name.decode("utf-8", "replace")
+            if stat.S_ISDIR(ino.mode):
+                nome += "/"
+            print(
+                f"  {stat.filemode(ino.mode)}  inode {entrada.inum:<3} "
+                f"nlink {ino.nlink:<3} {ino.size:>6} B  {nome}"
+            )
+
+
 def imprime_verificacao(problemas):
     print("=== verificação ===")
     if not problemas:
@@ -301,6 +428,7 @@ def despeja(caminho):
         raiz = le_inode(disco, sb, sb.root_inum)
         imprime_inode(f"inode {sb.root_inum} (raiz)", raiz)
         imprime_diretorio(disco, raiz)
+        imprime_arvore(disco, sb)
 
         problemas = verifica(disco, sb)
         imprime_verificacao(problemas)
