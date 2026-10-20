@@ -9,13 +9,20 @@ bin/
 *.bin
 Compiladores/inclusao_lexico/compiler
 Compiladores/inclusao_lexico/tstLexCompiler
+Compiladores/condicional_se/compiler
+Compiladores/condicional_se/compiler4win
+Compiladores/condicional_se/compiler4macos
+Compiladores/condicional_se/compiler.dSYM/
+*.cc.asm
+Organizacao-computadores/trab1
 
 # Artefatos de compilação Python
 __pycache__/
 *.pyc
 
-# Arquivos de sistema
+# Arquivos de sistema e de editor
 .DS_Store
+.vscode/
 
 # Arquivos de teste grandes/gerados (ver README para regenerar)
 Sistemas-OperacionaisI/opzip/teste_grande.txt
