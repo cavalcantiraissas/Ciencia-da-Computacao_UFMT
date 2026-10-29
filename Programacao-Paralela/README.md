@@ -39,6 +39,7 @@ Em caso de impossibilidade de realizar todas as atividades presenciais, dada a r
 | [TestLinhaMontagem](TestLinhaMontagem/README.md) | Linha de montagem em pipeline (OperarioA → Montador → Embalador) com estações de trabalho sincronizadas por semáforos (`Semaphore`) |
 | [simulador_ingressos.py](simulador_ingressos.py) | Simulador de venda de ingressos em Python: compradores concorrentes protegem o estoque com `threading.Lock` e enviam eventos a uma thread logger via `queue.Queue`, com relatório final de consistência |
 | [MaxVetor.c](MaxVetor.c) | Valor máximo de um vetor em C com OpenMP: cada thread calcula seu máximo local e atualiza `max_global` uma única vez dentro de `#pragma omp critical`, com comparação contra `reduction(max:...)` e conferência sequencial |
+| [soma_arvore.c](soma_arvore.c) | Soma dos nós de uma árvore binária de busca em C com OpenMP tasks: uma única thread (`parallel` + `single`) inicia o percurso na raiz, cada subárvore vira uma `#pragma omp task` com `shared`/`default(none)` e `taskwait` sincroniza as somas parciais, com conferência sequencial |
 
 ---
 
