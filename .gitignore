@@ -13,6 +13,10 @@ Compiladores/condicional_se/compiler
 Compiladores/condicional_se/compiler4win
 Compiladores/condicional_se/compiler4macos
 Compiladores/condicional_se/compiler.dSYM/
+Compiladores/tratamento_funcoes/compiler
+Compiladores/tratamento_funcoes/compiler4win
+Compiladores/tratamento_funcoes/compiler4macos
+Compiladores/tratamento_funcoes/referencia_codigo10/compiler
 *.cc.asm
 Organizacao-computadores/trab1
 
