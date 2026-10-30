@@ -278,6 +278,18 @@ void gen_preambule(void) {
     emit("%%define SYS_EXIT 60");
 #endif
     emit("%%define _RT_MAXSTR %d", MAX_CHAR - 1); //tamanho maximo de uma string (sem o '\0')
+
+    //Desvio para as funcoes e retorno. O x86-64 nao tem jal/jr (MIPS/RISC-V):
+    //jal vira 'call', que guarda o endereco de retorno na pilha, e jr vira
+    //'ret', que desvia para esse endereco
+    fprintf(output_file, "\n;jal <label>: salta para a funcao, guardando o endereco de retorno\n");
+    fprintf(output_file, "%%macro jal 1\n");
+    emit("call %%1");
+    fprintf(output_file, "%%endmacro\n");
+    fprintf(output_file, ";jr: retorna ao ponto de chamada (endereco guardado pelo jal)\n");
+    fprintf(output_file, "%%macro jr 0\n");
+    emit("ret");
+    fprintf(output_file, "%%endmacro\n");
 }
 
 /**
@@ -384,7 +396,7 @@ void gen_preambule_code(void) {
  */
 void gen_epilog_code(void) {
     fprintf(output_file, "\n");
-    emit(";encerra programa");
+    emit(";encerra programa (fim do escopo principal: begin ... end)");
 #if defined(TARGET_WIN)
     emit("and rsp, -16");
     emit("sub rsp, 32");
@@ -395,6 +407,42 @@ void gen_epilog_code(void) {
     emit("xor rdi, rdi");
     emit("syscall");
 #endif
+}
+
+/**
+ * @brief Funcao que gera a chamada de uma funcao: desvia para o label da
+ * funcao com 'jal'. Os argumentos ja foram copiados para os parametros, que
+ * sao variaveis globais.
+ *
+ * @param name nome da funcao
+ * @param label label da funcao (registrado na TSF)
+ */
+void gen_call(char *name, char *label) {
+    emit(";chamada da funcao %s", name);
+    emit("jal %s", label);
+}
+
+/**
+ * @brief Funcao que gera o inicio do codigo de uma funcao (seu label)
+ *
+ * @param name nome da funcao
+ * @param label label da funcao (registrado na TSF)
+ */
+void gen_func_begin(char *name, char *label) {
+    fprintf(output_file, "\n");
+    emit(";---------------- funcao %s ----------------", name);
+    gen_label(label);
+}
+
+/**
+ * @brief Funcao que gera o fim do codigo de uma funcao: retorno ao ponto de
+ * chamada com 'jr'
+ *
+ * @param name nome da funcao
+ */
+void gen_func_end(char *name) {
+    emit(";retorno da funcao %s", name);
+    emit("jr");
 }
 
 /**
