@@ -1,0 +1,8 @@
+&& nao avaliou a divisao por zero
+|| nao avaliou a divisao por zero
+tres testes verdadeiros
+ultimo teste verdadeiro
+0
+linha1
+linha2 "aspas"
+[ERRO] Divisao por zero
