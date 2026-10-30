@@ -16,7 +16,7 @@
 //Variaveis globais
 type_symbol_table_variables global_symbol_table_variables;
 type_symbol_table_string symbol_table_string;
-//type_symbol_function symfuncs[MAX_FUNCS];
+type_symbol_table_func symbol_table_func;
  
 
 /**
@@ -105,50 +105,56 @@ type_symbol_table_string_entry *sym_string_declare(char *s) {
 }
 
 /**
- * @brief Busca pelo simbolo na tabela (funcoes)
+ * @brief Busca por uma funcao na tabela de simbolos de funcoes (TSF)
  * 
- * @param s 
- * @return type_symbol_function* 
+ * @param name nome (id) da funcao
+ * @return type_symbol_table_func_entry* entrada da funcao, ou NULL se nao cadastrada
  */
-/*
-type_symbol_function *sym_func_find(char *s){
+type_symbol_table_func_entry *sym_func_find(char *name) {
     int i;
-	type_symbol_function *symbol = NULL;
-	for (i = 0; i < symfuncspos; i++) {
-		if (strcmp(symfuncs[i].name, s) == 0) {
-			symbol = &symfuncs[i];
-		}
-	}
-	return symbol;
+    for (i = 0; i < symbol_table_func.n_funcs; i++) {
+        if (strcmp(symbol_table_func.func[i].name, name) == 0)
+            return &(symbol_table_func.func[i]);
+    }
+    return NULL;
 }
-*/
 
 /**
- * @brief Insere um novo simbolo na tabela (funcoes)
+ * @brief Insere uma nova funcao na tabela de simbolos de funcoes (TSF). Gera
+ * e registra o label da funcao ("_fn_<nome>"), usado como destino do jal. O
+ * prefixo '_' evita conflito com os nomes das variaveis, que nao podem
+ * comecar com '_'.
  * 
- * @param name 
- * @param type 
- * @param params 
- * @param nparams 
- * @return type_symbol_function* 
+ * @param name nome (id) da funcao
+ * @param type tipo declarado da funcao
+ * @param params lista de parametros (tipo e nome), na ordem do prototipo
+ * @param n_params quantidade de parametros
+ * @return type_symbol_table_func_entry* entrada inserida, ou NULL se a TSF estiver cheia
  */
-/*
-type_symbol_function *sym_func_declare(char *name, char type, type_symbol params[MAX_PARAMS],int nparams){
-    int i;
-    strncpy (symfuncs[symfuncspos].name, name, MAX_TOKSZ);
-    symfuncs[symfuncspos].type = type;
-    symfuncs[symfuncspos].nparams = nparams;
-    for (i = 0; i < nparams; i++) {    
-        strncpy(symfuncs[symfuncspos].params[i].name,params[i].name,MAX_TOKSZ);
-        symfuncs[symfuncspos].params[i].type = params[i].type;
+type_symbol_table_func_entry *sym_func_declare(char *name, int type, type_symbol_table_entry params[MAX_PARAMS], int n_params) {
+    int i, pos;
+    type_symbol_table_func_entry *func;
+
+    if (symbol_table_func.n_funcs >= MAX_FUNCS) {
+        printf("[ERRO] Limite de declaracao de funcoes atingido.\n");
+        return NULL;
     }
-    symfuncspos ++;
-    if (symfuncspos > MAX_FUNCS) {
-		printf("[ERRO] Limite de declaracao de funcoes atingido.");
+    pos = symbol_table_func.n_funcs;
+    func = &(symbol_table_func.func[pos]);
+    strcpy(func->name, name);
+    snprintf(func->label, sizeof(func->label), "_fn_%s", name);
+    func->type = type;
+    func->n_params = n_params;
+    for (i = 0; i < n_params; i++) {
+        strcpy(func->params[i].name, params[i].name);
+        func->params[i].type = params[i].type;
+        func->params[i].addr = 0;
     }
-    return &symfuncs[symfuncspos -1];
+    func->implemented = false;
+    func->called = false;
+    symbol_table_func.n_funcs++;
+    return func;
 }
-*/
 
 /**
  * @brief Inicializa tabela de simbolos de variaveis globais
@@ -179,6 +185,23 @@ void initSymbolTableString() {
     }
 }
 
+/**
+ * @brief Inicializa tabela de simbolos de funcoes (TSF)
+ * 
+ */
+void initSymbolTableFunc() {
+    int i;
+    symbol_table_func.n_funcs = 0;
+    for (i = 0; i < MAX_FUNCS; i++) {
+        strcpy(symbol_table_func.func[i].name, "");
+        strcpy(symbol_table_func.func[i].label, "");
+        symbol_table_func.func[i].type = -1;
+        symbol_table_func.func[i].n_params = 0;
+        symbol_table_func.func[i].implemented = false;
+        symbol_table_func.func[i].called = false;
+    }
+}
+
 ///Para DEBUG
 void printSTVariables(type_symbol_table_variables *stv) {
     int i, n_var;
@@ -199,5 +222,35 @@ void printSTString() {
     for (i = 0; i < n_str; i++) {
         printf("\tstring[%d].name:%s\n", i, symbol_table_string.string[i].name);
         printf("\tstring[%d].value:%s\n", i, symbol_table_string.string[i].value);
+    }
+}
+
+///Para DEBUG - Nome do tipo, usado na impressao da TSF
+static const char *stTypeName(int type) {
+    switch (type) {
+        case INT:    return "int";
+        case FLOAT:  return "float";
+        case CHAR:   return "char";
+        case STRING: return "string";
+        default:     return "?";
+    }
+}
+
+///Para DEBUG - Impressao da tabela de simbolos de funcoes (TSF)
+void printSTFunc() {
+    int i, j;
+    type_symbol_table_func_entry *func;
+    printf("TABELA DE SIMBOLOS DE FUNCOES:\n");
+    printf("Numero de funcoes = %d\n", symbol_table_func.n_funcs);
+    for (i = 0; i < symbol_table_func.n_funcs; i++) {
+        func = &(symbol_table_func.func[i]);
+        printf("\tfuncao[%d].name:%s\n", i, func->name);
+        printf("\tfuncao[%d].type:%d (%s)\n", i, func->type, stTypeName(func->type));
+        printf("\tfuncao[%d].label:%s\n", i, func->label);
+        printf("\tfuncao[%d].n_params:%d\n", i, func->n_params);
+        for (j = 0; j < func->n_params; j++)
+            printf("\t\tparam[%d]: type:%d (%s) name:%s\n", j, func->params[j].type, stTypeName(func->params[j].type), func->params[j].name);
+        printf("\tfuncao[%d].implemented:%d\n", i, func->implemented);
+        printf("\tfuncao[%d].called:%d\n", i, func->called);
     }
 }

@@ -51,32 +51,44 @@ struct st_symbol_table_strings {
 };
 typedef struct st_symbol_table_strings type_symbol_table_string;
 
-/* Preparo para tratamento de funcoes
-// Estrutura da tabela de simbolos para funcoes
-struct st_sym_func {
-    char type;
-    char name[MAX_TOKSZ];
-    type_symbol params[MAX_PARAMS];
-    int nparams;
+// Entrada da tabela de simbolos de funcoes (TSF)
+struct st_symbol_func_entry {
+    int type;                                   //tipo declarado (int, float, char ou string)
+    char name[MAX_TOKSZ];                       //nome (id) da funcao
+    char label[MAX_TOKSZ];                      //label da funcao no codigo gerado (destino do jal)
+    type_symbol_table_entry params[MAX_PARAMS]; //parametros (tipo e nome), na ordem do prototipo
+    int n_params;                               //quantidade de parametros
+    int implemented;                            //true depois que o codigo da funcao foi reconhecido
+    int called;                                 //true se a funcao foi chamada em algum ponto do codigo
 };
-typedef struct st_sym_func type_symbol_function_entry;
-*/
+typedef struct st_symbol_func_entry type_symbol_table_func_entry;
+
+// Tabela de simbolos de funcoes (TSF)
+struct st_symbol_table_func {
+    type_symbol_table_func_entry func[MAX_FUNCS];
+    int n_funcs;
+};
+typedef struct st_symbol_table_func type_symbol_table_func;
 
 
 // Prototipos
+//Manipulacao da TS de variaveis
 type_symbol_table_entry *sym_find(char *s, type_symbol_table_variables *stv);
 type_symbol_table_entry *sym_declare(char *name, int type, int addr, type_symbol_table_variables *stv);
+//Manipulacao da TS de strings
 type_symbol_table_string_entry *sym_string_find(char *s);
 type_symbol_table_string_entry *sym_string_declare(char *s);
+//Manipulacao da TS de funcoes (TSF)
+type_symbol_table_func_entry *sym_func_find(char *name);
+type_symbol_table_func_entry *sym_func_declare(char *name, int type, type_symbol_table_entry params[MAX_PARAMS], int n_params);
+
 void initSymbolTableVariables(type_symbol_table_variables *stv);
 void initSymbolTableString();
+void initSymbolTableFunc();
 
 //Funcoes destinadas a DEBUG
 void printSTVariables(type_symbol_table_variables *stv);
 void printSTString();
+void printSTFunc();
 
-/* Preparo para tratamento de funcoes
-type_symbol_function *sym_func_find(char *s);
-type_symbol_function *sym_func_declare(char *name,char type, type_symbol_table_entry params[MAX_PARAMS], int nparams);
-*/
 #endif //_SYMBOLS_H_
