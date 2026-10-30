@@ -14,8 +14,10 @@
 // Variaveis globais
 type_token *lookahead;
 int n_errors = 0; //Quantidade de erros encontrados na compilacao
+int in_function = false; //true durante o reconhecimento do codigo de uma funcao (Func_code)
 extern type_symbol_table_variables global_symbol_table_variables;
 extern type_symbol_table_string symbol_table_string;
+extern type_symbol_table_func symbol_table_func;
 extern char output_file_name[FILENAME_MAX];
 extern FILE *output_file;
 
@@ -118,36 +120,178 @@ int declarations(void) {
 }
 
 /**
- * @brief Regra de derivacao declaracao
+ * @brief Regra de derivacao declaracao:
+ *        declaration -> type id ( declarationV | declarationF )
+ *        O token apos o id diferencia a declaracao de variavel (';') da
+ *        declaracao (prototipo) de funcao ('(').
  * @return int true se reconheceu uma declaracao; false no fim das declaracoes ou em erro
  */
 int declaration (void) {
-    type_symbol_table_entry *search_symbol;
-    char var_name[MAX_CHAR];
-    int var_type;
+    char name[MAX_CHAR];
+    int type;
 
-    //Verifica o tipo da variavel
-    var_type = lookahead->tag;
-    if ( var_type == INT || var_type == FLOAT || var_type == CHAR || var_type == STRING) {
-        match(var_type);
-        if ( lookahead->tag != ID ) {
-            error("Identificador esperado apos o tipo, encontrado '%s'.", currentLexeme());
-            return false;
-        }
-        strcpy(var_name, lookahead->lexema);
-        search_symbol = sym_find( var_name, &global_symbol_table_variables );
-
-        if ( search_symbol != NULL) {
-            error("Variavel '%s' ja declarada.", var_name);
-            return false;
-        }
-        sym_declare( var_name, var_type, 0, &global_symbol_table_variables);
-        match(ID);
-        return match(SEMICOLON); //Verifica se ; vem a seguir
+    //Verifica o tipo da variavel/funcao
+    type = lookahead->tag;
+    if ( !isType(type) ) {
+        //Qualquer outro token (begin, if, while, read, write, id, fim de arquivo, ...)
+        //encerra as declaracoes; ele sera tratado pela regra seguinte
+        return false;
     }
-    //Qualquer outro token (if, while, read, write, id, fim de arquivo, ...)
-    //encerra as declaracoes; ele sera tratado pela regra 'statements'
+    match(type);
+    if ( lookahead->tag != ID ) {
+        error("Identificador esperado apos o tipo, encontrado '%s'.", currentLexeme());
+        return false;
+    }
+    strcpy(name, lookahead->lexema);
+    match(ID);
+
+    if ( lookahead->tag == SEMICOLON )
+        return declarationV(name, type);
+    if ( lookahead->tag == OPEN_PAR )
+        return declarationF(name, type);
+    error("Era esperado ';' (declaracao de variavel) ou '(' (declaracao de funcao) apos '%s', encontrado '%s'.",
+        name, currentLexeme());
     return false;
+}
+
+/**
+ * @brief Regra de derivacao da declaracao de variavel: declarationV -> ';'
+ *
+ * @param name nome da variavel
+ * @param type tipo da variavel
+ * @return int true/false
+ */
+int declarationV(char *name, int type) {
+    if ( sym_find(name, &global_symbol_table_variables) != NULL ) {
+        error("Variavel '%s' ja declarada.", name);
+        return false;
+    }
+    if ( sym_func_find(name) != NULL ) {
+        error("'%s' ja foi declarado como funcao.", name);
+        return false;
+    }
+    if ( sym_declare(name, type, 0, &global_symbol_table_variables) == NULL ) {
+        n_errors++; //mensagem ja emitida por sym_declare
+        return false;
+    }
+    return match(SEMICOLON);
+}
+
+/**
+ * @brief Regra de derivacao da declaracao (prototipo) de funcao:
+ *        declarationF -> '(' param_list ')' ';'
+ *        Insere a funcao na TSF (que gera o seu label) e registra os
+ *        parametros como variaveis globais.
+ *
+ * @param name nome da funcao
+ * @param type tipo da funcao
+ * @return int true/false
+ */
+int declarationF(char *name, int type) {
+    type_symbol_table_entry params[MAX_PARAMS];
+    int n_params, i;
+
+    if ( in_function ) {
+        error("Funcao '%s' declarada dentro de outra funcao: os prototipos devem vir antes do 'begin' do escopo principal.", name);
+        return false;
+    }
+    if ( sym_func_find(name) != NULL ) {
+        error("Funcao '%s' ja declarada.", name);
+        return false;
+    }
+    if ( sym_find(name, &global_symbol_table_variables) != NULL ) {
+        error("'%s' ja foi declarado como variavel.", name);
+        return false;
+    }
+    match(OPEN_PAR);
+    if ( !paramList(params, &n_params) )
+        return false;
+    if ( !match(CLOSE_PAR) )
+        return false;
+
+    //Parametros sao variaveis globais: nao podem repetir nomes de variaveis,
+    //de outros parametros ou de funcoes
+    for (i = 0; i < n_params; i++) {
+        if ( sym_find(params[i].name, &global_symbol_table_variables) != NULL ) {
+            error("Parametro '%s' da funcao '%s' ja declarado (parametros sao variaveis globais).", params[i].name, name);
+            return false;
+        }
+        if ( sym_func_find(params[i].name) != NULL || strcmp(params[i].name, name) == 0 ) {
+            error("Parametro '%s' da funcao '%s' tem o nome de uma funcao.", params[i].name, name);
+            return false;
+        }
+        sym_declare(params[i].name, params[i].type, 0, &global_symbol_table_variables);
+    }
+    if ( sym_func_declare(name, type, params, n_params) == NULL ) {
+        n_errors++; //mensagem ja emitida por sym_func_declare
+        return false;
+    }
+    return match(SEMICOLON);
+}
+
+/**
+ * @brief Regra de derivacao da lista de parametros (prototipo e implementacao):
+ *        param_list -> type id { ',' type id } | [vazio]
+ *        Apenas reconhece a lista; quem chama decide se registra ou compara.
+ *
+ * @param params vetor que recebe os parametros (tipo e nome)
+ * @param n_params recebe a quantidade de parametros
+ * @return int true/false
+ */
+int paramList(type_symbol_table_entry params[MAX_PARAMS], int *n_params) {
+    int type;
+    *n_params = 0;
+    if ( lookahead->tag == CLOSE_PAR )
+        return true; //[vazio]
+    while (true) {
+        type = lookahead->tag;
+        if ( !isType(type) ) {
+            error("Declaracao de parametro incorreta: esperado um tipo (int, float, char ou string), encontrado '%s'.", currentLexeme());
+            return false;
+        }
+        match(type);
+        if ( lookahead->tag != ID ) {
+            error("Identificador do parametro esperado apos o tipo, encontrado '%s'.", currentLexeme());
+            return false;
+        }
+        if ( *n_params >= MAX_PARAMS ) {
+            error("Limite de %d parametros por funcao atingido.", MAX_PARAMS);
+            return false;
+        }
+        params[*n_params].type = type;
+        strcpy(params[*n_params].name, lookahead->lexema);
+        params[*n_params].addr = 0;
+        (*n_params)++;
+        match(ID);
+        if ( lookahead->tag != COMMA )
+            return true;
+        match(COMMA);
+    }
+}
+
+/**
+ * @brief Indica se o token eh um tipo de dado (int, float, char ou string)
+ */
+int isType(int tag) {
+    return tag == INT || tag == FLOAT || tag == CHAR || tag == STRING;
+}
+
+/**
+ * @brief Escreve o prototipo de uma funcao, ex.: "soma(int x, int y)", usado
+ *        nas mensagens de erro
+ *
+ * @param func entrada da funcao na TSF
+ * @param buffer recebe o prototipo
+ * @param size tamanho do buffer
+ */
+void funcSignature(type_symbol_table_func_entry *func, char *buffer, int size) {
+    int i, len;
+    len = snprintf(buffer, size, "%s(", func->name);
+    for (i = 0; i < func->n_params && len < size; i++)
+        len += snprintf(buffer + len, size - len, "%s%s %s", i > 0 ? ", " : "",
+            typeName(func->params[i].type), func->params[i].name);
+    if (len < size)
+        snprintf(buffer + len, size - len, ")");
 }
 
 /**
@@ -740,22 +884,31 @@ int F() {
  */
 int main(int argc, char *argv[]) {
     int ok;
+    int print_tables = false;
+    char *input_name;
 
-    //Inicializa a tabela de simbolo global
+    //Inicializa as tabelas de simbolos (variaveis, strings e funcoes)
     initSymbolTableVariables(&global_symbol_table_variables);
     initSymbolTableString();
+    initSymbolTableFunc();
 
-    //Verifica a passagem de parametro
-    if (argc != 2) {
-        printf("[ERRO]\n\tÉ necessário informar um arquivo de entrada (código) como parâmetro.\n\n");
+    //Verifica a passagem de parametro: [-ts] arquivo
+    if (argc == 3 && strcmp(argv[1], "-ts") == 0) {
+        print_tables = true; //imprime as tabelas de simbolos (DEBUG)
+        input_name = argv[2];
+    } else if (argc == 2) {
+        input_name = argv[1];
+    } else {
+        printf("[ERRO]\n\tÉ necessário informar um arquivo de entrada (código) como parâmetro.\n");
+        printf("\tUso: %s [-ts] <arquivo>   (-ts imprime as tabelas de simbolos)\n\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    initLex(argv[1]); //Carrega codigo
+    initLex(input_name); //Carrega codigo
     lookahead = getToken(); //Inicializacao do lookahead
 
     //Abre o arquivo de saida
-    snprintf(output_file_name, sizeof(output_file_name), "%s.asm", argv[1]);
+    snprintf(output_file_name, sizeof(output_file_name), "%s.asm", input_name);
     output_file = fopen(output_file_name, "w+");
     if (output_file == NULL) {
         printf("[ERRO]\n\tNao foi possivel criar o arquivo de saida: %s\n\n", output_file_name);
@@ -764,6 +917,11 @@ int main(int argc, char *argv[]) {
 
     ok = program(); //Chamada da derivacao/funcao inicial da gramatica
 
+    if (print_tables) {
+        printSTVariables(&global_symbol_table_variables);
+        printSTString();
+        printSTFunc();
+    }
     fclose(output_file);
     free(lookahead);
     if ( !ok || n_errors > 0 ) {
