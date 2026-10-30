@@ -239,6 +239,12 @@ type_token *getToken() {
             strcpy(token->lexema, "|");
         }
     }
+    //Verifica se COMMA -> "," (separador de parametros)
+    else if (ch == COMMA) {
+        token->tag = COMMA;
+        strcpy(token->lexema, ",");
+        token->value = 0;
+    }
     //Verifica inicio de escopo -> '{' (equivalente a 'begin')
     else if (ch == '{') {
         token->tag = BEGIN;
