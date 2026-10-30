@@ -1,3 +1,6 @@
 string s;
 int x;
-s = x;
+
+begin
+    s = x;
+end

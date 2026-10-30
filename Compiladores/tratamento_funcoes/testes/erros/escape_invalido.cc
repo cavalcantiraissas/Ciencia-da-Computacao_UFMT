@@ -1,2 +1,5 @@
 int x;
-write "abc\q";
+
+begin
+    write "abc\q";
+end

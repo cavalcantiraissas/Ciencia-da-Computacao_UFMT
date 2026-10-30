@@ -22,18 +22,27 @@
 
 /*
  * Gramatica: 
- *      program      -> declarations statements
+ *      program      -> declarations begin statements end func_code
  *      declarations -> declaration declarations | [vazio]
- *      declaration  -> type id ;
+ *      declaration  -> type id ( declarationV | declarationF )
+ *      declarationV -> ;
+ *      declarationF -> '(' param_list ')' ;
+ *      param_list   -> type id { ',' type id } | [vazio]
  *      type         -> int | float | char | string
+ *      func_code    -> func_impl func_code | [vazio]
+ *      func_impl    -> type id '(' param_list ')' begin declarations statements end
+ *                      (so funcoes prototipadas, com o mesmo tipo e parametros)
  *      statements   -> statement statements | [vazio]
- *      statement    -> read_stmt | write_stmt | if_stmt | while_stmt | assign_stmt
+ *      statement    -> read_stmt | write_stmt | if_stmt | while_stmt | id_stmt
+ *      id_stmt      -> id ( assign_stmt | call_stmt )   (resolve atribuicao x chamada)
+ *      call_stmt    -> '(' [ arg { ',' arg } ] ')' ;
+ *      arg          -> id | E | string_const       (id: o proprio parametro, que eh global)
  *      read_stmt    -> read id ;
  *      write_stmt   -> write id ; | write string_const ;
  *      if_stmt      -> if '(' B ')' block [ else block ]
  *      while_stmt   -> while '(' B ')' block
  *      block        -> '{' statements '}'        ('begin' / 'end' tambem aceitos)
- *      assign_stmt  -> id '=' valor ;            (valor compativel com o tipo de id:
+ *      assign_stmt  -> '=' valor ;               (valor compativel com o tipo de id:
  *                                                 int, char -> E inteira; float -> E;
  *                                                 string -> string_const | id string)
  *
@@ -80,6 +89,9 @@ int idStmt(void);
 int assignStmt(char*);
 int callStmt(char*);
 int argument(type_symbol_table_func_entry*, int, int*, char*);
+int funcCode(void);
+int funcImpl(void);
+int checkCalledFunctions(void);
 int stringValue(char*);
 const char *typeName(int);
 int isNumeric(int);

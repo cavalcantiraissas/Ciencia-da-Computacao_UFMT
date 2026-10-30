@@ -1,3 +1,6 @@
 int x;
 int y;
-x = y > 1;
+
+begin
+    x = y > 1;
+end

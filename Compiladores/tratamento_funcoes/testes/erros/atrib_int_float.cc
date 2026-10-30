@@ -1,2 +1,5 @@
 int x;
-x = 3.14;
+
+begin
+    x = 3.14;
+end

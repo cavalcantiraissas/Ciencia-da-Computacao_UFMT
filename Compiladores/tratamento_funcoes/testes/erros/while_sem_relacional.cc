@@ -1,4 +1,7 @@
 int x;
-while (x) {
-    x = 1;
-}
+
+begin
+    while (x) {
+        x = 1;
+    }
+end

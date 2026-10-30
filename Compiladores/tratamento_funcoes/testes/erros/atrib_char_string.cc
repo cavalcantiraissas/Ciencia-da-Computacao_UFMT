@@ -1,2 +1,5 @@
 char c;
-c = "abc";
+
+begin
+    c = "abc";
+end

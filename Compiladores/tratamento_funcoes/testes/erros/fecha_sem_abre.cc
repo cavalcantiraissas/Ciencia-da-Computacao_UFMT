@@ -1,3 +1,6 @@
 int x;
-x = 1;
-}
+
+begin
+    x = 1;
+    }
+end

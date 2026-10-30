@@ -1,4 +1,7 @@
 int x;
-if (x > ) {
-    write "a";
-}
+
+begin
+    if (x > ) {
+        write "a";
+    }
+end

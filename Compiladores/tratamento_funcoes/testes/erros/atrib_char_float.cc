@@ -1,2 +1,5 @@
 char c;
-c = 2.5;
+
+begin
+    c = 2.5;
+end

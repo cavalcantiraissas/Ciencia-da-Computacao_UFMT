@@ -1,4 +1,7 @@
 int x;
-if (y > 1) {
-    x = 1;
-}
+
+begin
+    if (y > 1) {
+        x = 1;
+    }
+end

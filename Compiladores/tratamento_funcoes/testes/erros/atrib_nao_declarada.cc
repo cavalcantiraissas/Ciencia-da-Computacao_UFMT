@@ -1,2 +1,5 @@
 int x;
-y = 1;
+
+begin
+    y = 1;
+end

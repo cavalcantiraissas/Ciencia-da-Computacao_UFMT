@@ -88,7 +88,8 @@ int match(int token_tag) {
 }
 
 /**
- * @brief Regra de derivacao inicial
+ * @brief Regra de derivacao inicial:
+ *        program -> declarations begin statements end func_code
  * @return int true/false
  */
 int program (void) {
@@ -96,14 +97,19 @@ int program (void) {
     if ( !declarations() )
         return false;
     gen_preambule_code(); //Chamada do gerador de codigo para escrita do cabecalho da secao de codigo
+    //Escopo principal, delimitado por begin ... end (sem cabecalho de funcao)
+    if ( !match(BEGIN) )
+        return false;
     if ( !statements() )
         return false;
-    //Os comandos so podem terminar no fim do arquivo (um '}' aqui nao tem '{' correspondente)
-    if ( lookahead->tag != ENDTOKEN ) {
-        error("Fim de escopo '%s' sem inicio de escopo correspondente.", currentLexeme());
+    if ( !match(END) )
         return false;
-    }
-    gen_epilog_code();
+    gen_epilog_code(); //O programa encerra ao final do escopo principal
+    //Codigo das funcoes, depois do escopo principal
+    if ( !funcCode() )
+        return false;
+    if ( !checkCalledFunctions() )
+        return false;
     gen_runtime(); //rotinas de apoio: conversao texto/numero na entrada e saida
     gen_data_section(); //Chamada do gerador de codigo para declaracao de variaveis
     return true;
@@ -716,6 +722,115 @@ int argument(type_symbol_table_func_entry *func, int index, int *arg_kind, char 
         genIntToFloat(0);
     *arg_kind = ARG_EXPR;
     return true;
+}
+
+/**
+ * @brief Regra de derivacao do codigo das funcoes, apos o escopo principal:
+ *        func_code -> func_impl func_code | [vazio]
+ *
+ * @return int true se todas as funcoes foram reconhecidas e o arquivo terminou
+ */
+int funcCode(void) {
+    while ( isType(lookahead->tag) ) {
+        if ( !funcImpl() )
+            return false;
+    }
+    if ( lookahead->tag == ENDTOKEN )
+        return true;
+    if ( lookahead->tag == END )
+        error("Fim de escopo '%s' sem inicio de escopo correspondente.", currentLexeme());
+    else
+        error("Apos o 'end' do escopo principal so pode haver a implementacao de funcoes, encontrado '%s'.", currentLexeme());
+    return false;
+}
+
+/**
+ * @brief Regra de derivacao da implementacao de uma funcao:
+ *        func_impl -> type id '(' param_list ')' begin declarations statements end
+ *        So funcoes prototipadas (na TSF) podem ser implementadas, uma unica
+ *        vez, com o mesmo tipo e os mesmos parametros do prototipo. As
+ *        variaveis declaradas no corpo sao globais.
+ *
+ * @return int true/false
+ */
+int funcImpl(void) {
+    type_symbol_table_func_entry *func;
+    type_symbol_table_entry params[MAX_PARAMS];
+    char name[MAX_CHAR];
+    char signature[MAX_CHAR];
+    int type, n_params, i;
+
+    type = lookahead->tag;
+    match(type);
+    if ( lookahead->tag != ID ) {
+        error("Identificador da funcao esperado apos o tipo, encontrado '%s'.", currentLexeme());
+        return false;
+    }
+    strcpy(name, lookahead->lexema);
+    func = sym_func_find(name);
+    if ( func == NULL ) {
+        error("Funcao '%s' nao prototipada: so podem ser implementadas funcoes declaradas antes do 'begin'.", name);
+        return false;
+    }
+    funcSignature(func, signature, sizeof(signature));
+    if ( func->implemented ) {
+        error("Funcao '%s' ja implementada.", name);
+        return false;
+    }
+    if ( type != func->type ) {
+        error("Funcao '%s' implementada com tipo %s, mas prototipada com tipo %s.", name, typeName(type), typeName(func->type));
+        return false;
+    }
+    match(ID);
+    if ( !match(OPEN_PAR) )
+        return false;
+    if ( !paramList(params, &n_params) )
+        return false;
+    if ( !match(CLOSE_PAR) )
+        return false;
+    if ( n_params != func->n_params ) {
+        error("Funcao '%s' implementada com %d parametro(s), mas o prototipo tem %d: %s.", name, n_params, func->n_params, signature);
+        return false;
+    }
+    for (i = 0; i < n_params; i++) {
+        if ( params[i].type != func->params[i].type || strcmp(params[i].name, func->params[i].name) != 0 ) {
+            error("Parametro %d da implementacao de '%s' (%s %s) difere do prototipo: %s.",
+                i + 1, name, typeName(params[i].type), params[i].name, signature);
+            return false;
+        }
+    }
+    func->implemented = true;
+
+    gen_func_begin(func->name, func->label);
+    in_function = true;
+    if ( !match(BEGIN) )
+        return false;
+    if ( !declarations() ) //variaveis da funcao (registradas na TS global)
+        return false;
+    if ( !statements() )
+        return false;
+    if ( !match(END) )
+        return false;
+    in_function = false;
+    gen_func_end(func->name);
+    return true;
+}
+
+/**
+ * @brief Verifica, ao final da compilacao, se toda funcao chamada foi
+ *        implementada (caso contrario o jal nao teria destino)
+ *
+ * @return int true/false
+ */
+int checkCalledFunctions(void) {
+    int i, ok = true;
+    for (i = 0; i < symbol_table_func.n_funcs; i++) {
+        if ( symbol_table_func.func[i].called && !symbol_table_func.func[i].implemented ) {
+            error("Funcao '%s' chamada mas nao implementada.", symbol_table_func.func[i].name);
+            ok = false;
+        }
+    }
+    return ok;
 }
 
 /**
