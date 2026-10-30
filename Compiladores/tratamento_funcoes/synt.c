@@ -366,7 +366,7 @@ int statement (void) {
     } else if (lookahead->tag == WHILE) {
         return whileStmt();
     } else if (lookahead->tag == ID) {
-        return assignStmt();
+        return idStmt();
     } else if ( (lookahead->tag == ENDTOKEN) || (lookahead->tag == END) ) {
         //Fim de arquivo ou fim de escopo ('}' / 'end'): nao ha mais comandos
         return false;
@@ -460,6 +460,25 @@ int whileStmt(void) {
 }
 
 /**
+ * @brief Regra de derivacao dos comandos que comecam com id. Resolve a
+ *        ambiguidade entre atribuicao e chamada de funcao pelo token seguinte:
+ *        id_stmt -> id ( assign_stmt | call_stmt )
+ *
+ * @return int true/false
+ */
+int idStmt(void) {
+    char id_name[MAX_CHAR];
+    strcpy(id_name, lookahead->lexema);
+    match(ID);
+    if ( lookahead->tag == ASSIGN )
+        return assignStmt(id_name);
+    if ( lookahead->tag == OPEN_PAR )
+        return callStmt(id_name);
+    error("Esperado '=' (atribuicao) ou '(' (chamada de funcao) apos '%s', encontrado '%s'.", id_name, currentLexeme());
+    return false;
+}
+
+/**
  * @brief Regra de derivacao da atribuicao: id '=' valor ';'
  *        O valor deve corresponder ao tipo da variavel:
  *          int    -> expressao inteira (int/char)
@@ -467,20 +486,21 @@ int whileStmt(void) {
  *          char   -> expressao inteira (constante char, variavel char, ...)
  *          string -> constante string ou outra variavel string
  * 
+ * @param var_name nome da variavel (o id ja foi consumido)
  * @return int true/false
  */
-int assignStmt(void) {
-    char var_name[MAX_CHAR];
+int assignStmt(char *var_name) {
     type_symbol_table_entry *var;
     int kind;
 
-    strcpy(var_name, lookahead->lexema);
     var = sym_find(var_name, &global_symbol_table_variables);
     if ( var == NULL ) {
-        error("Variavel '%s' nao declarada.", var_name);
+        if ( sym_func_find(var_name) != NULL )
+            error("'%s' eh uma funcao e nao pode receber valor.", var_name);
+        else
+            error("Variavel '%s' nao declarada.", var_name);
         return false;
     }
-    match(ID);
     if ( !match(ASSIGN) )
         return false;
 
@@ -519,6 +539,183 @@ int assignStmt(void) {
     }
     gen_assign(var_name, var->type);
     return match(SEMICOLON);
+}
+
+//Tipos de argumento de uma chamada de funcao
+#define ARG_ID 1     //o proprio parametro (variavel global): nada a copiar
+#define ARG_EXPR 2   //expressao: valor na pilha, copiado para o parametro
+#define ARG_STRING 3 //constante string: copiada para o parametro
+
+/**
+ * @brief Regra de derivacao da chamada de funcao (procedimento):
+ *        call_stmt -> '(' [ arg { ',' arg } ] ')' ';'
+ *        arg       -> id | E | string_const
+ *        Verifica se a funcao esta na TSF, se a quantidade de argumentos eh a
+ *        do prototipo e se cada argumento eh adequado ao parametro (ver
+ *        argument). Os argumentos sao copiados para os parametros (variaveis
+ *        globais) e a funcao eh chamada com jal.
+ *
+ * @param func_name nome da funcao (o id ja foi consumido)
+ * @return int true/false
+ */
+int callStmt(char *func_name) {
+    type_symbol_table_func_entry *func;
+    int arg_kind[MAX_PARAMS];
+    char arg_string[MAX_PARAMS][MAX_TOKSZ];
+    char signature[MAX_CHAR];
+    int n_args, i;
+
+    func = sym_func_find(func_name);
+    if ( func == NULL ) {
+        if ( sym_find(func_name, &global_symbol_table_variables) != NULL )
+            error("'%s' eh uma variavel, nao uma funcao.", func_name);
+        else
+            error("Funcao '%s' nao declarada (sem prototipo).", func_name);
+        return false;
+    }
+    funcSignature(func, signature, sizeof(signature));
+    match(OPEN_PAR);
+
+    n_args = 0;
+    if ( lookahead->tag != CLOSE_PAR ) {
+        while (true) {
+            if ( n_args < func->n_params ) {
+                if ( !argument(func, n_args, &arg_kind[n_args], arg_string[n_args]) )
+                    return false;
+            } else { //argumento excedente: apenas reconhecido, para contar a quantidade
+                if ( lookahead->tag == STRING_CONST )
+                    match(STRING_CONST);
+                else if ( !E() )
+                    return false;
+            }
+            n_args++;
+            if ( lookahead->tag != COMMA )
+                break;
+            match(COMMA);
+        }
+    }
+    if ( !match(CLOSE_PAR) )
+        return false;
+    if ( n_args != func->n_params ) {
+        error("Quantidade de parametros incorreta na chamada de '%s': informado(s) %d, esperado(s) %d. Prototipo: %s.",
+            func_name, n_args, func->n_params, signature);
+        return false;
+    }
+
+    //Copia os argumentos para os parametros. Os valores das expressoes estao
+    //na pilha, o ultimo no topo; por isso sao desempilhados de tras para frente
+    for (i = n_args - 1; i >= 0; i--) {
+        if ( arg_kind[i] == ARG_EXPR )
+            gen_assign(func->params[i].name, func->params[i].type);
+    }
+    for (i = 0; i < n_args; i++) {
+        if ( arg_kind[i] == ARG_STRING )
+            gen_assign_string(func->params[i].name, arg_string[i]);
+    }
+    gen_call(func->name, func->label);
+    func->called = true;
+    return match(SEMICOLON);
+}
+
+/**
+ * @brief Reconhece um argumento da chamada e verifica se ele eh adequado ao
+ *        parametro correspondente do prototipo:
+ *          - id: deve ser o proprio parametro (mesmo id), ja que os
+ *            parametros sao variaveis globais;
+ *          - expressao (E): o tipo deve ser compativel com o do parametro,
+ *            como na atribuicao (int -> float eh convertido);
+ *          - constante string: so para parametro string.
+ *
+ * @param func funcao chamada (entrada da TSF)
+ * @param index posicao do argumento (0 = primeiro)
+ * @param arg_kind recebe ARG_ID, ARG_EXPR ou ARG_STRING
+ * @param arg_string recebe o rotulo da constante string (ARG_STRING)
+ * @return int true/false
+ */
+int argument(type_symbol_table_func_entry *func, int index, int *arg_kind, char *arg_string) {
+    type_symbol_table_entry *param, *var;
+    type_symbol_table_string_entry *str;
+    char signature[MAX_CHAR];
+    char name[MAX_CHAR];
+    int kind;
+
+    param = &(func->params[index]);
+    funcSignature(func, signature, sizeof(signature));
+
+    if ( lookahead->tag == STRING_CONST ) {
+        if ( param->type != STRING ) {
+            error("Parametro %d da chamada de '%s' deve ser %s, encontrada a constante string %s. Prototipo: %s.",
+                index + 1, func->name, typeName(param->type), lookahead->lexema, signature);
+            return false;
+        }
+        str = sym_string_find(lookahead->lexema);
+        if ( str == NULL )
+            str = sym_string_declare(lookahead->lexema);
+        if ( str == NULL ) {
+            n_errors++; //mensagem ja emitida por sym_string_declare
+            return false;
+        }
+        strcpy(arg_string, str->name);
+        *arg_kind = ARG_STRING;
+        return match(STRING_CONST);
+    }
+
+    if ( lookahead->tag == ID ) {
+        strcpy(name, lookahead->lexema);
+        var = sym_find(name, &global_symbol_table_variables);
+        if ( var == NULL ) {
+            error("Variavel '%s' nao declarada.", name);
+            return false;
+        }
+        match(ID);
+        if ( lookahead->tag == COMMA || lookahead->tag == CLOSE_PAR ) { //argumento eh apenas um id
+            if ( strcmp(name, param->name) != 0 ) {
+                error("Parametro %d da chamada de '%s' deve ser o id '%s' (parametros sao variaveis globais), encontrado '%s'. Prototipo: %s.",
+                    index + 1, func->name, param->name, name, signature);
+                return false;
+            }
+            if ( var->type != param->type ) {
+                error("Parametro %d da chamada de '%s' deve ser %s, encontrado '%s' (%s). Prototipo: %s.",
+                    index + 1, func->name, typeName(param->type), name, typeName(var->type), signature);
+                return false;
+            }
+            *arg_kind = ARG_ID;
+            return true;
+        }
+        //O id inicia uma expressao: continua a partir do F ja reconhecido
+        if ( var->type == STRING ) {
+            error("Variavel '%s' eh do tipo string e nao pode ser usada em expressoes.", name);
+            return false;
+        }
+        gen_push_var(name, var->type);
+        kind = TR(var->type == FLOAT ? EXPR_FLOAT : EXPR_INT);
+        if ( kind )
+            kind = ER(kind);
+    } else {
+        kind = E();
+    }
+    if ( !kind )
+        return false;
+
+    if ( param->type == STRING ) {
+        error("Parametro %d da chamada de '%s' (string) deve receber uma constante string ou o proprio id '%s'. Prototipo: %s.",
+            index + 1, func->name, param->name, signature);
+        return false;
+    }
+    if ( kind == EXPR_BOOL ) {
+        error("Parametro %d da chamada de '%s' deve receber uma expressao aritmetica, nao uma comparacao. Prototipo: %s.",
+            index + 1, func->name, signature);
+        return false;
+    }
+    if ( kind == EXPR_FLOAT && (param->type == INT || param->type == CHAR) ) {
+        error("Parametro %d da chamada de '%s' (%s) nao pode receber uma expressao float. Prototipo: %s.",
+            index + 1, func->name, typeName(param->type), signature);
+        return false;
+    }
+    if ( kind == EXPR_INT && param->type == FLOAT )
+        genIntToFloat(0);
+    *arg_kind = ARG_EXPR;
+    return true;
 }
 
 /**
@@ -856,7 +1053,10 @@ int F() {
         strcpy(lexema, lookahead->lexema);
         search_symbol = sym_find(lexema, &global_symbol_table_variables);
         if ( search_symbol == NULL ) {
-            error("Variavel '%s' nao declarada.", lexema);
+            if ( sym_func_find(lexema) != NULL )
+                error("'%s' eh uma funcao sem valor de retorno (procedimento) e nao pode ser usada em expressoes.", lexema);
+            else
+                error("Variavel '%s' nao declarada.", lexema);
             return false;
         }
         if ( search_symbol->type == STRING ) {
