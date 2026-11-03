@@ -24,7 +24,10 @@ def init_db():
 @app.route('/')
 def index():
     """Página inicial com apresentação simples"""
-    return render_template('index.html')
+    # A consulta fica aqui: o template só exibe o valor
+    with sqlite3.connect(DATABASE) as conn:
+        total_produtos = conn.execute('SELECT COUNT(*) FROM produtos').fetchone()[0]
+    return render_template('index.html', total_produtos=total_produtos)
 
 @app.route('/cadastrar', methods=['GET', 'POST'])
 def cadastrar():

@@ -24,12 +24,7 @@
             <div class="card-body">
                 <h5 class="card-title">Estatísticas</h5>
                 <p class="card-text">
-                    {% with conn = sqlite3.connect(DATABASE) %}
-                        {% set cursor = conn.cursor() %}
-                        {% set cursor.execute('SELECT COUNT(*) FROM produtos') %}
-                        {% set total_produtos = cursor.fetchone()[0] %}
-                        Total de produtos cadastrados: <strong>{{ total_produtos }}</strong>
-                    {% endwith %}
+                    Total de produtos cadastrados: <strong>{{ total_produtos }}</strong>
                 </p>
             </div>
         </div>
