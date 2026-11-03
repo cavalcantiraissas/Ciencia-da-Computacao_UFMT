@@ -1,46 +1,52 @@
 # Programação Paralela
 
-Repositório de atividades e trabalhos desenvolvidos durante a disciplina de **Programação Paralela**, do curso de Ciência da Computação.
+**Programas concorrentes e paralelos em Java, Python e C: monitores, semáforos, pools de threads, filas thread-safe e OpenMP.**
+
+[![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Python](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![OpenMP](https://img.shields.io/badge/C-OpenMP-A8B9CC?logo=c&logoColor=white)](https://www.openmp.org/)
+[![UFMT](https://img.shields.io/badge/UFMT-Ci%C3%AAncia_da_Computa%C3%A7%C3%A3o-003366)](../)
+
+Trabalhos da disciplina de Programação Paralela do curso de Ciência da Computação da UFMT (prof. Anthony Ferreira La Marca). Com processadores de muitos núcleos em todo computador, programar de forma paralela é o caminho para reduzir o tempo de solução e atacar problemas maiores; os exercícios cobrem os mecanismos de coordenação entre threads e o paralelismo de dados com OpenMP.
 
 ---
 
-## Informações Gerais
+## Trabalhos
 
-| | |
-|---|---|
-| Instituição | Universidade Federal de Mato Grosso (UFMT) |
-| Docente | Anthony Ferreira La Marca |
+| Trabalho | Descrição | Mecanismo |
+|---|---|---|
+| [Armazém](./Armazem) | Produtor-consumidor sobre um armazém de capacidade limitada | Monitor: `synchronized`, `wait`, `notifyAll` |
+| [Linha de montagem](./TestLinhaMontagem) | Pipeline de três etapas ligadas por duas estações limitadas | `Semaphore` (mutex, vagas e itens) |
+| [NotificationSystem](./NotificationSystem) | 40 notificações num pool de threads com fila limitada e rejeição personalizada | `ThreadPoolExecutor`, `ScheduledExecutorService` |
+| [simulador_ingressos.py](simulador_ingressos.py) | 10 compradores concorrentes disputam 20 ingressos; uma thread de log recebe os eventos e o relatório final confere a consistência do estoque | `threading.Lock`, `queue.Queue` |
+| [MaxVetor.c](MaxVetor.c) | Máximo de um vetor: máximo local por thread e uma única atualização do global em região crítica, comparado com `reduction(max:...)` e com a versão sequencial | OpenMP `critical` e `reduction` |
+| [soma_arvore.c](soma_arvore.c) | Soma dos nós de uma árvore binária de busca, com uma tarefa por subárvore e conferência sequencial | OpenMP `task` e `taskwait` |
 
----
+## Como executar
 
-## Sobre a disciplina
+```bash
+# Java (17+)
+cd Armazem && javac *.java && java TestArmazem
 
-Programação Paralela. Avaliação de desempenho de programas paralelos. Desenvolvimento de programas paralelos: programação paralela com memória compartilhada. Programação com passagem de mensagem. Programação para dispositivos de processamento gráfico (GPU).
+# Python 3
+python3 simulador_ingressos.py
 
-Devido à necessidade do processamento de grande quantidade de informação e pelas limitações físicas existentes atualmente, todos os computadores são constituídos por processadores com diversos núcleos, tornando indispensável a programação em uma abordagem paralela. Espera-se, com isso, reduzir o tempo necessário para a solução de um problema e tornar possível a solução de problemas mais complexos e de maior dimensão.
+# C com OpenMP: N elementos e número de threads são opcionais
+gcc -fopenmp -O2 MaxVetor.c -o max_vetor && ./max_vetor 1000000 4
+gcc -fopenmp -O2 soma_arvore.c -o soma_arvore && ./soma_arvore
+```
 
-Em caso de impossibilidade de realizar todas as atividades presenciais, dada a redução da quantidade de dias letivos, algumas atividades poderão acontecer de forma remota.
+No macOS, o `gcc` padrão é o clang, que não aceita `-fopenmp`. Instale o GCC do Homebrew (`brew install gcc`) e use `gcc-15` (ou a versão instalada) no lugar de `gcc`.
 
-### Tópicos abordados
+O Armazém e a Linha de montagem rodam indefinidamente; encerre com `Ctrl + C`.
+
+## Conteúdo da disciplina
 
 1. Avaliação de desempenho de programas paralelos
-2. Desenvolvimento de programas paralelos com memória compartilhada
+2. Programação paralela com memória compartilhada
 3. Programação com passagem de mensagem
-4. Programação para dispositivos de processamento gráfico (GPU)
+4. Programação para unidades de processamento gráfico (GPU)
 
 ---
 
-## Conteúdo do repositório
-
-| Pasta | Descrição |
-|---|---|
-| [NotificationSystem](NotificationSystem/README.md) | Sistema de notificações paralelo com `ThreadPoolExecutor` e monitoramento via `ScheduledExecutorService` |
-| [Armazem](Armazem/README.md) | Problema Produtor-Consumidor com monitor (`synchronized`, `wait` e `notifyAll`) sobre um armazém de capacidade limitada |
-| [TestLinhaMontagem](TestLinhaMontagem/README.md) | Linha de montagem em pipeline (OperarioA → Montador → Embalador) com estações de trabalho sincronizadas por semáforos (`Semaphore`) |
-| [simulador_ingressos.py](simulador_ingressos.py) | Simulador de venda de ingressos em Python: compradores concorrentes protegem o estoque com `threading.Lock` e enviam eventos a uma thread logger via `queue.Queue`, com relatório final de consistência |
-| [MaxVetor.c](MaxVetor.c) | Valor máximo de um vetor em C com OpenMP: cada thread calcula seu máximo local e atualiza `max_global` uma única vez dentro de `#pragma omp critical`, com comparação contra `reduction(max:...)` e conferência sequencial |
-| [soma_arvore.c](soma_arvore.c) | Soma dos nós de uma árvore binária de busca em C com OpenMP tasks: uma única thread (`parallel` + `single`) inicia o percurso na raiz, cada subárvore vira uma `#pragma omp task` com `shared`/`default(none)` e `taskwait` sincroniza as somas parciais, com conferência sequencial |
-
----
-
-[Voltar ao repositório principal](https://github.com/cavalcantiraissas/Ciencia-da-Computacao_UFMT)
+[← Repositório principal](../)

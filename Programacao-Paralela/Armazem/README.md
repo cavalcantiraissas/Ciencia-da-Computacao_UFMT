@@ -1,6 +1,34 @@
-# Armazem
+# Armazém: Produtor-Consumidor com monitor
 
-Simulação do problema clássico **Produtor-Consumidor** em Java, utilizando um monitor com `synchronized`, `wait()` e `notifyAll()` para coordenar o acesso concorrente a um armazém de capacidade limitada.
+**O problema clássico do produtor-consumidor em Java: produtores e consumidores compartilham um armazém de capacidade limitada, coordenados por um monitor com `synchronized`, `wait()` e `notifyAll()`.**
+
+[![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Concorrência](https://img.shields.io/badge/concorr%C3%AAncia-monitor-555555)](#como-funciona)
+[![Disciplina](https://img.shields.io/badge/disciplina-Programa%C3%A7%C3%A3o_Paralela-6f42c1)](../)
+
+Atividade da disciplina de Programação Paralela (UFMT). O armazém é o recurso compartilhado: quem tenta depositar com ele cheio, ou retirar com ele vazio, espera até ser acordado por outra thread.
+
+---
+
+## Sumário
+
+- [Como funciona](#como-funciona)
+- [Sobre](#sobre)
+- [Como compilar e executar](#como-compilar-e-executar)
+- [Estrutura do projeto](#estrutura-do-projeto)
+
+---
+
+## Como funciona
+
+```mermaid
+flowchart LR
+    P1[Produtor 1<br/>a cada 300 ms] -->|depositar| A[(Armazém<br/>até 10 pacotes)]
+    P2[Produtor 2<br/>a cada 300 ms] -->|depositar| A
+    A -->|retirar, FIFO| C[Consumidor<br/>a cada 500 ms]
+    A -. cheio: wait .-> P1
+    A -. vazio: wait .-> C
+```
 
 ## Sobre
 
@@ -34,7 +62,7 @@ Armazém cheio! Produtor aguardando...
 Retirado: pacote 2 | Ocupação: 9/10
 ```
 
-## Arquivos
+## Estrutura do projeto
 
 | Arquivo | Descrição |
 |---|---|
@@ -45,4 +73,4 @@ Retirado: pacote 2 | Ocupação: 9/10
 
 ---
 
-[Voltar para Programação Paralela](../README.md)
+[← Programação Paralela](../) · [Repositório principal](../../)

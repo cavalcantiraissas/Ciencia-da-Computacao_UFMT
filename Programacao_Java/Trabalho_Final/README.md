@@ -1,130 +1,118 @@
-# Sistema de Gerenciamento de Itens
-Um sistema completo em Java para gerenciamento de itens (Livros e Filmes) com interface gráfica, desenvolvido como parte de um trabalho acadêmico.
+# Sistema de Gerenciamento de Itens: livros e filmes
 
-## Sobre o Projeto
-Sistema que permite cadastrar, listar, buscar, exportar e importar informações sobre livros e filmes através de uma interface gráfica amigável.
+**Aplicação desktop em Java Swing para cadastrar, listar, filtrar, exportar e importar um acervo de livros e filmes, organizada em camadas e com exceções próprias para as validações.**
 
-## Funcionalidades
+[![Java](https://img.shields.io/badge/Java-8%2B-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Swing](https://img.shields.io/badge/UI-Swing-5382A1)](#como-executar)
+[![POO](https://img.shields.io/badge/paradigma-orientado_a_objetos-555555)](#modelo-de-classes)
+[![Disciplina](https://img.shields.io/badge/disciplina-Programa%C3%A7%C3%A3o_em_Java-6f42c1)](../)
 
-### Operações Principais
+Trabalho final da disciplina de Programação III (UFMT), desenvolvido por **Raissa Cavalcanti** (outubro de 2025). O projeto aplica herança, polimorfismo e encapsulamento num caso completo, separando a interface gráfica da lógica de negócio.
 
-- Gerenciamento de Livros: Cadastro com título, descrição, autor e número de páginas
-- Gerenciamento de Filmes: Cadastro com título, descrição, diretor e duração
-- Busca Avançada: Filtragem de itens por título
-- Relatórios: Contagem de itens por tipo
-- Persistência: Exportação e importação de dados
-- Listagem Ordenada: Exibição de itens ordenados por título
-- Validações
+---
 
-## Arquitetura do Sistema
+## Sumário
 
-### Estrutura de Pacotes
+- [Destaques](#destaques)
+- [Modelo de classes](#modelo-de-classes)
+- [Como executar](#como-executar)
+- [Uso](#uso)
+- [Formato de exportação](#formato-de-exportação)
+- [Estrutura do projeto](#estrutura-do-projeto)
 
-```text
-Trabalho_Final/
-└── src/
-    ├── exceptions/      # Exceções personalizadas
-    ├── model/           # Modelos de dados
-    ├── service/         # Lógica de negócio
-    └── gui/             # Interface gráfica
+---
+
+## Destaques
+
+- **Cadastro de livros** (título, descrição, autor e páginas) **e filmes** (título, descrição, diretor e duração).
+- **Busca** por parte do título e **listagem ordenada** por título, com contagem por tipo.
+- **Exportação e importação** em texto, com um item por linha.
+- **Validações com exceções próprias:** campo obrigatório vazio e título duplicado.
+- **Camadas separadas:** modelo, serviço, exceções e interface.
+
+## Modelo de classes
+
+```mermaid
+classDiagram
+    class Item {
+        <<abstract>>
+        #titulo
+        #descricao
+        #dataCadastro
+        +exibirDetalhes()*
+        +toExportString()
+    }
+    class Livro {
+        -autor
+        -numeroPaginas
+        +exibirDetalhes()
+        +toExportString()
+    }
+    class Filme {
+        -diretor
+        -duracaoMinutos
+        +exibirDetalhes()
+        +toExportString()
+    }
+    class GerenciadorItens {
+        +adicionarItem(Item)
+        +listarTodos()
+        +buscarPorTitulo(titulo)
+        +contarPorTipo()
+        +ordenarPorTitulo()
+        +exportarParaArquivo(caminho)
+        +importarDeArquivo(caminho)
+    }
+    class ItemManagerGUI {
+        <<JFrame>>
+    }
+    Item <|-- Livro
+    Item <|-- Filme
+    GerenciadorItens o-- Item
+    ItemManagerGUI --> GerenciadorItens
+    GerenciadorItens ..> CampoVazioException : lança
+    GerenciadorItens ..> DuplicadoException : lança
 ```
 
-## Pré-requisitos
+O fluxo de uma operação é: **interface → validação → serviço → modelo**. Erros de validação voltam à interface como exceções e são exibidos ao usuário.
 
-- Java JDK 8 ou superior
-- Ambiente com suporte a Swing
+## Como executar
 
-## Classes e Responsabilidades
+**Pré-requisito:** JDK 8 ou superior.
 
-### Camada de Apresentação (GUI)
+```bash
+cd Trabalho_Final
+javac -d out $(find src -name "*.java")
+java -cp out gui.ItemManagerGUI
+```
 
-`ItemManagerGUI`: Interface gráfica principal com Swing
-- Formulários para cadastro de livros e filmes
-- Área de exibição de resultados
-- Controles de busca e navegação
+## Uso
 
-### Camada de Serviço
+| Ação | Como fazer |
+|---|---|
+| Cadastrar | Escolha "Livro" ou "Filme", preencha os campos e clique em **Adicionar** |
+| Buscar | Digite parte do título e clique em **Filtrar** |
+| Listar | Clique em **Listar Todos**; a contagem por tipo aparece no fim |
+| Exportar | Clique em **Exportar Dados** e escolha o arquivo |
 
-`GerenciadorItens`: Núcleo do sistema
-- CRUD de itens
-- Busca e ordenação
-- Importação/exportação
-- Estatísticas
+## Formato de exportação
 
-### Camada de Modelo
-- `Item`: Classe abstrata base
-- `Livro`: Especialização para livros
-- `Filme`: Especialização para filmes
-
-### Camada de Exceções
-- `CampoVazioException`: Campos obrigatórios não preenchidos
-- `DuplicadoException`: Itens com títulos duplicados
-
-### Formato de Dados
-
-#### Estrutura de Exportação
 ```text
 Livro|Título|Descrição|2024-01-15|Autor|300
 Filme|Título|Descrição|2024-01-15|Diretor|120
 ```
 
-#### Campos por Tipo
+## Estrutura do projeto
 
-**Livro:**
-- Título*
-- Descrição*
-- Autor*
-- Número de Páginas*
-
-**Filme:**
-- Título*
-- Descrição*
-- Diretor*
-- Duração (minutos)*
-
-*Campos obrigatórios
-
-## Padrões e Boas Práticas
-- Herança: Item como classe base abstrata
-- Polimorfismo: Métodos exibirDetalhes() e toExportString()
-- Encapsulamento: Atributos privados com getters/setters
-- Tratamento de Exceções: Exceções personalizadas e específicas
-- Interface Gráfica: Separada da lógica de negócio
-- Documentação: Código comentado e organizado
-
-## Fluxo de Dados
 ```text
-Interface → Validação → Serviço → Modelo
-    ↑           ↑          ↑        ↑
-   Exibição   Exceções  Regras   Persistência
+Trabalho_Final/
+└── src/
+    ├── model/        # Item (abstrata), Livro, Filme
+    ├── service/      # GerenciadorItens: cadastro, busca, ordenação, importação e exportação
+    ├── exceptions/   # CampoVazioException, DuplicadoException
+    └── gui/          # ItemManagerGUI (Swing)
 ```
 
-## Informações
-- Desenvolvedora: Raissa Cavalcanti
-- Tecnologias: Java, Swing, Programação Orientada a Objetos
-- Data: 10 de Outubro de 2025
+---
 
-## Licença
-- Este projeto foi desenvolvido para fins educacionais como parte de um trabalho acadêmico.
-
-## Exemplo de Uso
-
-**Cadastrar Livro:**
-1. Selecione "Livro" no tipo
-2. Preencha título, descrição, autor e páginas
-3. Clique em "Adicionar"
-
-**Buscar Item:**
-1. Digite parte do título no campo de busca
-2. Clique em "Filtrar"
-
-**Exportar Dados:**
-1. Clique em "Exportar Dados"
-2. Escolha o local e nome do arquivo
-3. Os dados serão salvos em formato texto
-
-**Ver Estatísticas:**
-1. Clique em "Listar Todos"
-2. Veja a contagem por tipo no final da listagem
-
-Sistema robusto e intuitivo para gerenciamento completo de acervo de livros e filmes!
+[← Programação em Java](../) · [Repositório principal](../../)

@@ -1,34 +1,41 @@
 # Laboratório de Banco de Dados
 
-Este diretório contém as atividades e projetos desenvolvidos na disciplina de Laboratório de Banco de Dados do curso de Bacharelado em Ciência da Computação.
+**Recursos avançados de SGBDs aplicados a sistemas reais: funções, procedimentos armazenados, gatilhos, índices, transações e integração com linguagens de programação.**
 
-## Informações Gerais
-* Instituição: Universidade Federal de Mato Grosso
-* Docente: Anthony Ferreira La Marca
-* Período: 2026/1
-* Carga Horária: 64 horas
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![UFMT](https://img.shields.io/badge/UFMT-Ci%C3%AAncia_da_Computa%C3%A7%C3%A3o-003366)](../)
 
-## Objetivos
-O componente curricular visa solidificar o conhecimento sobre sistemas gerenciadores de banco de dados e apresentar conceitos avançados para a construção de sistemas complexos. O foco reside na integração de bancos de dados com linguagens de alto nível e no uso de recursos internos dos SGBDs.
+Trabalhos da disciplina de Laboratório de Banco de Dados do curso de Ciência da Computação da UFMT. O foco é integrar bancos de dados a linguagens de alto nível e usar os recursos internos do SGBD para garantir as regras de negócio.
 
-## Conteúdo Programático
-* Conexão com banco de dados relacional via Python, Java e C++
-* Desenvolvimento de Funções, Procedimentos Armazenados e Gatilhos (Triggers)
-* Teoria e prática de Indexação
-* Controle de transações e concorrência
-* Análise de estudos de caso reais
-
----
-
-## Projetos
-
-| Projeto | Descrição |
+| | |
 |---|---|
-| [FrotaGesta](./frotagesta) | Sistema desktop de controle de frota e manutenção preventiva, com banco PostgreSQL (triggers, procedure e views) e interface em Python |
+| **Docente** | Anthony Ferreira La Marca |
+| **Período** | 2026/1 |
+| **Carga horária** | 64 horas |
 
 ---
 
-## Bibliografia Principal
-* ELMASRI, Ramez; NAVATHE, Sham. Sistemas de banco de dados
-* DATE, C. J. Introdução a sistemas de bancos de dados
-* GARCIA-MOLINA, Hector; ULLMAN, Jeffrey D.; WIDOM, Jennifer. Implementação de sistemas de bancos de dados
+## Trabalhos
+
+| Trabalho | Descrição | Tecnologias |
+|---|---|---|
+| [FrotaGesta](./frotagesta) | Controle de frota e manutenção preventiva, com gatilhos de CNH e de alertas, procedure de encerramento de viagem em transação atômica, views para o painel e interface desktop | PostgreSQL, PL/pgSQL, Python, CustomTkinter |
+
+## Conteúdo da disciplina
+
+- Conexão com bancos relacionais em Python, Java e C++
+- Funções, procedimentos armazenados e gatilhos
+- Indexação: teoria e prática
+- Controle de transações e de concorrência
+- Estudos de caso reais
+
+## Bibliografia
+
+- ELMASRI, Ramez; NAVATHE, Shamkant B. *Sistemas de Banco de Dados*.
+- DATE, C. J. *Introdução a Sistemas de Bancos de Dados*.
+- GARCIA-MOLINA, Hector; ULLMAN, Jeffrey D.; WIDOM, Jennifer. *Implementação de Sistemas de Bancos de Dados*.
+
+---
+
+[← Repositório principal](../)

@@ -1,56 +1,78 @@
-# Ciência da Computação - UFMT
+# Ciência da Computação · UFMT
 
-Repositório acadêmico do curso de Bacharelado em Ciência da Computação pela Universidade Federal de Mato Grosso (UFMT). Reúne atividades, trabalhos, projetos e materiais de estudo produzidos ao longo da graduação, organizados por disciplina.
+**Trabalhos, projetos e materiais de estudo do Bacharelado em Ciência da Computação da Universidade Federal de Mato Grosso, organizados por disciplina: de estruturas de dados e compiladores a sistemas operacionais, bancos de dados e programação paralela.**
 
-O conteúdo é atualizado continuamente conforme o progresso do curso. Cada pasta corresponde a uma disciplina e contém os arquivos, códigos e documentações produzidos naquele contexto.
+[![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white)](#disciplinas)
+[![C++](https://img.shields.io/badge/C%2B%2B-00599C?logo=cplusplus&logoColor=white)](#disciplinas)
+[![Java](https://img.shields.io/badge/Java-ED8B00?logo=openjdk&logoColor=white)](#disciplinas)
+[![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)](#disciplinas)
+[![RISC-V](https://img.shields.io/badge/RISC--V_Assembly-283272?logo=riscv&logoColor=white)](#disciplinas)
+[![SQL](https://img.shields.io/badge/SQL-MySQL_%7C_PostgreSQL-4479A1?logo=postgresql&logoColor=white)](#disciplinas)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)](#disciplinas)
+[![Status](https://img.shields.io/badge/curso-em_andamento-yellow)](#sobre-o-curso)
+
+Cada pasta corresponde a uma disciplina e tem um README com o conteúdo, os trabalhos e como executá-los. Os trabalhos maiores têm README próprio, com arquitetura, decisões de projeto, instruções de execução e limitações conhecidas. O repositório é atualizado conforme o curso avança.
 
 ---
 
-## Estrutura do Repositório
+## Sumário
 
-| Disciplina | Descrição | Conteúdo |
+- [Projetos em destaque](#projetos-em-destaque)
+- [Disciplinas](#disciplinas)
+- [Como navegar](#como-navegar)
+- [Sobre o curso](#sobre-o-curso)
+- [Autora](#autora)
+
+---
+
+## Projetos em destaque
+
+| Projeto | O que é | Tecnologias |
 |---|---|---|
-| [Arquitetura de Computadores](./Arquitetura-Computadores) | Estudo da organização interna de sistemas computacionais: hierarquia de memória, pipeline, conjunto de instruções e desempenho de processadores | Assembly, análise de desempenho, relatórios |
-| [Banco de Dados](./Banco-de-dados) | Fundamentos de banco de dados relacionais: modelagem ER, normalização, SQL e projeto de schemas | SQL, modelagem, diagramas ER |
-| [Compiladores](./Compiladores) | Construção de compiladores: análise léxica, sintática, semântica e geração de código | C |
-| [Engenharia de Software / Sistemas](./Engenharia_Software) | Ciclo de vida de software, requisitos, modelagem UML, padrões de projeto e metodologias ágeis | UML, diagramas, documentação |
-| [Estrutura de Dados em C](./Estrutura_de_Dados_C) | Implementação das principais estruturas de dados - listas, pilhas, filas, árvores e grafos — em linguagem C | C, algoritmos, estruturas de dados |
-| [Laboratório de Banco de Dados](./Lab_Banco-Dados) | Atividades práticas de banco de dados: criação de schemas, consultas SQL avançadas e modelagem aplicada | SQL, MySQL, exercícios práticos |
-| [Organização de Computadores](./Organizacao-computadores) | Arquitetura de von Neumann, representação de dados, lógica digital, circuitos combinacionais e sequenciais | Lógica digital, circuitos, relatórios |
-| [Programação Paralela](./Programacao-Paralela) | Avaliação de desempenho, programação com memória compartilhada, passagem de mensagem e programação para GPU | Java, Python, C, OpenMP, MPI |
-| [Programação para Dispositivos Móveis](./Programacao-Disp-Moveis) | Desenvolvimento de aplicações móveis: layouts, componentes, ciclo de vida e integração com APIs | Android, Java/Kotlin |
-| [Programação Web](./Programacao-Web) | Desenvolvimento front-end e back-end para a web: HTML, CSS, JavaScript e integração com servidores | HTML, CSS, JS, PHP |
-| [Programação em C++](./Programacao_C++) | Paradigma orientado a objetos em C++: classes, herança, polimorfismo, templates e STL | C++ |
-| [Programação em Java](./Programacao_Java) | Orientação a objetos em Java: encapsulamento, interfaces, coleções, tratamento de exceções e padrões de projeto | Java |
-| [Projeto de Software](./Projeto-Software) | Desenvolvimento de um projeto de software completo: especificação, arquitetura, implementação e entrega | Documentação, código, apresentação |
-| [Redes de Computadores](./Redes_Computadores) | Comunicação em rede com sockets: protocolos da camada de transporte (TCP), arquitetura cliente-servidor e protocolos de aplicação como WHOIS | Python, sockets |
-| [Sistemas Operacionais](./Sistemas-OperacionaisI) | Gerenciamento de processos, escalonamento, memória virtual, sistemas de arquivos e sincronização | C, shell scripts, relatórios |
-| [Sistemas Operacionais II](./Sistemas-OperacionaisII) | Implementação de um sistema de arquivos (vsfs, do OSTEP): formato on-disk, alocação por bitmaps, inodes, diretórios e montagem via FUSE | Python, FUSE |
+| [Compilador de C simplificado](./Compiladores) | Construído em cinco etapas, do analisador de expressões a funções com `jal`/`jr`, gerando assembly x86-64 para Linux, macOS e Windows, com 47 casos de erro testados | C, NASM |
+| [vsfs](./Sistemas-OperacionaisII) | Sistema de arquivos do OSTEP montado com FUSE: superbloco, bitmaps, inodes, diretórios, hard links e um `fsck` próprio | Python, FUSE |
+| [opzip](./Sistemas-OperacionaisI/opzip) | Compressor RLE paralelo com escrita ordenada por buffer circular, *speedup* medido e um deadlock real diagnosticado | C, pthreads |
+| [Relógios bare-metal](./Organizacao-computadores) | O mesmo relógio digital em Assembly e em C, sem sistema operacional, movido por interrupções de temporizador e de UART | RISC-V, QEMU |
+| [FrotaGesta](./Lab_Banco-Dados/frotagesta) | Controle de frota com regras de negócio em gatilhos, procedure transacional e interface desktop | PostgreSQL, Python |
+| [Árvores balanceadas](./Estrutura_de_Dados_C/ED2/Tarefa1_Arvores_Binarias_Balanceadas) | ABB, AVL e Rubro-Negra comparadas em altura, rotações e custo de busca | C |
 
----
+## Disciplinas
 
-## Tecnologias Presentes no Repositório
+| Disciplina | Trabalhos | Tecnologias |
+|---|---|---|
+| [Arquitetura de Computadores](./Arquitetura-Computadores) | Processador RV32 em Logisim com bateria de testes; jogo de labirinto bare-metal | Logisim, Assembly RISC-V |
+| [Banco de Dados](./Banco-de-dados) | Biblioteca digital em 3FN com 10 consultas analíticas | MySQL |
+| [Compiladores](./Compiladores) | Compilador incremental de C simplificado, em cinco etapas | C, NASM |
+| [Engenharia de Software](./Engenharia_Software) | Domínio hospitalar no modelo de domínio rico | Python, UML |
+| [Estrutura de Dados em C](./Estrutura_de_Dados_C) | Listas, pilhas, filas, heap, árvores balanceadas, matrizes esparsas e grafos | C |
+| [Laboratório de Banco de Dados](./Lab_Banco-Dados) | FrotaGesta: gatilhos, procedure, views e interface desktop | PostgreSQL, Python |
+| [Organização de Computadores](./Organizacao-computadores) | Vetores em Assembly, pilha com `brk`, fila com `malloc` e dois relógios bare-metal | RISC-V, C, QEMU, Docker |
+| [Programação em C++](./Programacao_C++) | 13 listas de exercícios e um jogo de batalhas por turnos | C++ |
+| [Programação em Java](./Programacao_Java) | Exercícios e um gerenciador de livros e filmes em Swing | Java, Swing |
+| [Programação Paralela](./Programacao-Paralela) | Monitores, semáforos, pools de threads e OpenMP | Java, Python, C |
+| [Programação para Dispositivos Móveis](./Programacao-Disp-Moveis) | Em andamento (2026/1) | Android, Kotlin, Flutter |
+| [Programação Web](./Programacao-Web) | Módulos, closures, DOM, `fetch` e uma aplicação Flask | JavaScript, Python, Flask |
+| [Projeto de Software](./Projeto-Software) | Em andamento (2026/1) | UML, padrões de projeto |
+| [Redes de Computadores](./Redes_Computadores) | Cliente WHOIS e eco cliente-servidor sobre TCP | Python, sockets |
+| [Sistemas Operacionais I](./Sistemas-OperacionaisI) | Compressor paralelo com produtor-consumidor | C, pthreads |
+| [Sistemas Operacionais II](./Sistemas-OperacionaisII) | Sistema de arquivos vsfs, em três fases | Python, FUSE |
 
-![C](https://img.shields.io/badge/C-00599C?style=flat-square&logo=c&logoColor=white)
-![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=cplusplus&logoColor=white)
-![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-005C84?style=flat-square&logo=mysql&logoColor=white)
-![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+## Como navegar
 
----
+- **README da disciplina:** conteúdo, docente, bibliografia e a lista de trabalhos.
+- **README do trabalho:** o que foi feito, como funciona, como compilar e executar, e limitações.
+- **Relatórios e enunciados** em PDF ficam na pasta do respectivo trabalho.
 
-## Sobre o Curso
+A maior parte do código usa só as ferramentas padrão de cada linguagem (`gcc`, `g++`, `javac`, `python3`). Os trabalhos que dependem de ambiente específico, como RISC-V, QEMU, FUSE ou um SGBD, trazem as instruções de instalação, e alguns oferecem um contêiner Docker.
 
-**Instituição:** Universidade Federal de Mato Grosso (UFMT)  
-**Curso:** Bacharelado em Ciência da Computação  
-**Status:** Em andamento
+## Sobre o curso
 
----
+| | |
+|---|---|
+| **Instituição** | Universidade Federal de Mato Grosso (UFMT), Campus Araguaia |
+| **Curso** | Bacharelado em Ciência da Computação |
+| **Situação** | Em andamento |
 
 ## Autora
 
-**Raissa Cavalcanti** - [GitHub](https://github.com/cavalcantiraissas) · [LinkedIn](https://www.linkedin.com/in/cavalcantiraissa/)
+**Raissa Cavalcanti** · [GitHub](https://github.com/cavalcantiraissas) · [LinkedIn](https://www.linkedin.com/in/cavalcantiraissa/)

@@ -1,27 +1,41 @@
-# Relógio Digital - RISC-V Bare Metal
+# Relógio Digital Bare-Metal em Assembly RISC-V
 
-> Implementação de um relógio digital em **Assembly RISC-V RV32IMA**, executando diretamente sobre o hardware emulado pelo **QEMU virt**, sem sistema operacional, sem bibliotecas externas.
+**Relógio `HH:MM:SS` escrito inteiramente em Assembly RV32IMA, sem sistema operacional nem bibliotecas, controlando temporizador, UART e controlador de interrupções por acesso direto à memória no QEMU `virt`.**
 
-**Disciplina:** Organização de Computadores - UFMT  
-**Alunos:** Raissa Cavalcanti e Luiz Torres  
-**Professor:** Linder Cândido
+[![RISC-V](https://img.shields.io/badge/RISC--V-RV32IMA-283272?logo=riscv&logoColor=white)](https://riscv.org/)
+[![Assembly](https://img.shields.io/badge/Assembly-bare--metal-555555)](#visão-geral)
+[![QEMU](https://img.shields.io/badge/QEMU-virt-FF6600?logo=qemu&logoColor=white)](https://www.qemu.org/docs/master/system/riscv/virt.html)
+[![Docker](https://img.shields.io/badge/Docker-build_e_execu%C3%A7%C3%A3o-2496ED?logo=docker&logoColor=white)](#como-executar)
+[![Disciplina](https://img.shields.io/badge/disciplina-Organiza%C3%A7%C3%A3o_de_Computadores-6f42c1)](../)
+
+Trabalho 2 da disciplina de Organização de Computadores (UFMT, prof. Linder Cândido), feito por **Raissa Cavalcanti** e **Luiz Torres**, na versão em Assembly. Todo o código está num único arquivo, [`clock.S`](clock.S), e cada periférico é programado por escrita direta nos seus registradores. A versão do mesmo trabalho em C está em [relogio-digital](../relogio-digital).
 
 ---
 
 ## Sumário
 
-- [Visão Geral](#visão-geral)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Mapa de Memória](#mapa-de-memória)
-- [Arquitetura do Software](#arquitetura-do-software)
-- [Como Executar](#como-executar)
-- [Uso do Relógio](#uso-do-relógio)
-- [Detalhes Técnicos](#detalhes-técnicos)
+- [Destaques](#destaques)
+- [Visão geral](#visão-geral)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Mapa de memória](#mapa-de-memória)
+- [Arquitetura do software](#arquitetura-do-software)
+- [Como executar](#como-executar)
+- [Uso do relógio](#uso-do-relógio)
+- [Detalhes técnicos](#detalhes-técnicos)
 - [Referências](#referências)
 
 ---
 
-## Visão Geral
+## Destaques
+
+- **Um vetor de *trap* para tudo:** `trap_handler` salva 19 registradores, lê `mcause` e despacha para o temporizador ou para a UART.
+- **Laço principal com `wfi`:** o processador dorme até a próxima interrupção, sem espera ativa.
+- **Leitura segura de `mtime` (64 bits) numa CPU de 32 bits**, relendo a parte alta para detectar o vai-um entre os acessos.
+- **Escrita de `mtimecmp` sem disparo espúrio**, bloqueando a parte alta antes de escrever a baixa.
+- **Comando `T HH:MM:SS`** recebido por interrupção e validado campo a campo.
+- **Documentação em PDF** do código e do relatório técnico.
+
+## Visão geral
 
 O projeto implementa um relógio digital funcional inteiramente em Assembly RISC-V, sem nenhuma camada de abstração. Todos os periféricos são controlados por acesso direto a registradores mapeados em memória (MMIO).
 
@@ -37,7 +51,7 @@ O projeto implementa um relógio digital funcional inteiramente em Assembly RISC
 
 ---
 
-## Estrutura do Projeto
+## Estrutura do projeto
 
 ```
 riscv-clock/
@@ -71,7 +85,7 @@ uart_puts       Envia string null-terminated
 
 ---
 
-## Mapa de Memória
+## Mapa de memória
 
 Plataforma **QEMU virt** — periféricos acessados por escrita direta nos endereços físicos:
 
@@ -85,7 +99,7 @@ Plataforma **QEMU virt** — periféricos acessados por escrita direta nos ender
 
 ---
 
-## Arquitetura do Software
+## Arquitetura do software
 
 ```
 _start (10 passos de inicialização)
@@ -122,7 +136,7 @@ trap_handler (.align 4)                     │
 
 ---
 
-## Como Executar
+## Como executar
 
 ### Pré-requisito
 
@@ -166,7 +180,7 @@ make clean
 
 ---
 
-## Uso do Relógio
+## Uso do relógio
 
 ### Saída esperada ao iniciar
 
@@ -204,7 +218,7 @@ Ctrl-A   →   X
 
 ---
 
-## Detalhes Técnicos
+## Detalhes técnicos
 
 ### Timer — leitura segura de 64 bits em CPU de 32 bits
 
@@ -251,3 +265,7 @@ O NS16550 é byte-addressable. O `IER` está no offset **byte 1** (não word 1 =
 - [NS16550 UART Datasheet (TI PC16550D)](https://www.ti.com/lit/ds/symlink/pc16550d.pdf)
 - [SiFive PLIC Specification](https://github.com/riscv/riscv-plic-spec)
 - [RISC-V Unprivileged ISA Manual](https://github.com/riscv/riscv-isa-manual/releases/latest)
+
+---
+
+[← Organização de Computadores](../) · [Repositório principal](../../)

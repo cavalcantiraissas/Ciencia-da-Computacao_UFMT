@@ -1,27 +1,58 @@
-# OPZIP: Zip Paralelo com Escrita Ordenada
+# opzip: compressor RLE paralelo com escrita ordenada
 
-Sincronização produtor-consumidor com pthreads aplicada a compressão RLE.
+**Compressor *run-length encoding* em C com pthreads: várias threads comprimem blocos em paralelo e uma thread escritora grava o resultado na ordem original, por um buffer circular limitado sincronizado com mutexes e variáveis de condição.**
 
-**Autores:** Luiz Henrique Ribeiro Torres, Raissa Caroline Cavalcanti da Silva
-**Disciplina:** Sistemas Operacionais I | Prof. Dr. Maxweel Silva Carmo
-**Instituição:** Universidade Federal de Mato Grosso | Campus Araguaia | ICET
-**Local/data:** Barra do Garças, MT | julho de 2026
+[![C](https://img.shields.io/badge/C-pthreads-A8B9CC?logo=c&logoColor=white)](https://man7.org/linux/man-pages/man7/pthreads.7.html)
+[![Make](https://img.shields.io/badge/build-make-427819)](Makefile)
+[![ThreadSanitizer](https://img.shields.io/badge/ThreadSanitizer-sem_data_races-2E7D32)](#race-conditions-e-deadlock)
+[![Relatório](https://img.shields.io/badge/relat%C3%B3rio-PDF-B30B00)](opzip_relatorio.pdf)
+[![Disciplina](https://img.shields.io/badge/disciplina-Sistemas_Operacionais_I-6f42c1)](../)
+
+Trabalho da disciplina de Sistemas Operacionais I (UFMT, Campus Araguaia, prof. Dr. Maxweel Silva Carmo), feito por **Luiz Henrique Ribeiro Torres** e **Raissa Caroline Cavalcanti da Silva** (Barra do Garças, MT, julho de 2026).
+
+---
 
 ## Sumário
 
+- [Destaques](#destaques)
+- [Como funciona](#como-funciona)
 - [Introdução](#introdução)
 - [Como compilar e executar](#como-compilar-e-executar)
-- [Fundamentação teórica](#fundamentação-teórica-e-relação-com-sistemas-operacionais)
+- [Fundamentação teórica e relação com Sistemas Operacionais](#fundamentação-teórica-e-relação-com-sistemas-operacionais)
 - [Arquitetura do sistema](#arquitetura-do-sistema)
 - [Detalhamento do código](#detalhamento-do-código)
 - [Escolha de TAM_BLOCO e K](#escolha-de-tam_bloco-e-k)
 - [Ambiente de testes](#ambiente-de-testes)
 - [Speedup versus número de threads](#speedup-versus-número-de-threads)
 - [Efeito do parâmetro K no desempenho](#efeito-do-parâmetro-k-no-desempenho)
-- [O que acontece com K = 1](#o-que-acontece-com-k--1)
-- [Mutex global versus mutex por posição](#mutex-global-versus-mutex-por-posição-do-buffer)
+- [O que acontece com K = 1?](#o-que-acontece-com-k--1)
+- [Mutex global versus mutex por posição do buffer](#mutex-global-versus-mutex-por-posição-do-buffer)
 - [Considerações finais](#considerações-finais)
 - [Referências](#referências)
+
+---
+
+## Destaques
+
+- **Pipeline produtor-consumidor real:** os blocos são escritos assim que ficam prontos, sem esperar o fim da compressão de todos.
+- **Ordem garantida por janela deslizante** sobre um buffer circular de K posições.
+- **Sem espera ativa:** toda espera usa `pthread_cond_wait`.
+- **Distribuição dinâmica de blocos**, que equilibra a carga entre threads mais rápidas e mais lentas.
+- **Deadlock real encontrado e corrigido** durante os testes, com a explicação da causa.
+- **Experimentos de desempenho:** *speedup* de 3,29× com 8 threads, efeito de K e comparação entre mutex global e mutex por posição do buffer.
+
+## Como funciona
+
+```mermaid
+flowchart LR
+    F[arquivo de entrada<br/>lido para a memória] --> D{proximo_bloco<br/>mutex_bloco}
+    D --> P1[produtora 1<br/>comprime bloco]
+    D --> P2[produtora 2<br/>comprime bloco]
+    D --> PN[produtora N<br/>comprime bloco]
+    P1 & P2 & PN -->|cond_slot_livre| B[(buffer circular<br/>K posições<br/>mutex_buffer)]
+    B -->|cond_slot_pronto,<br/>em ordem| C[consumidora<br/>escreve na saída]
+    C --> O[arquivo .oz]
+```
 
 ## Introdução
 
@@ -294,3 +325,7 @@ Esses resultados reforçam que, em sistemas concorrentes, corretude e desempenho
 ## Referências
 
 ARPACI-DUSSEAU, Remzi H.; ARPACI-DUSSEAU, Andrea C. **Operating Systems: Three Easy Pieces**. Capítulos: Introduction to Threads; Threads API; Locks; Using Locks; Condition Variables. Arpaci-Dusseau Books, 2018.
+
+---
+
+[← Sistemas Operacionais I](../) · [Repositório principal](../../)

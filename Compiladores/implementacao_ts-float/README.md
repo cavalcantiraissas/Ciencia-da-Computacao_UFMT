@@ -1,8 +1,48 @@
-# Implementação da Tabela de Símbolos com suporte a `float`
+# Tabela de símbolos e números `float`
 
-Evolução do compilador de C simplificado (versão de [inclusao_lexico](../inclusao_lexico)) que passa a ter uma **tabela de símbolos** e a reconhecer números de **ponto flutuante**. Nesta etapa, o compilador processa apenas **declarações de variáveis** (`int` e `float`), registra cada variável na tabela de símbolos e gera a **seção de dados** (`section .data`) em assembly NASM.
+**Segunda etapa do compilador: declarações de variáveis `int` e `float`, tabela de símbolos e geração da seção de dados em NASM.**
 
-## Gramática atual
+[![C](https://img.shields.io/badge/C-gcc-A8B9CC?logo=c&logoColor=white)](https://gcc.gnu.org/)
+[![NASM](https://img.shields.io/badge/NASM-x86--64-0C322C)](https://www.nasm.us/)
+[![Disciplina](https://img.shields.io/badge/disciplina-Compiladores-6f42c1)](../)
+
+Evolução do compilador de C simplificado da disciplina de Compiladores (UFMT). Nesta etapa o compilador processa apenas **declarações de variáveis**: registra cada uma na tabela de símbolos, reconhece números de ponto flutuante no léxico e gera a `section .data` do programa em assembly NASM.
+
+Etapa 2 de 5 · anterior: [expressões e leitura de arquivo](../inclusao_lexico) · próxima: [`char`, `string` e atribuição](../constante_string_novos_tipos_dados)
+
+---
+
+## Sumário
+
+- [Destaques](#destaques)
+- [Como funciona](#como-funciona)
+- [Gramática](#gramática)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Como compilar e executar](#como-compilar-e-executar)
+- [Análise do código e correções](#análise-do-código-e-correções)
+
+---
+
+## Destaques
+
+- **Tabela de símbolos** de variáveis (nome, tipo, endereço e valor genérico) e tabela de strings com rótulos `str0`, `str1`, ...
+- **Léxico de números** que distingue inteiros de `float` e trata casos de borda como `7.`, `10.x` e `1.2.3`.
+- **Detecção de redeclaração** e de erros de sintaxe nas declarações.
+- **Seção de dados NASM** com `dd 0` ou `dd 0.0` conforme o tipo.
+- **Código revisado com AddressSanitizer:** 12 problemas da base corrigidos; compila sem avisos com `-Wall -Wextra`.
+
+## Como funciona
+
+```mermaid
+flowchart LR
+    A[código-fonte] --> B[Léxico<br/>lex.c]
+    B -->|tokens| C[Sintático<br/>synt.c]
+    C <-->|declara e consulta| T[(Tabela de símbolos<br/>symbols.c)]
+    C --> D[Gerador<br/>gen.c]
+    D --> E[entrada.txt.asm<br/>section .data]
+```
+
+## Gramática
 
 ```
 program      -> declarations statements
@@ -14,7 +54,7 @@ statement    -> ε
 
 `statements` ainda não é processado: `program()` chama apenas `declarations()`.
 
-## Arquivos
+## Estrutura do projeto
 
 | Arquivo | Descrição |
 |---|---|
@@ -26,7 +66,7 @@ statement    -> ε
 | [tst_lex_numeros.c](tst_lex_numeros.c) | Programa de teste do léxico: lê `entrada_numeros.txt` (ou o arquivo passado como argumento) e imprime se cada token é `NUM` ou `FLOAT_NUM`. |
 | [entrada_numeros.txt](entrada_numeros.txt) | Entrada de exemplo para o teste do léxico, com inteiros, floats e casos de borda (`7.`, `10.x`, `1.2.3` e um número com mais de 31 dígitos). |
 
-## Compilação e execução
+## Como compilar e executar
 
 ```bash
 # compilador
@@ -91,3 +131,9 @@ Depois das correções, o código compila sem avisos com `gcc -Wall -Wextra` e r
 
 - O valor de um `FLOAT_NUM` fica só no `lexema`: o campo `value` do token é `int`.
 - `statements()` ainda não é chamado, e as funções `genAdd`/`genSub`/`genMult`/`genDiv`/`genNum` ainda não são usadas.
+
+---
+
+Etapa 2 de 5 · anterior: [expressões e leitura de arquivo](../inclusao_lexico) · próxima: [`char`, `string` e atribuição](../constante_string_novos_tipos_dados)
+
+[← Compiladores](../) · [Repositório principal](../../)

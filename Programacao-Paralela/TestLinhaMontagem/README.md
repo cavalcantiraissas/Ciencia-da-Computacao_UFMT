@@ -1,6 +1,34 @@
-# TestLinhaMontagem
+# Linha de montagem com semáforos
 
-Simulação de uma **linha de montagem** em Java com dois buffers encadeados (Produtor-Consumidor em pipeline), sincronizados com **semáforos** (`java.util.concurrent.Semaphore`).
+**Pipeline de produção em Java com três threads e duas estações de capacidade limitada, sincronizadas por `java.util.concurrent.Semaphore`: um produtor-consumidor encadeado.**
+
+[![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Concorrência](https://img.shields.io/badge/concorr%C3%AAncia-sem%C3%A1foros-555555)](#como-funciona)
+[![Disciplina](https://img.shields.io/badge/disciplina-Programa%C3%A7%C3%A3o_Paralela-6f42c1)](../)
+
+Atividade da disciplina de Programação Paralela (UFMT). Cada estação é um buffer protegido por três semáforos, e a velocidade diferente de cada etapa deixa visível o gargalo da linha.
+
+---
+
+## Sumário
+
+- [Como funciona](#como-funciona)
+- [Sobre](#sobre)
+- [Como compilar e executar](#como-compilar-e-executar)
+- [Estrutura do projeto](#estrutura-do-projeto)
+
+---
+
+## Como funciona
+
+```mermaid
+flowchart LR
+    O[OperarioA<br/>parte bruta a cada 300 ms] --> A[(Estação A<br/>capacidade 4)]
+    A --> M[Montador<br/>500 ms por peça]
+    M --> B[(Estação B<br/>capacidade 3)]
+    B --> E[Embalador<br/>400 ms por peça]
+    E --> F[produto finalizado]
+```
 
 ## Sobre
 
@@ -46,7 +74,7 @@ Estação A (Partes Brutas) -> depositado: 14 | Ocupação: 4
 Produto finalizado: 9
 ```
 
-## Arquivos
+## Estrutura do projeto
 
 | Arquivo | Descrição |
 |---|---|
@@ -58,4 +86,4 @@ Produto finalizado: 9
 
 ---
 
-[Voltar para Programação Paralela](../README.md)
+[← Programação Paralela](../) · [Repositório principal](../../)

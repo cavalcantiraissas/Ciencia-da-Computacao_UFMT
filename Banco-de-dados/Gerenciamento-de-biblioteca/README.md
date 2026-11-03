@@ -1,227 +1,220 @@
 # Sistema de Gerenciamento de Biblioteca Digital
 
-> Banco de Dados Relacional para gerenciamento completo de acervo, usuários, empréstimos, reservas e multas de uma biblioteca digital. Desenvolvido como projeto acadêmico de Banco de Dados.
+**Banco de dados relacional em MySQL para acervo, usuários, empréstimos, reservas com fila e multas, normalizado na 3FN e acompanhado de 10 consultas analíticas.**
 
-![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-blue?logo=mysql&logoColor=white)
-![Status](https://img.shields.io/badge/status-concluído-brightgreen)
-![Normalização](https://img.shields.io/badge/normalização-3FN-orange)
-![Consultas](https://img.shields.io/badge/consultas%20SQL-10-purple)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![SQL](https://img.shields.io/badge/SQL-DDL_%7C_DML_%7C_DQL-336791)](#consultas-implementadas)
+[![Normalização](https://img.shields.io/badge/normaliza%C3%A7%C3%A3o-3FN-orange)](#normalização)
+[![Disciplina](https://img.shields.io/badge/disciplina-Banco_de_Dados-6f42c1)](../)
 
-**Autores:** Raissa Caroline Cavalcanti da Silva e Gabriel Nunes
+Projeto da disciplina de Banco de Dados (UFMT, 2025/2), feito por **Raissa Caroline Cavalcanti da Silva** e **Gabriel Nunes**. O esquema cobre o ciclo completo de uma biblioteca: cadastro do acervo físico por exemplar, controle de usuários, empréstimos com prazo, fila de reservas por ordem de chegada e registro de multas por atraso.
 
 ---
 
-## Índice
+## Sumário
 
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Modelo de Dados](#modelo-de-dados)
-- [Tecnologias](#tecnologias)
-- [Estrutura do Repositório](#estrutura-do-repositório)
-- [Como Executar](#como-executar)
-- [Consultas Implementadas](#consultas-implementadas)
-- [Resultados Obtidos](#resultados-obtidos)
-- [Regras de Negócio](#regras-de-negócio)
+- [Destaques](#destaques)
+- [Modelo de dados](#modelo-de-dados)
+- [Como executar](#como-executar)
+- [Consultas implementadas](#consultas-implementadas)
+- [Resultados obtidos](#resultados-obtidos)
+- [Regras de negócio](#regras-de-negócio)
 - [Normalização](#normalização)
+- [Estrutura do projeto](#estrutura-do-projeto)
 
 ---
 
-## Sobre o Projeto
+## Destaques
 
-Este projeto implementa um **Banco de Dados Relacional** para gerenciar as operações de uma Biblioteca Digital. O sistema cobre o ciclo completo de uma biblioteca: cadastro do acervo físico, controle de usuários, empréstimos com prazos, sistema de reservas com fila de espera FIFO, geração automática de multas por atraso e 10 consultas analíticas.
+- **9 tabelas na 3FN**, com relacionamento N:M entre livros e autores e controle no nível do exemplar físico.
+- **Integridade no próprio banco:** chaves estrangeiras com `ON DELETE RESTRICT`, `CHECK` de datas e valores, `ENUM` para status e `UNIQUE` na identificação do usuário.
+- **Fila de reservas FIFO** ordenada pela data da reserva.
+- **10 consultas analíticas**, incluindo uma `VIEW`, a tradução de uma expressão de álgebra relacional e duas formas de responder a mesma pergunta (`NOT IN` e `NOT EXISTS`).
+- **8 índices** nas colunas usadas em junções e filtros.
+- **Resultados exportados em CSV** e relatório em PDF explicando o código.
 
-O esquema foi projetado na **Terceira Forma Normal (3FN)**, garantindo integridade referencial e eliminação de redundâncias.
+## Modelo de dados
 
----
+```mermaid
+erDiagram
+    Editora ||--o{ Livro : publica
+    Livro ||--o{ Livro_Autor : tem
+    Autor ||--o{ Livro_Autor : escreve
+    Livro ||--o{ Exemplar : "possui cópias"
+    Exemplar ||--o{ Emprestimo : "é emprestado em"
+    Usuario ||--o{ Emprestimo : faz
+    Exemplar ||--o{ Reserva : "é reservado em"
+    Usuario ||--o{ Reserva : faz
+    Emprestimo ||--o{ Multa : gera
 
-## Modelo de Dados
-
-### Entidades
+    Editora {
+        int id_editora PK
+        varchar nome
+        varchar localizacao
+    }
+    Livro {
+        varchar isbn PK
+        varchar titulo
+        year ano_publicacao
+        varchar edicao
+        int id_editora FK
+    }
+    Autor {
+        int id_autor PK
+        varchar nome
+    }
+    Livro_Autor {
+        varchar isbn PK, FK
+        int id_autor PK, FK
+    }
+    Exemplar {
+        int id_exemplar PK
+        varchar isbn FK
+        varchar numero_tombamento
+        enum status
+    }
+    Usuario {
+        int id_usuario PK
+        varchar nome
+        varchar numero_identificacao UK
+        enum status
+        enum tipo
+    }
+    Emprestimo {
+        int id_emprestimo PK
+        int id_exemplar FK
+        int id_usuario FK
+        date data_emprestimo
+        date data_prevista_devolucao
+        date data_real_devolucao
+    }
+    Reserva {
+        int id_reserva PK
+        int id_exemplar FK
+        int id_usuario FK
+        datetime data_reserva
+        enum status
+    }
+    Multa {
+        int id_multa PK
+        int id_emprestimo FK
+        decimal valor
+        tinyint pago
+        date data_geracao
+    }
+```
 
 | Tabela | Descrição |
 |---|---|
-| `Editora` | Editoras cadastradas no sistema |
-| `Livro` | Títulos do acervo identificados por ISBN |
-| `Autor` | Autores dos livros |
-| `Livro_Autor` | Relacionamento N:M entre Livro e Autor |
-| `Exemplar` | Cada item físico de um título (tombamento, status) |
-| `Usuario` | Alunos e professores cadastrados |
-| `Emprestimo` | Transações de retirada e devolução |
-| `Reserva` | Fila de espera para exemplares indisponíveis |
-| `Multa` | Penalidades financeiras por atraso |
+| `Editora` | Editoras do acervo |
+| `Livro` | Títulos, identificados pelo ISBN |
+| `Autor` / `Livro_Autor` | Autores e a associação N:M com os livros |
+| `Exemplar` | Cada cópia física de um título, com tombamento e status (`Disponivel`, `Emprestado`, `Reservado`, `Extraviado`) |
+| `Usuario` | Alunos e professores |
+| `Emprestimo` | Retiradas e devoluções; `data_real_devolucao` nula indica empréstimo em aberto |
+| `Reserva` | Fila de espera, com status `Ativa`, `Cancelada` ou `Atendida` |
+| `Multa` | Penalidades por atraso, pagas ou pendentes |
 
-### Cardinalidades
+O DER e o esquema lógico também estão em [`DER_v2.html`](DER_v2.html) e [`Esquema_Logico.html`](Esquema_Logico.html); abra no navegador.
 
-```
-Editora    1 ──── N    Livro
-Livro      N ──── M    Autor       (via Livro_Autor)
-Livro      1 ──── N    Exemplar
-Exemplar   1 ──── N    Emprestimo
-Exemplar   1 ──── N    Reserva
-Usuario    1 ──── N    Emprestimo
-Usuario    1 ──── N    Reserva
-Emprestimo 1 ──── N    Multa
-```
+## Como executar
 
-O DER completo está disponível no arquivo [`DER_v2.html`](./DER_v2.html) — abra no navegador para visualização interativa.
-
----
-
-## Tecnologias
-
-- **MySQL 8.0+** — SGBD relacional
-- **MySQL Workbench** — IDE de modelagem e execução
-- **SQL** — DDL, DML, DQL, Views, Constraints e Índices
-
----
-
-## Estrutura do Repositório
-
-```
- biblioteca-digital/
-├── 📄 DDL.sql                  # CREATE TABLE, constraints e índices
-├── 📄 DML.sql                  # INSERT INTO com dados de teste
-├── 📄 Consultas.sql            # RC001 a RC010 — queries analíticas
-├── 📊 DER_v2.html              # Diagrama Entidade-Relacionamento interativo
-├── 📋 Esquema_Logico.html      # Esquema relacional lógico detalhado
-├── 📊 resultados_1.csv         # RC001 — Livros em atraso
-├── 📊 resultados_2.csv         # RC002 — Análise de acervo por editora
-├── 📊 resultados_3.csv         # RC003 v1 — Títulos disponíveis
-├── 📊 resultados_4.csv         # RC003 v2 — Títulos disponíveis (NOT EXISTS)
-├── 📊 resultados_5.csv         # RC005 — View V_EmprestimosAtivos
-├── 📊 resultados_6.csv         # RC006 — Álgebra relacional (Ano > 2020)
-├── 📊 resultados_7.csv         # RC007 — Ranking últimos 6 meses
-├── 📊 resultados_8.csv         # RC007 — Ranking últimos 6 meses (execução alternativa)
-├── 📊 resultados_9.csv         # RC008 — Relatório de inadimplência
-├── 📊 resultados_10.csv        # RC009 — Reservas pendentes
-├── 📊 resultados_11.csv        # RC010 — Próximo na fila
-├── 📕 relatório-código.pdf     # Explicação detalhada do código (DDL, DML e consultas)
-└── 📖 README.md                # Este arquivo
-```
-
----
-
-## Como Executar
-
-### Pré-requisitos
-
-- MySQL 8.0 ou superior
-- MySQL Workbench
-
-### Instalação no macOS (via Homebrew)
+**Pré-requisitos:** MySQL 8.0+ (o esquema usa `CHECK` e `DEFAULT (CURRENT_DATE)`, que exigem essa versão) e, opcionalmente, o MySQL Workbench.
 
 ```bash
+# macOS (Homebrew)
 brew install mysql
 brew services start mysql
-mysql_secure_installation
 ```
 
-### Passo a passo
+Execute os scripts nesta ordem:
 
-Execute os scripts **nesta ordem** no MySQL Workbench (`Cmd+Shift+Enter` para rodar o arquivo inteiro):
-
-```
-1. DDL.sql        →  Cria o banco e todas as tabelas
-2. DML.sql        →  Popula com dados de teste
-3. Consultas.sql  →  Executa as queries (Cmd+Enter para rodar uma por vez)
+```bash
+mysql -u root -p < DDL.sql         # cria o banco biblioteca_digital, tabelas e índices
+mysql -u root -p < DML.sql         # insere os dados de teste
+mysql -u root -p < Consultas.sql   # executa as consultas RC001 a RC010
 ```
 
-### Verificação rápida após execução
+No MySQL Workbench, abra cada arquivo e execute com `Cmd + Shift + Enter` (arquivo inteiro) ou `Cmd + Enter` (uma consulta por vez).
+
+**Verificação rápida:**
 
 ```sql
 USE biblioteca_digital;
-SHOW TABLES;
-
-SELECT COUNT(*) AS livros    FROM Livro;       -- esperado: 10
-SELECT COUNT(*) AS usuarios  FROM Usuario;     -- esperado: 10
-SELECT COUNT(*) AS exemplares FROM Exemplar;  -- esperado: 17
-SELECT COUNT(*) AS emprestimos FROM Emprestimo; -- esperado: 13
+SELECT COUNT(*) FROM Livro;       -- 10
+SELECT COUNT(*) FROM Usuario;     -- 10
+SELECT COUNT(*) FROM Exemplar;    -- 17
+SELECT COUNT(*) FROM Emprestimo;  -- 13
 ```
 
----
+## Consultas implementadas
 
-## Consultas Implementadas
-
-| ID | Nome | Descrição | Resultado |
-|---|---|---|---|
-| RC001 | Livros em Atraso | Usuário, título e dias de atraso para empréstimos vencidos | 6 registros |
-| RC002 | Análise de Acervo | Editoras ordenadas por número de títulos | 8 editoras |
-| RC003 | Disponibilidade | Títulos sem nenhum exemplar emprestado no momento | 7 títulos |
-| RC004 | Transações por Usuário | Histórico de um usuário com status de cada empréstimo | Paramétrico |
-| RC005 | View Empréstimos Ativos | `CREATE VIEW V_EmprestimosAtivos` com coluna `situacao` | 6 registros |
-| RC006 | Álgebra Relacional | Tradução de `ΠNome,Titulo(σAno>2020(Usuário ⋈ Empréstimo ⋈ Livro))` | 4 registros |
-| RC007 | Ranking de Livros | Títulos mais emprestados nos últimos 6 meses | Dinâmico |
-| RC008 | Inadimplência | Total de multas acumuladas por usuário (pagas + pendentes) | 6 usuários |
-| RC009 | Reservas Pendentes | Títulos com fila ativa e quantidade de pessoas esperando | 3 títulos |
-| RC010 | Próximo na Fila | Primeiro usuário da fila FIFO para um ISBN específico | 1 registro |
-
----
-
-## Resultados Obtidos
-
-### RC001 — Livros em Atraso
-6 empréstimos identificados como vencidos. O maior atraso pertence a **Diego Rafael Souza** com **434 dias** no título *MySQL: Guia do Desenvolvedor* (TOMB-0008), emprestado desde 01/12/2024.
-
-| Usuário | Título | Atraso |
+| ID | Consulta | O que responde |
 |---|---|---|
-| Diego Rafael Souza | MySQL: Guia do Desenvolvedor | 434 dias |
-| Ana Paula Ferreira | Sistemas de Banco de Dados | 399 dias |
-| Bruno Henrique Costa | Introdução à Álgebra Relacional | 394 dias |
-| Carla Dias Mendonça | Learning SQL | 389 dias |
-| Isabela Cristina Nunes | SQL e Modelagem de Dados | 384 dias |
-| João Pedro Matos | Python for Data Analysis | 372 dias |
+| RC001 | Livros em atraso | Usuário, título e dias de atraso dos empréstimos vencidos |
+| RC002 | Análise de acervo | Editoras ordenadas pelo número de títulos |
+| RC003 | Disponibilidade | Títulos sem nenhum exemplar emprestado (versões com `NOT IN` e `NOT EXISTS`) |
+| RC004 | Transações por usuário | Histórico de um usuário com o status de cada empréstimo (parametrizada) |
+| RC005 | View de empréstimos ativos | `CREATE VIEW V_EmprestimosAtivos`, com a coluna calculada `situacao` |
+| RC006 | Álgebra relacional | Tradução de `π Nome, Titulo (σ Ano > 2020 (Usuário ⋈ Empréstimo ⋈ Livro))` |
+| RC007 | Ranking de livros | Títulos mais emprestados nos últimos 6 meses |
+| RC008 | Inadimplência | Total de multas por usuário, pagas e pendentes |
+| RC009 | Reservas pendentes | Títulos com fila ativa e quantas pessoas aguardam |
+| RC010 | Próximo da fila | Primeiro usuário da fila FIFO para um ISBN |
 
-### RC002 — Análise de Acervo
-O'Reilly Media e Bookman lideram com 2 títulos cada. As demais 6 editoras possuem 1 título cada no acervo.
+## Resultados obtidos
 
-### RC003 — Disponibilidade
-7 títulos com pelo menos um exemplar disponível para empréstimo imediato, incluindo *Introduction to Algorithms* (4ª ed., 2022) e *Engenharia de Software* (8ª ed.).
+Os resultados estão em `resultados_1.csv` a `resultados_11.csv`. Os dias de atraso dependem da data em que as consultas foram executadas.
 
-### RC005 — View V_EmprestimosAtivos
-A view retorna 6 empréstimos ativos, todos classificados como **"Em Atraso"**, evidenciando que não há empréstimos ativos dentro do prazo nos dados de teste.
+| Consulta | Resultado |
+|---|---|
+| RC001 | 6 empréstimos vencidos; o maior atraso é de 434 dias (*MySQL: Guia do Desenvolvedor*) |
+| RC002 | O'Reilly Media e Bookman lideram com 2 títulos cada; as outras 6 editoras têm 1 |
+| RC003 | 7 títulos com exemplar disponível, como *Introduction to Algorithms* (4ª ed.) |
+| RC005 | 6 empréstimos ativos, todos em atraso nos dados de teste |
+| RC006 | 4 pares usuário–livro com publicação posterior a 2020 |
+| RC008 | R$ 190,00 em multas pendentes; o maior devedor acumula R$ 72,00 |
+| RC009 | 3 títulos com fila; *Sistemas de Banco de Dados* tem 2 pessoas aguardando |
+| RC010 | Para o ISBN `978-8543004792`, a primeira da fila é a reserva de 20/01/2025, às 09:00 |
 
-### RC006 — Álgebra Relacional (Ano > 2020)
-4 combinações usuário–livro resultantes da junção tripla com filtro `ano_publicacao > 2020`: Diego, Isabela, João Pedro e Prof. Fernando — todos com livros publicados após 2020.
-
-### RC008 — Relatório de Inadimplência
-Total de **R$ 190,00** em multas pendentes no sistema. Diego Rafael Souza acumula o maior valor: **R$ 72,00**.
-
-| Usuário | Total Acumulado | Pendente |
-|---|---|---|
-| Diego Rafael Souza | R$ 72,00 | R$ 72,00 |
-| Ana Paula Ferreira | R$ 37,00 | R$ 37,00 |
-| Bruno Henrique Costa | R$ 32,00 | R$ 32,00 |
-| Carla Dias Mendonça | R$ 27,00 | R$ 27,00 |
-| Isabela Cristina Nunes | R$ 22,00 | R$ 22,00 |
-| Prof. Fernando Alves | R$ 0,00 | R$ 0,00 |
-
-### RC009 — Reservas Pendentes
-3 títulos com fila ativa. *Sistemas de Banco de Dados* possui a maior fila: **2 pessoas** aguardando.
-
-### RC010 — Próximo na Fila
-Para o ISBN `978-8543004792` (*Sistemas de Banco de Dados*), a próxima usuária é **Elisa Tavares Lima** (ALU-2024-005), com reserva feita em 20/01/2025 às 09:00 — a mais antiga na fila.
-
----
-
-## Regras de Negócio
+## Regras de negócio
 
 | ID | Regra | Implementação |
 |---|---|---|
-| RN001 | ISBN único por livro | `PRIMARY KEY (isbn)` |
+| RN001 | ISBN único por livro; identificação única por usuário | `PRIMARY KEY (isbn)`, `UNIQUE (numero_identificacao)` |
 | RN002 | Integridade referencial | `FOREIGN KEY` com `ON DELETE RESTRICT` |
-| RN003 | Campos obrigatórios | `NOT NULL` em titulo, nome, numero_identificacao |
-| RN004 | Livro–Autor N:M | Tabela `Livro_Autor` com PK composta |
-| RN005 | 3ª Forma Normal | Ausência de dependências transitivas |
-| RN006 | Data devolução > data empréstimo | `CHECK (data_prevista_devolucao > data_emprestimo)` |
-| RN101 | Entidade Reserva com status | `ENUM('Ativa','Cancelada','Atendida')` |
+| RN003 | Campos obrigatórios | `NOT NULL` em título, nomes e identificação |
+| RN004 | Livro–Autor N:M | Tabela `Livro_Autor` com chave composta |
+| RN005 | Terceira forma normal | Sem dependências transitivas |
+| RN006 | Devolução prevista posterior ao empréstimo | `CHECK (data_prevista_devolucao > data_emprestimo)` |
+| RN101 | Reserva com status | `ENUM('Ativa', 'Cancelada', 'Atendida')` |
 | RN102 | Fila FIFO | `ORDER BY data_reserva ASC` nas consultas |
-| RN103 | Controle por exemplar | Entidade `Exemplar` com `id_exemplar` único |
-
----
+| RN103 | Controle por exemplar | Empréstimos e reservas apontam para `Exemplar` |
 
 ## Normalização
 
-**1FN** — Todos os atributos são atômicos. O relacionamento N:M Livro↔Autor foi decomposto na tabela associativa `Livro_Autor`.
+- **1FN:** todos os atributos são atômicos; o N:M entre Livro e Autor foi decomposto em `Livro_Autor`.
+- **2FN:** todo atributo não chave depende da chave primária inteira. `Livro_Autor` não tem atributos não chave.
+- **3FN:** não há dependências transitivas. A localização da editora fica em `Editora`, e não em `Livro`; status e tipo do usuário dependem só de `id_usuario`.
 
-**2FN** — Todos os atributos não-chave dependem funcionalmente da chave primária completa. Em `Livro_Autor`, não há atributos não-chave; em `Emprestimo`, tudo depende de `id_emprestimo`.
+## Estrutura do projeto
 
-**3FN** — Não existem dependências transitivas. A localização da editora foi isolada na tabela `Editora` (não fica em `Livro`). Status e tipo do usuário dependem exclusivamente de `id_usuario`.
+```text
+Gerenciamento-de-biblioteca/
+├── DDL.sql                # criação do banco, tabelas, restrições e índices
+├── DML.sql                # dados de teste
+├── Consultas.sql          # consultas RC001 a RC010
+├── DER_v2.html            # diagrama entidade-relacionamento
+├── Esquema_Logico.html    # esquema relacional lógico
+├── resultados_*.csv       # resultados exportados das consultas
+└── relatório-código.pdf   # explicação do DDL, do DML e das consultas
+```
+
+## Limitações
+
+- As multas são inseridas pelo `DML.sql`; não há gatilho que as gere automaticamente ao registrar uma devolução atrasada.
+- O status do exemplar não é atualizado automaticamente por empréstimos e devoluções: ele é mantido pelos dados de teste.
+
+---
+
+[← Banco de Dados](../) · [Repositório principal](../../)
