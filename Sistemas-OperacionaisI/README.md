@@ -1,30 +1,42 @@
 # Sistemas Operacionais I
 
-Repositório técnico para o estudo dos princípios fundamentais, mecanismos e abstrações que compõem os sistemas operacionais modernos.
+**Princípios e mecanismos dos sistemas operacionais modernos, com ênfase em concorrência: threads, exclusão mútua, variáveis de condição e o problema do produtor-consumidor na prática.**
 
-## Informações Gerais
-* Instituição: Universidade Federal de Mato Grosso 
-* Docente: Maxwell Silva Carmo 
-* Período: 2026/1 
-* Carga Horária: 64 horas 
+[![C](https://img.shields.io/badge/C-pthreads-A8B9CC?logo=c&logoColor=white)](https://man7.org/linux/man-pages/man7/pthreads.7.html)
+[![Python](https://img.shields.io/badge/Python-benchmarks-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![UFMT](https://img.shields.io/badge/UFMT-Ci%C3%AAncia_da_Computa%C3%A7%C3%A3o-003366)](../)
 
-## Objetivos
-Apresentar a evolução e os conceitos básicos da arquitetura de sistemas operacionais, permitindo ao aluno compreender a interface entre software e hardware e o desenvolvimento de soluções computacionais eficientes.
+Trabalhos da disciplina de Sistemas Operacionais I do curso de Ciência da Computação da UFMT. O objetivo é entender a interface entre software e hardware e as abstrações que o sistema operacional oferece aos programas.
 
-## Conteúdo Programático
-* Processos e Threads: Comunicação, Sincronização e Escalonamento
-* Gerenciamento de Memória: Paginação, Memória Virtual e Algoritmos de Cache
-* Sistemas de Arquivos e Gerenciamento de Entrada/Saída
-* Concorrência e Problemas Clássicos
-* Implementação de chamadas de sistema (System Calls) e programas concorrentes
-
-## Projetos
-
-| Projeto | Descrição |
+| | |
 |---|---|
-| [opzip](./opzip) | Compressor RLE paralelo com pthreads, sincronização produtor-consumidor e escrita ordenada via buffer circular |
+| **Docente** | Maxweel Silva Carmo |
+| **Período** | 2026/1 |
+| **Carga horária** | 64 horas |
 
-## Bibliografia Principal
-* TANENBAUM, Andrew S. Sistemas operacionais modernos
-* TANENBAUM, A. S.; WOODHULL, A. S. Operating Systems Design and Implementation
-* SILVA DE OLIVEIRA, R. et al. Sistemas Operacionais
+---
+
+## Trabalhos
+
+| Trabalho | Descrição | Tecnologias |
+|---|---|---|
+| [opzip](./opzip) | Compressor RLE paralelo: threads produtoras comprimem blocos e uma escritora grava em ordem por um buffer circular limitado; inclui experimentos de *speedup*, tamanho do buffer e granularidade dos mutexes | C, pthreads, ThreadSanitizer, Python |
+
+## Conteúdo da disciplina
+
+- Processos e threads: comunicação, sincronização e escalonamento
+- Gerenciamento de memória: paginação, memória virtual e algoritmos de substituição
+- Sistemas de arquivos e gerenciamento de entrada e saída
+- Concorrência e problemas clássicos
+- Chamadas de sistema e programas concorrentes
+
+## Bibliografia
+
+- TANENBAUM, Andrew S. *Sistemas Operacionais Modernos*.
+- TANENBAUM, Andrew S.; WOODHULL, Albert S. *Operating Systems: Design and Implementation*.
+- OLIVEIRA, Rômulo Silva de; CARISSIMI, Alexandre; TOSCANI, Simão. *Sistemas Operacionais*.
+- ARPACI-DUSSEAU, Remzi H.; ARPACI-DUSSEAU, Andrea C. *Operating Systems: Three Easy Pieces*.
+
+---
+
+[← Repositório principal](../)

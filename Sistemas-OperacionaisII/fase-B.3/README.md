@@ -1,6 +1,28 @@
-# Fase B.3: as rotinas restantes
+# vsfs, fase B.3: as rotinas restantes
 
-Completa o vsfs da [fase B.2](../fase-B.2) com as operações que faltavam. Agora dá para apagar arquivos, criar e remover diretórios, criar hard links, renomear e mover, mudar permissões e consultar o espaço livre.
+**Completa o vsfs com sete operações: apagar arquivos, criar e remover diretórios, hard links, renomear e mover, permissões e consulta de espaço livre.**
+
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FUSE](https://img.shields.io/badge/FUSE-mfusepy-555555)](https://pypi.org/project/mfusepy/)
+[![OSTEP](https://img.shields.io/badge/refer%C3%AAncia-OSTEP_cap._40-0A7BBB)](https://pages.cs.wisc.edu/~remzi/OSTEP/file-implementation.pdf)
+[![Disciplina](https://img.shields.io/badge/disciplina-Sistemas_Operacionais_II-6f42c1)](../)
+
+Fase 3 de 3 · anterior: [B.2, gravação](../fase-B.2)
+
+---
+
+## Sumário
+
+- [Operações](#operações)
+- [O que mudou](#o-que-mudou)
+- [Como cada operação funciona](#como-cada-operação-funciona)
+- [Decisões](#decisões)
+- [Limitações](#limitações)
+- [Como rodar](#como-rodar)
+
+---
+
+## Operações
 
 | Operação | Comando no shell | O que faz no disco |
 |---|---|---|
@@ -94,3 +116,9 @@ rmdir /tmp/mnt/docs/sub /tmp/mnt/docs   # rmdir
 umount /tmp/mnt
 python3 dumpfs.py disco.img   # mostra a árvore e deve terminar com "nenhum problema"
 ```
+
+---
+
+Fase 3 de 3 · anterior: [B.2, gravação](../fase-B.2)
+
+[← Sistemas Operacionais II](../) · [Repositório principal](../../)

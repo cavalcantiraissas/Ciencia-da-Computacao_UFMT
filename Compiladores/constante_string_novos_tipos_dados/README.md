@@ -1,13 +1,52 @@
-# Constantes string e novos tipos de dados (`char` e `string`)
+# Constantes `string`, novos tipos (`char` e `string`) e atribuição
 
-Evolução do compilador de C simplificado (versão de [implementacao_ts-float](../implementacao_ts-float)). Nesta etapa, o compilador passa a reconhecer os tipos **`char`** e **`string`** e implementa o **comando de atribuição** de constantes a variáveis. Para cada atribuição, o compilador:
+**Terceira etapa do compilador: tipos `char` e `string`, comando de atribuição de constantes com verificação de tipo e geração do código x86-64 correspondente.**
 
-1. verifica se a variável foi declarada;
-2. verifica se o tipo da constante é compatível com o tipo da variável;
-3. guarda o valor na tabela de símbolos;
-4. gera o código assembly (NASM, x86-64) correspondente.
+[![C](https://img.shields.io/badge/C-gcc-A8B9CC?logo=c&logoColor=white)](https://gcc.gnu.org/)
+[![Make](https://img.shields.io/badge/build-make-427819)](makefile)
+[![NASM](https://img.shields.io/badge/NASM-x86--64-0C322C)](https://www.nasm.us/)
+[![Disciplina](https://img.shields.io/badge/disciplina-Compiladores-6f42c1)](../)
 
-## Gramática atual
+Evolução do compilador de C simplificado da disciplina de Compiladores (UFMT). Para cada atribuição, o compilador verifica se a variável foi declarada e se a constante é compatível com o tipo, guarda o valor na tabela de símbolos e gera o código assembly (NASM, x86-64).
+
+Etapa 3 de 5 · anterior: [tabela de símbolos e `float`](../implementacao_ts-float) · próxima: [`if`, `while` e operadores lógicos](../condicional_se)
+
+---
+
+## Sumário
+
+- [Destaques](#destaques)
+- [Como funciona](#como-funciona)
+- [Gramática](#gramática)
+- [Compatibilidade de tipos na atribuição](#compatibilidade-de-tipos-na-atribuição)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Como compilar e executar](#como-compilar-e-executar)
+- [Alterações em relação à base](#alterações-em-relação-à-base)
+
+---
+
+## Destaques
+
+- **Quatro tipos:** `int`, `float`, `char` e `string`, cada um com regras próprias de compatibilidade.
+- **Verificação semântica** de declaração, tipo e faixa de valores (`int` até 2147483647).
+- **`float` em IEEE 754:** a constante vira o padrão de bits de precisão simples no `mov`.
+- **Strings** na tabela de strings, reaproveitadas se repetidas e copiadas com `rep movsb`.
+- **10 casos de erro tratados** com mensagens claras; nenhum `.asm` incompleto em caso de falha.
+
+## Como funciona
+
+```mermaid
+flowchart LR
+    A[code.cc] --> B[Léxico<br/>lex.c]
+    B -->|tokens| C[Sintático<br/>synt.c]
+    C <-->|tipo e valor| T[(Tabela de símbolos<br/>e de strings)]
+    C --> D[Gerador<br/>gen.c]
+    D --> E[code.cc.asm]
+    E --> F[nasm + ld]
+    F --> G[executável]
+```
+
+## Gramática
 
 ```
 program      -> declarations statements
@@ -30,7 +69,7 @@ constant     -> num | float_num | char_const | string_const
 
 Qualquer outra combinação é erro (por exemplo, `int` recebendo `3.14`, já que haveria perda da parte fracionária).
 
-## Arquivos
+## Estrutura do projeto
 
 | Arquivo | Descrição |
 |---|---|
@@ -41,12 +80,16 @@ Qualquer outra combinação é erro (por exemplo, `int` recebendo `3.14`, já qu
 | [gen.h](gen.h) / [gen.c](gen.c) | Gerador de código. `gen_assign` gera a atribuição a partir do valor guardado na TS, e `gen_data_section` reserva espaço para cada variável e emite as constantes string. |
 | [code.cc](code.cc) | Programa de exemplo com declarações e atribuições de todos os tipos. |
 | [makefile](makefile) | Compilação do compilador (`make`) e limpeza (`make clean`). |
+| [tst_lex.c](tst_lex.c) | Teste isolado do léxico: imprime a tag, o nome da tag e o lexema de cada token do arquivo, e para no primeiro erro léxico (`make tstLex`, depois `./tstLexCompiler arquivo`) |
 
-## Compilação e execução
+## Como compilar e executar
 
 ```bash
 make                    # ou: gcc -Wall -o compiler lex.c symbols.c gen.c synt.c
 ./compiler code.cc      # gera code.cc.asm
+
+make tstLex             # teste isolado do léxico
+./tstLexCompiler code.cc
 
 # montagem e ligação do código gerado (Linux x86-64)
 nasm -f elf64 code.cc.asm
@@ -153,3 +196,9 @@ O código compila sem avisos com `gcc -Wall -Wextra` e roda sem erros com `-fsan
 - Constantes char não aceitam sequências de escape (`'\n'`), e strings estão limitadas a 29 caracteres pelo tamanho do lexema (`MAX_CHAR`).
 - Os nomes das variáveis viram rótulos no assembly sem prefixo, então uma variável chamada `str0`, `main` ou com nome de registrador (`rax`) conflita com o NASM.
 - As funções `genAdd`/`genSub`/`genMult`/`genDiv`/`genNum` ainda não são usadas, e `genMult`/`genDiv` mantêm as instruções inválidas da base (`imult`, `idiv rax,rbx`).
+
+---
+
+Etapa 3 de 5 · anterior: [tabela de símbolos e `float`](../implementacao_ts-float) · próxima: [`if`, `while` e operadores lógicos](../condicional_se)
+
+[← Compiladores](../) · [Repositório principal](../../)

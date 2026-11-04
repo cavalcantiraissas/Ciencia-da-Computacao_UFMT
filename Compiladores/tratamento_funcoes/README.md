@@ -1,18 +1,60 @@
 # Funções: prototipação, chamada e implementação
 
-Primeira versão completa do compilador de C simplificado. Ela reúne o que foi construído nas etapas anteriores e acrescenta funções:
+**Quinta etapa e primeira versão completa do compilador: protótipos numa tabela de símbolos de funções, chamadas verificadas contra o protótipo e implementação após o escopo principal, com desvio por `jal` e retorno por `jr`.**
 
-- declaração de variáveis `int`, `float`, `char` e `string`;
-- `if`/`else`, `while`, atribuição, `read` e `write`, como em [condicional_se/](../condicional_se);
-- **prototipação** de funções antes do escopo principal, registrada na **tabela de símbolos de funções (TSF)**;
-- **chamada** de funções, com verificação do protótipo;
-- **implementação** das funções depois do escopo principal, com desvio por `jal` e retorno por `jr`.
+[![C](https://img.shields.io/badge/C-gcc-A8B9CC?logo=c&logoColor=white)](https://gcc.gnu.org/)
+[![Make](https://img.shields.io/badge/build-make-427819)](makefile)
+[![NASM](https://img.shields.io/badge/NASM-x86--64-0C322C)](https://www.nasm.us/)
+[![Plataformas](https://img.shields.io/badge/alvos-Linux_%7C_macOS_%7C_Windows-555555)](#como-compilar-e-testar)
+[![Disciplina](https://img.shields.io/badge/disciplina-Compiladores-6f42c1)](../)
 
-A referência é o código #10 da disciplina, guardado sem alterações em [referencia_codigo10/](referencia_codigo10) (ele não compila: `sym_find(id_name)` sem o segundo argumento e um `))` sobrando em `synt.c`). A implementação foi feita sobre o compilador de [condicional_se/](../condicional_se).
+Versão final do compilador de C simplificado da disciplina de Compiladores (UFMT). Reúne o que foi construído nas etapas anteriores (tipos, expressões, `if`/`else`, `while`, atribuição, `read` e `write`) e acrescenta funções. Como permitido no enunciado, parâmetros e variáveis das funções são globais, e as funções funcionam como procedimentos, sem valor de retorno.
 
-Como permitido no enunciado, os parâmetros e as variáveis das funções são **variáveis globais**, registradas na TS global. As funções funcionam como **procedimentos**: não há valor de retorno.
+Etapa 5 de 5 · anterior: [`if`, `while` e operadores lógicos](../condicional_se)
 
-## Gramática atual
+---
+
+## Sumário
+
+- [Destaques](#destaques)
+- [Como funciona](#como-funciona)
+- [Gramática](#gramática)
+- [Requisito 1: prototipação e TSF](#requisito-1-prototipação-e-tsf)
+- [Requisito 2: chamada de função](#requisito-2-chamada-de-função)
+- [Requisito 3: implementação das funções](#requisito-3-implementação-das-funções)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Como compilar e testar](#como-compilar-e-testar)
+- [Limitações](#limitações)
+
+---
+
+## Destaques
+
+- **Tabela de símbolos de funções (TSF)** com tipo, label, parâmetros e indicadores de implementação e chamada; impressa com `./compiler -ts`.
+- **Chamadas verificadas:** existência da função, número de argumentos e compatibilidade de cada argumento com o parâmetro.
+- **Implementação conferida com o protótipo** (tipo, quantidade, tipos e nomes dos parâmetros) e aviso para função chamada sem implementação.
+- **`jal`/`jr` como macros NASM** sobre `call`/`ret`, o que permite que funções chamem outras e a si mesmas.
+- **Testes automatizados:** 11 programas com saída esperada e 47 casos de erro, verificados em Linux, macOS e Windows.
+
+## Como funciona
+
+```mermaid
+flowchart TB
+    subgraph Programa-fonte
+        P[protótipos] --> M[begin ... end<br/>escopo principal] --> F[implementação<br/>das funções]
+    end
+    P -->|declarationF| TSF[(TSF)]
+    M -->|callStmt confere| TSF
+    F -->|funcImpl confere| TSF
+    M --> G[código do principal<br/>+ syscall de saída]
+    F --> H[_fn_nome: ... jr]
+    G & H --> R[rotinas de apoio<br/>e seção de dados]
+    R --> A[.asm]
+```
+
+A implementação foi feita sobre o compilador de [condicional_se/](../condicional_se). O código de referência da disciplina (código #10) está guardado sem alterações em [referencia_codigo10/](referencia_codigo10); ele não compila, porque `synt.c` chama `sym_find(id_name)` sem o segundo argumento e tem um `))` sobrando.
+
+## Gramática
 
 ```
 program      -> declarations begin statements end func_code
@@ -172,7 +214,7 @@ _fn_soma:
 	jr
 ```
 
-## Arquivos
+## Estrutura do projeto
 
 | Arquivo | Alteração em relação a [condicional_se/](../condicional_se) |
 |---|---|
@@ -183,8 +225,9 @@ _fn_soma:
 | [gen.h](gen.h) / [gen.c](gen.c) | Macros `jal`/`jr` no preâmbulo e as funções `gen_call`, `gen_func_begin` e `gen_func_end`. |
 | [referencia_codigo10/](referencia_codigo10) | Código #10 da disciplina (referência), sem alterações. |
 | [testes/](testes) | Os testes da etapa anterior agora estão dentro de `begin ... end`. Há 2 novos programas válidos e 25 novos casos de erro. |
+| [tst_lex.c](tst_lex.c) | Teste isolado do léxico: imprime a tag, o nome da tag e o lexema de cada token do arquivo, e para no primeiro erro léxico (`make tstLex`, depois `./tstLexCompiler arquivo`) |
 
-## Compilação e testes
+## Como compilar e testar
 
 ```bash
 make                      # gera ./compiler (codigo para Linux)
@@ -192,10 +235,11 @@ make                      # gera ./compiler (codigo para Linux)
 ./compiler -ts testes/funcoes_procedimentos.cc  # idem, imprimindo as tabelas de simbolos
 make testes               # compila tudo de testes/ e confere se tudo de testes/erros/ e rejeitado
 make executar             # compila, monta, liga e executa os testes, comparando com os .out
+make tstLex               # teste isolado do léxico: ./tstLexCompiler arquivo.cc
 make clean
 ```
 
-A montagem e a ligação em cada plataforma são as mesmas de [condicional_se/](../condicional_se#compilação-e-testes). No macOS, use `make compiler_macos` antes de `sh testes/rodar.sh`.
+A montagem e a ligação em cada plataforma são as mesmas de [condicional_se/](../condicional_se#como-compilar-e-testar). No macOS, use `make compiler_macos` antes de `sh testes/rodar.sh`.
 
 ### Programas de teste
 
@@ -237,9 +281,15 @@ Casos de erro de funções (em [testes/erros/](testes/erros)):
 | comando depois do `end` do principal | `Apos o 'end' do escopo principal so pode haver a implementacao de funcoes, encontrado 'write'.` |
 | `int a;` dentro de `soma(int a, int b)` | `Variavel 'a' ja declarada.` |
 
-## Limitações desta versão
+## Limitações
 
 - Parâmetros e variáveis das funções são globais. Por isso, um mesmo nome não pode ser usado em escopos diferentes: dois parâmetros de funções diferentes, ou um parâmetro e uma variável, não podem ter o mesmo nome.
 - Um argumento que seja um `id` sozinho precisa ser o próprio parâmetro. Para passar outra variável, use uma expressão, por exemplo `dobro(x + 0)`. Para `string`, use a constante ou atribua antes ao parâmetro (`quem = nome; saudacao(quem);`).
 - Não há retorno de valor. O tipo declarado da função é verificado entre o protótipo e a implementação, mas não é usado. Uma função não pode aparecer em expressões.
 - Na recursão, as chamadas compartilham as mesmas variáveis globais. Ela só funciona quando nenhum valor do chamador é usado depois da chamada recursiva, como em [funcoes_recursao_args.cc](testes/funcoes_recursao_args.cc).
+
+---
+
+Etapa 5 de 5 · anterior: [`if`, `while` e operadores lógicos](../condicional_se)
+
+[← Compiladores](../) · [Repositório principal](../../)

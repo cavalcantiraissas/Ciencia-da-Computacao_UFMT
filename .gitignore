@@ -31,3 +31,6 @@ __pycache__/
 # Arquivos de teste grandes/gerados (ver README para regenerar)
 Sistemas-OperacionaisI/opzip/teste_grande.txt
 Sistemas-OperacionaisI/opzip/arquivo_grande.oz
+
+# Banco SQLite criado pela Página Flask na primeira execução
+Programacao-Web/atividades-classe/Pagina-Flask/produtos.db

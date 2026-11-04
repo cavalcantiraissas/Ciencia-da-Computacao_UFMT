@@ -1,15 +1,54 @@
-# Pilha com `brk` e Fila com `malloc/free` — Assembly RISC-V 64-bit
+# Pilha com `brk` e Fila com `malloc`/`free` em Assembly RISC-V
 
-> **Universidade:** Universidade Federal de Mato Grosso (UFMT)  
-> **Disciplina:** Organização de Computadores  
-> **Professor:** Linder Candido  
-> **Alunas:** Raissa Cavalcanti · Vitória Calonga  
-> **Ambiente:** MacBook Pro 16-inch, 2019 — 2,6 GHz 6-Core Intel Core i7  
-> **Execução:** Docker + Ubuntu 22.04 + QEMU RISC-V
+**Duas estruturas de dados dinâmicas em Assembly RISC-V 64 bits, com menu interativo: uma pilha que gerencia o heap sozinha pela chamada de sistema `brk` e uma fila encadeada que usa `malloc` e `free` da libc.**
+
+[![RISC-V](https://img.shields.io/badge/RISC--V-RV64-283272?logo=riscv&logoColor=white)](https://riscv.org/)
+[![Assembly](https://img.shields.io/badge/Assembly-GNU_as-555555)](#sobre-o-projeto)
+[![QEMU](https://img.shields.io/badge/QEMU-user_mode-FF6600?logo=qemu&logoColor=white)](https://www.qemu.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ubuntu_22.04-2496ED?logo=docker&logoColor=white)](#como-rodar)
+[![Disciplina](https://img.shields.io/badge/disciplina-Organiza%C3%A7%C3%A3o_de_Computadores-6f42c1)](../)
+
+Trabalho da disciplina de Organização de Computadores (UFMT, prof. Linder Cândido), feito por **Raissa Cavalcanti** e **Vitória Calonga**. O contraste entre as duas partes mostra o que a libc faz por baixo: na pilha, cada operação move o *program break* diretamente; na fila, a alocação de cada nó fica a cargo do `malloc`.
+
+O passo a passo dos conceitos e da implementação está em [`explicacao.md`](explicacao.md).
 
 ---
 
-## Sobre o projeto 
+## Sumário
+
+- [Destaques](#destaques)
+- [Como funciona](#como-funciona)
+- [Sobre o projeto](#sobre-o-projeto)
+- [Parte 1 — Pilha com brk](#parte-1--pilha-com-brk)
+- [Parte 2 — Fila com malloc/free](#parte-2--fila-com-mallocfree)
+- [Como rodar](#como-rodar)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Tecnologias](#tecnologias)
+
+---
+
+## Destaques
+
+- **Pilha sem nenhuma biblioteca de alocação:** `empilha` sobe o *break* 4 bytes e grava com `sw`; `desempilha` lê com `lw` e desce o *break*.
+- **Fila encadeada FIFO** com nós de 16 bytes (valor, alinhamento e ponteiro), inserção no fim e remoção no início.
+- **Menus interativos** que mostram o endereço do *break* e dos nós a cada operação.
+- **Execução em qualquer máquina** com Docker, compilação cruzada e emulação do QEMU em modo usuário.
+
+## Como funciona
+
+```mermaid
+flowchart LR
+    subgraph Pilha [pilha_brk.s]
+        P1[push x] --> P2[brk + 4] --> P3[sw x no topo]
+        Q1[pop] --> Q2[lw do topo] --> Q3[brk - 4]
+    end
+    subgraph Fila [fila_malloc.s]
+        F1[insert x] --> F2[malloc 16 bytes] --> F3[liga no tail]
+        G1[remove] --> G2[desliga o head] --> G3[free]
+    end
+```
+
+## Sobre o projeto
 
 Implementação de duas estruturas de dados dinâmicas em **Assembly RISC-V 64-bit**, com menu interativo para o usuário inserir e remover valores em tempo de execução.
 
@@ -137,7 +176,7 @@ qemu-riscv64 -L /usr/riscv64-linux-gnu ./fila_malloc
 
 ---
 
-## Estrutura do repositório
+## Estrutura do projeto
 
 ```
 .
@@ -149,7 +188,7 @@ qemu-riscv64 -L /usr/riscv64-linux-gnu ./fila_malloc
 
 ---
 
-## Tecnologias utilizadas
+## Tecnologias
 
 - **Assembly RISC-V 64-bit** — linguagem de implementação
 - **GCC cross-compiler** (`riscv64-linux-gnu-gcc`) — compilação cruzada
@@ -157,3 +196,7 @@ qemu-riscv64 -L /usr/riscv64-linux-gnu ./fila_malloc
 - **Docker + Ubuntu 22.04** — ambiente de execução isolado
 - **Linux syscall `brk`** (nº 214) — alocação manual de memória (Parte 1)
 - **libc** (`malloc`, `free`, `printf`, `scanf`) — alocação gerenciada e I/O (Parte 2)
+
+---
+
+[← Organização de Computadores](../) · [Repositório principal](../../)

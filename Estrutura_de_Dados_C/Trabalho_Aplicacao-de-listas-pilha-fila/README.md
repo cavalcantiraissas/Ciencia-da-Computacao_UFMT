@@ -1,32 +1,53 @@
-# Trabalho - Aplicação de Listas, Pilha e Fila
+# Gerenciador de Pedidos de Restaurante: Fila e Pilha
 
-Trabalho prático de aplicação integrada das estruturas de dados lineares estudadas na disciplina. O sistema simula um contexto real de gerenciamento de pedidos, utilizando pilha e fila como mecanismos de controle de fluxo, com separação clara entre interface (`main.c`), estruturas de dados (`.h`/`.c`) e entidade de domínio (`pedido`).
+**Sistema de pedidos em C que combina estruturas lineares: os pedidos aguardam o preparo numa fila e, quando ficam prontos, vão para uma pilha de entrega.**
 
----
+[![C](https://img.shields.io/badge/C-gcc-A8B9CC?logo=c&logoColor=white)](https://gcc.gnu.org/)
+[![Disciplina](https://img.shields.io/badge/disciplina-Estrutura_de_Dados_I-6f42c1)](../)
 
-## Estrutura do Projeto
-
-```
-Trabalho_Aplicacao-de-listas-pilha-fila/
-├── main.c          # Ponto de entrada e lógica da aplicação
-├── pedido.h        # Definição da struct Pedido
-├── pedido.c        # Implementação das operações sobre Pedido
-├── fila.h          # Interface da estrutura Fila
-├── fila.c          # Implementação da Fila
-├── pilha.h         # Interface da estrutura Pilha
-├── pilha.c         # Implementação da Pilha
-└── Trab-Lista_Fila_Pilha-pratica.pdf   # Enunciado do trabalho
-```
+Trabalho prático da disciplina de Estrutura de Dados I (UFMT). O sistema simula a cozinha de um restaurante, com a interface (`main.c`), as estruturas de dados (`fila`, `pilha`) e a entidade de domínio (`pedido`) em módulos separados.
 
 ---
 
-## Como Compilar e Executar
+## Como funciona
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Fila: 1 - Novo pedido
+    Fila --> Fila: 2 - Iniciar preparo<br/>(status "em preparo")
+    Fila --> Pilha: 3 - Finalizar preparo<br/>(status "pronto")
+    Pilha --> [*]: 4 - Entregar pedido<br/>(status "entregue")
+```
+
+| Opção do menu | Efeito |
+|---|---|
+| 1 - Novo pedido | Lê número, cliente e itens e coloca o pedido no fim da fila |
+| 2 - Iniciar preparo | Marca o primeiro da fila como "em preparo" |
+| 3 - Finalizar preparo | Marca o primeiro da fila como "pronto", retira-o da fila e o empilha |
+| 4 - Entregar pedido | Marca o topo da pilha como "entregue" e o desempilha |
+| 5 - Sair | Encerra o programa |
+
+A fila garante que os pedidos sejam preparados na ordem de chegada (FIFO); a pilha entrega primeiro o último pedido que ficou pronto (LIFO).
+
+## Como executar
 
 ```bash
-gcc main.c pedido.c fila.c pilha.c -o aplicacao
-./aplicacao
+gcc main.c pedido.c fila.c pilha.c -o pedidos
+./pedidos
+```
+
+## Estrutura do projeto
+
+```text
+Trabalho_Aplicacao-de-listas-pilha-fila/
+├── main.c                              # menu e fluxo dos pedidos
+├── pedido.h / pedido.c                 # struct Pedido: criar, alterar status, imprimir
+├── fila.h / fila.c                     # fila encadeada de pedidos
+├── pilha.h / pilha.c                   # pilha encadeada de pedidos
+└── Trab-Lista_Fila_Pilha-pratica.pdf   # enunciado
 ```
 
 ---
 
-[Voltar para Estrutura de Dados em C](../README.md)
+[← Estrutura de Dados em C](../) · [Repositório principal](../../)

@@ -1,15 +1,57 @@
 # Comandos condicionais (`if`/`else`), `while`, atribuição e operadores lógicos
 
-Evolução do compilador de C simplificado. Nesta etapa o compilador passa a reconhecer:
+**Quarta etapa do compilador: controle de fluxo, expressões booleanas com curto-circuito, expressões com `int`, `float` e `char`, entrada e saída com conversão e geração de código para Linux, macOS e Windows.**
 
-- o comando **`if`** (com `else` opcional) e o comando **`while`**, com blocos delimitados por `{ }` (ou `begin`/`end`);
-- **expressões booleanas** no formato `[id | exp_aritmética] operador [id | exp_aritmética]`, combinadas com **`&&`** e **`||`** e agrupadas com parênteses;
-- o **comando de atribuição** `id = valor;`, em que o valor precisa ser compatível com o tipo da variável;
-- **expressões com `int`, `float` e `char`**, com conversão automática de `int` para `float` e menos unário;
-- **`read`/`write` com conversão entre texto e número**, feita por rotinas de apoio em assembly;
-- geração de código para **Linux**, **macOS** e **Windows** (x86-64).
+[![C](https://img.shields.io/badge/C-gcc-A8B9CC?logo=c&logoColor=white)](https://gcc.gnu.org/)
+[![Make](https://img.shields.io/badge/build-make-427819)](makefile)
+[![NASM](https://img.shields.io/badge/NASM-x86--64-0C322C)](https://www.nasm.us/)
+[![Plataformas](https://img.shields.io/badge/alvos-Linux_%7C_macOS_%7C_Windows-555555)](#como-compilar-e-testar)
+[![Disciplina](https://img.shields.io/badge/disciplina-Compiladores-6f42c1)](../)
 
-## Gramática atual
+Evolução do compilador de C simplificado da disciplina de Compiladores (UFMT). Nesta etapa a linguagem ganha `if`/`else` e `while` com blocos `{ }` ou `begin`/`end`, expressões booleanas combinadas com `&&` e `||`, atribuição com verificação de tipo e `read`/`write` que convertem entre texto e número por rotinas de apoio escritas em assembly.
+
+Etapa 4 de 5 · anterior: [`char`, `string` e atribuição](../constante_string_novos_tipos_dados) · próxima: [funções](../tratamento_funcoes)
+
+---
+
+## Sumário
+
+- [Destaques](#destaques)
+- [Como funciona](#como-funciona)
+- [Gramática](#gramática)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Como compilar e testar](#como-compilar-e-testar)
+- [Alterações em relação à base](#alterações-em-relação-à-base)
+
+---
+
+## Destaques
+
+- **Gramática com precedência completa:** `||` < `&&` < relacionais < `+ -` < `* /`, com parênteses e menos unário.
+- **Verificação de tipos nas expressões:** cada regra devolve `EXPR_INT`, `EXPR_FLOAT` ou `EXPR_BOOL`, com promoção automática de `int` para `float`.
+- **Curto-circuito** em `&&` e `||`: `if (x != 0 && 10 / x > 1)` não divide por zero.
+- **Ponto flutuante com SSE** (`addsd`, `ucomisd`, `cvtsi2sd`).
+- **E/S sem libc** no Linux e no macOS, via `syscall`; no Windows, com `printf`/`scanf`.
+- **Testes automatizados:** 9 programas com saída esperada e 22 casos de erro, verificados nas três plataformas.
+
+## Como funciona
+
+```mermaid
+flowchart LR
+    A[prog.cc] --> B[Léxico<br/>lex.c]
+    B -->|tokens| C[Sintático<br/>synt.c]
+    C <-->|tipos| T[(Tabelas de<br/>símbolos e strings)]
+    C --> D{Gerador}
+    D -->|gen.c| L[.asm Linux]
+    D -->|gen_macos.c| M[.asm macOS]
+    D -->|gen_win.c| W[.asm Windows]
+    L & M & W --> N[NASM + ligador]
+    N --> X[executável]
+```
+
+O sintático é descendente recursivo e gera o código durante a análise. Cada comparação empilha `1` ou `0`, e os comandos `if`/`while` desviam conforme o topo da pilha. O mesmo `gen.c` serve às três plataformas: `gen_macos.c` e `gen_win.c` só definem uma macro e o incluem.
+
+## Gramática
 
 ```
 program      -> declarations statements
@@ -99,7 +141,7 @@ Constantes string aceitam as sequências de escape `\n`, `\t`, `\r`, `\0`, `\\`,
 As conversões são feitas por **rotinas de apoio** (`_rt_read_int`, `_rt_write_float`, `_rt_strcpy`, ...), escritas em assembly no fim do arquivo gerado. No Linux e no macOS elas usam as chamadas de sistema `read`/`write` (instrução `syscall`, sem libc). No Windows elas chamam `printf`/`scanf`. Uma divisão inteira por zero encerra o programa com `[ERRO] Divisao por zero` e código de saída `1`.
 
 
-## Arquivos
+## Estrutura do projeto
 
 | Arquivo | Descrição |
 |---|---|
@@ -111,14 +153,16 @@ As conversões são feitas por **rotinas de apoio** (`_rt_read_int`, `_rt_write_
 | [gen_macos.c](gen_macos.c) / [gen_win.c](gen_win.c) | Geradores para macOS e Windows: definem `TARGET_MACOS`/`TARGET_WIN` e incluem `gen.c`. Muda apenas a entrada e a saída do programa e as rotinas de apoio. |
 | [testes/](testes) | Programas de teste válidos, com a entrada (`.in`) e a saída esperada (`.out`), e o script [rodar.sh](testes/rodar.sh). Os de [testes/erros/](testes/erros) devem ser rejeitados. |
 | [code1.cc](code1.cc) / [code2.cc](code2.cc) | Exemplos originais. O `code2.cc` usa `if (1 - 1)`, que agora é rejeitado por não ser uma expressão booleana. |
+| [tst_lex.c](tst_lex.c) | Teste isolado do léxico: imprime a tag, o nome da tag e o lexema de cada token do arquivo, e para no primeiro erro léxico (`make tstLex`, depois `./tstLexCompiler arquivo`) |
 
-## Compilação e testes
+## Como compilar e testar
 
 ```bash
 make                      # gera ./compiler (codigo para Linux)
 ./compiler testes/if_multiplos.cc     # gera testes/if_multiplos.cc.asm
 make testes               # compila tudo de testes/ e confere se tudo de testes/erros/ e rejeitado
 make executar             # compila, monta, liga e executa os testes, comparando com os .out
+make tstLex               # teste isolado do léxico: ./tstLexCompiler arquivo.cc
 make clean
 ```
 
@@ -296,3 +340,9 @@ O código compila sem avisos com `gcc -Wall -Wextra`, e o compilador roda sem er
 
 - `write` de `float` usa 6 casas decimais e funciona para valores até cerca de ±9,2 × 10¹² (o valor é multiplicado por 10⁶ e convertido para inteiro de 64 bits). No Windows a formatação é a do `printf("%f")`, sem esse limite.
 - Os nomes das variáveis viram rótulos no assembly sem prefixo, como nas etapas anteriores. Uma variável chamada `rax` ou `main`, por exemplo, conflita com o NASM.
+
+---
+
+Etapa 4 de 5 · anterior: [`char`, `string` e atribuição](../constante_string_novos_tipos_dados) · próxima: [funções](../tratamento_funcoes)
+
+[← Compiladores](../) · [Repositório principal](../../)

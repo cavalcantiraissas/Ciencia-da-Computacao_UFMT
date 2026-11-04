@@ -1,28 +1,43 @@
 # Estrutura de Dados em C
 
-Atividades, exercícios, trabalhos e exemplos desenvolvidos ao longo das disciplinas de Estrutura de Dados I e II, cursadas no Bacharelado em Ciência da Computação da Universidade Federal de Mato Grosso (UFMT).
+**Estruturas de dados e algoritmos implementados em C: de listas, pilhas e filas a árvores balanceadas, matrizes esparsas e algoritmos de grafos.**
 
-O conteúdo abrange desde a implementação das estruturas lineares fundamentais até estruturas avançadas como árvores balanceadas e algoritmos de grafos, todos implementados em linguagem C.
+[![C](https://img.shields.io/badge/C-gcc-A8B9CC?logo=c&logoColor=white)](https://gcc.gnu.org/)
+[![Disciplinas](https://img.shields.io/badge/disciplinas-ED_I_e_ED_II-6f42c1)](#trabalhos)
+[![UFMT](https://img.shields.io/badge/UFMT-Ci%C3%AAncia_da_Computa%C3%A7%C3%A3o-003366)](../)
 
----
-
-## Tecnologia
-
-![C](https://img.shields.io/badge/C-00599C?style=flat-square&logo=c&logoColor=white)
+Atividades, trabalhos e exemplos das disciplinas de Estrutura de Dados I e II do curso de Ciência da Computação da UFMT. O conteúdo vai das estruturas lineares, com alocação estática e dinâmica, até árvores balanceadas e algoritmos clássicos de grafos, com análise de desempenho nos trabalhos.
 
 ---
 
-## Estrutura do Repositório
+## Trabalhos
 
-| Pasta | Descrição |
+| Trabalho | Descrição | Destaque |
+|---|---|---|
+| [Árvores binárias balanceadas](./ED2/Tarefa1_Arvores_Binarias_Balanceadas) | ABB, AVL e Rubro-Negra comparadas em altura, rotações, tempo e comparações de busca | Relatório com análise de desempenho |
+| [Análise de lista estática e dinâmica](./Trabalho_Analise-Lista-Estatica-e-Dinamica) | Lista em vetor, simplesmente encadeada e duplamente encadeada, com medição de tempo | Relatório comparativo |
+| [Aplicação de lista, pilha e fila](./Trabalho_Aplicacao-de-listas-pilha-fila) | Gerenciador de pedidos de restaurante: pedidos em fila, prontos em pilha | Estruturas combinadas num sistema |
+
+## Material de estudo
+
+| Pasta | Conteúdo |
 |---|---|
-| [Atividades_de_Classe](./Atividades_de_Classe) | Exercícios e atividades práticas realizadas em sala - listas, filas, pilhas, heap e ordenação |
-| [ED2](./ED2) | Estrutura de Dados II - estruturas avançadas, árvores balanceadas e algoritmos de grafos |
-| [Exemplos_de_Codigo](./Exemplos_de_Codigo) | Biblioteca de implementações de referência: árvores, tabela hash, ponteiros, listas e ordenação |
-| [Pseudo-Codigos](./Pseudo-Codigos) | Implementações dos principais algoritmos de ordenação em C |
-| [Trabalho_Analise-Lista-Estatica-e-Dinamica](./Trabalho_Analise-Lista-Estatica-e-Dinamica) | Trabalho comparativo entre alocação estática e dinâmica em listas encadeadas |
-| [Trabalho_Aplicacao-de-listas-pilha-fila](./Trabalho_Aplicacao-de-listas-pilha-fila) | Trabalho prático de aplicação integrada de listas, pilhas e filas |
+| [Atividades_de_Classe](./Atividades_de_Classe) | Exercícios introdutórios de C e implementações de lista, fila, pilha, lista dupla, lista circular e heap |
+| [ED2](./ED2) | Matrizes esparsas e algoritmos de grafos: Dijkstra, Bellman-Ford, Prim e Kruskal |
+| [Exemplos_de_Codigo](./Exemplos_de_Codigo) | Exemplos de referência das aulas: vetores, matrizes, ponteiros, listas, pilhas, filas, árvores, heap e tabela hash |
+| [Pseudo-Codigos](./Pseudo-Codigos) | Pseudocódigo dos principais algoritmos de ordenação |
+
+## Como compilar
+
+Os programas usam só a biblioteca padrão de C:
+
+```bash
+gcc arquivo.c -o programa
+./programa
+```
+
+Projetos com vários arquivos têm o comando de compilação no README da pasta.
 
 ---
 
-[Voltar ao repositório principal](https://github.com/cavalcantiraissas/Ciencia-da-Computacao_UFMT)
+[← Repositório principal](../)

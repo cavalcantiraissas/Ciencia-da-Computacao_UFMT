@@ -1,32 +1,43 @@
-# Programação III
+# Programação em Java
 
-Desenvolvimento de aplicações utilizando a plataforma Java, abrangendo desde a lógica de objetos até a persistência de dados e interfaces gráficas.
+**Desenvolvimento de aplicações na plataforma Java: orientação a objetos, exceções, coleções, arquivos e interfaces gráficas com Swing.**
 
-## Informações Gerais
-* Instituição: Universidade Federal de Mato Grosso
-* Docente: Taina Isabela Monteiro da Silva
-* Período: 2025/3
-* Carga Horária: 64 horas
+[![Java](https://img.shields.io/badge/Java-8%2B-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Swing](https://img.shields.io/badge/UI-Swing-5382A1)](#trabalhos)
+[![UFMT](https://img.shields.io/badge/UFMT-Ci%C3%AAncia_da_Computa%C3%A7%C3%A3o-003366)](../)
 
-## Objetivos
-Projetar e implementar sistemas escaláveis e modernos, integrando interfaces interativas com processamento multitarefa e bancos de dados.
+Trabalhos da disciplina de Programação III do curso de Ciência da Computação da UFMT.
 
-## Conteúdo Programático
-* Plataforma Java e Máquina Virtual (JVM)
-* Interface Gráfica com Swing e JavaFX
-* Programação Multithread e computação assíncrona
-* Persistência de dados via JDBC (Java Database Connectivity)
-* Frameworks de coleções e fluxos de dados
-* Tratamento avançado de exceções e depuração
-
-## Projetos
-
-| Pasta | Descrição |
+| | |
 |---|---|
-| [Atividades_Classe](./Atividades_Classe) | Exercícios práticos realizados em sala: POO, coleções, arquivos e interfaces gráficas com Swing |
-| [Trabalho_Final](./Trabalho_Final) | Sistema de gerenciamento de itens (livros e filmes) com interface gráfica Swing |
+| **Docente** | Taina Isabela Monteiro da Silva |
+| **Período** | 2025/3 |
+| **Carga horária** | 64 horas |
 
-## Bibliografia Principal
-* DEITEL, H. M. Java: Como programar
-* SANTOS, Rafael. Introdução à Programação Orientada a Objetos Usando Java
-* SCHILDT, Herbert. Java: A Referência Completa
+---
+
+## Trabalhos
+
+| Trabalho | Descrição | Tecnologias |
+|---|---|---|
+| [Sistema de Gerenciamento de Itens](./Trabalho_Final) | Acervo de livros e filmes com cadastro, busca, ordenação, exportação e importação, em camadas e com exceções próprias | Java, Swing |
+| [Atividades de classe](./Atividades_Classe) | 22 exercícios de fundamentos, orientação a objetos, exceções, coleções, arquivos e Swing | Java |
+
+## Conteúdo da disciplina
+
+- Plataforma Java e máquina virtual (JVM)
+- Interfaces gráficas com Swing e JavaFX
+- Programação multithread e assíncrona
+- Persistência com JDBC
+- Coleções e fluxos de dados
+- Tratamento de exceções e depuração
+
+## Bibliografia
+
+- DEITEL, Paul; DEITEL, Harvey. *Java: Como Programar*.
+- SANTOS, Rafael. *Introdução à Programação Orientada a Objetos Usando Java*.
+- SCHILDT, Herbert. *Java: A Referência Completa*.
+
+---
+
+[← Repositório principal](../)

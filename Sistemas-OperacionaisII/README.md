@@ -1,13 +1,52 @@
-# Sistemas Operacionais II
+# Sistemas Operacionais II: vsfs, um sistema de arquivos de verdade
 
-Repositório técnico da disciplina, com foco na implementação de um sistema de arquivos de verdade: do formato on-disk até a camada que atende as chamadas de sistema do kernel.
+**Implementação em Python do vsfs (*Very Simple File System*) do OSTEP, montado no Linux com FUSE: do formato em disco, com superbloco, bitmaps, inodes e diretórios, até as chamadas de sistema que o kernel repassa ao programa.**
 
-## Informações Gerais
-* Instituição: Universidade Federal de Mato Grosso
-* Linguagem: Python 3
-* Referência principal: OSTEP, capítulo 40 (*File System Implementation*)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FUSE](https://img.shields.io/badge/FUSE-mfusepy-555555)](https://pypi.org/project/mfusepy/)
+[![OSTEP](https://img.shields.io/badge/refer%C3%AAncia-OSTEP_cap._40-0A7BBB)](https://pages.cs.wisc.edu/~remzi/OSTEP/file-implementation.pdf)
+[![UFMT](https://img.shields.io/badge/UFMT-Ci%C3%AAncia_da_Computa%C3%A7%C3%A3o-003366)](../)
 
-## Projeto: vsfs
+Trabalho da disciplina de Sistemas Operacionais II do curso de Ciência da Computação da UFMT. O sistema de arquivos ocupa uma imagem de disco de 256 KiB e, depois de montado, funciona como qualquer pasta: `ls`, `cat`, `echo >`, `mkdir`, `ln`, `mv`, `chmod`, `rm` e `df` são atendidos pelo código Python.
+
+---
+
+## Sumário
+
+- [Destaques](#destaques)
+- [Como funciona](#como-funciona)
+- [O projeto](#o-projeto)
+- [Instalação](#instalação)
+- [Como rodar](#como-rodar)
+- [Comandos de teste (fase B.3)](#comandos-de-teste-fase-b3)
+- [Bibliografia](#bibliografia)
+
+---
+
+## Destaques
+
+- **Formato em disco completo:** superbloco, bitmaps de inodes e de dados, tabela de 80 inodes e 56 blocos de dados.
+- **Construção em três fases**, cada uma um retrato completo do código, com as decisões e limitações documentadas.
+- **Ordem de gravação pensada para falhas:** criar grava o nome por último e remover apaga o nome primeiro, de modo que uma interrupção deixa no máximo espaço perdido, nunca um nome apontando para algo liberado.
+- **`fsck` próprio** (`dumpfs.py`) que confere bitmaps, inodes, a árvore inteira e o `nlink` de cada inode.
+- **Roteiro de testes** com o resultado esperado de cada comando.
+
+## Como funciona
+
+```mermaid
+flowchart LR
+    U[programa do usuário<br/>ls, cat, mv, df...] -->|chamada de sistema| K[kernel Linux]
+    K -->|/dev/fuse| V[vsfs.py<br/>getattr, read, write,<br/>mkdir, rename...]
+    V --> L[layout.py<br/>empacota e desempacota<br/>superbloco, inodes, entradas]
+    V --> D[disk.py<br/>lê e grava blocos inteiros]
+    D --> I[(disco.img<br/>64 blocos de 4 KiB)]
+    M[mkfs.py] -->|formata| I
+    F[dumpfs.py<br/>inspeção e fsck] -->|lê| I
+```
+
+Cada operação do kernel vira uma sequência de leituras e gravações de blocos: resolver o caminho até o inode, ler ou alterar os bitmaps, gravar o inode e as entradas de diretório.
+
+## O projeto
 
 O **vsfs** (*Very Simple File System*) é o sistema de arquivos do capítulo 40 do OSTEP, implementado em Python sobre uma imagem de disco de 256 KiB e montado no sistema com FUSE (biblioteca [mfusepy](https://pypi.org/project/mfusepy/)).
 
@@ -221,6 +260,10 @@ Depois dos testes, desmonte e rode o `dumpfs.py`, como em [Desmontar e verificar
 | `/dev/fuse: No such file or directory` no WSL | O WSL está na versão 1. No PowerShell, rode `wsl --set-version Ubuntu-24.04 2` |
 | `não é uma imagem vsfs; rode o mkfs` | A imagem não foi formatada. Rode `python3 mkfs.py ~/disco.img --force` |
 
-## Bibliografia Principal
-* ARPACI-DUSSEAU, R. H.; ARPACI-DUSSEAU, A. C. Operating Systems: Three Easy Pieces (OSTEP)
-* TANENBAUM, Andrew S. Sistemas operacionais modernos
+## Bibliografia
+- ARPACI-DUSSEAU, Remzi H.; ARPACI-DUSSEAU, Andrea C. *Operating Systems: Three Easy Pieces*.
+- TANENBAUM, Andrew S. *Sistemas Operacionais Modernos*.
+
+---
+
+[← Repositório principal](../)
