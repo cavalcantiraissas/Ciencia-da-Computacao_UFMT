@@ -1,0 +1,30 @@
+#!/bin/sh
+# Executa um comando dentro do container de desenvolvimento.
+#   ./dev            -> shell interativo
+#   ./dev make run   -> compila e roda no QEMU
+# Use ENGINE=podman se não houver Docker.
+set -e
+ENGINE=${ENGINE:-docker}
+IMAGE=ros3-dev
+cd "$(dirname "$0")"
+
+# Constrói a imagem na primeira vez (ou se for removida)
+if ! $ENGINE image inspect $IMAGE >/dev/null 2>&1; then
+    $ENGINE build -t $IMAGE .
+fi
+
+[ $# -eq 0 ] && set -- bash
+
+TTY=; [ -t 0 ] && TTY=-it
+USER_ARGS="-u $(id -u):$(id -g)"
+NAME=ros3-dev-run
+
+# Se já há um container em execução (ex.: QEMU aguardando o GDB em outro
+# terminal), entra nele em vez de criar outro.
+if [ "$($ENGINE inspect -f '{{.State.Running}}' $NAME 2>/dev/null)" = true ]; then
+    exec $ENGINE exec $TTY $USER_ARGS $NAME "$@"
+fi
+
+# -u evita arquivos pertencentes ao root no Linux
+exec $ENGINE run --rm $TTY $USER_ARGS --name $NAME \
+    -v "$PWD":/work -p 1234:1234 $IMAGE "$@"
