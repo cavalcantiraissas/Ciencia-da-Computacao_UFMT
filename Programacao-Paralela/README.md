@@ -23,6 +23,7 @@ Trabalhos da disciplina de Programação Paralela do curso de Ciência da Comput
 | [MaxVetor.c](MaxVetor.c) | Máximo de um vetor: máximo local por thread e uma única atualização do global em região crítica, comparado com `reduction(max:...)` e com a versão sequencial | OpenMP `critical` e `reduction` |
 | [soma_arvore.c](soma_arvore.c) | Soma dos nós de uma árvore binária de busca, com uma tarefa por subárvore e conferência sequencial | OpenMP `task` e `taskwait` |
 | [caldeira_mpi.c](caldeira_mpi.c) | Pipeline de segurança de uma caldeira: sensor (rank 0) envia 100 leituras de 50 a 200 °C, o controlador (rank 1) abre a válvula de alívio acima de 100 °C e repassa o evento ao logger (rank 2), que grava console e `caldeira_log.txt` | MPI `Ssend` (síncrono) e `Bsend` com buffer pré-alocado |
+| [estacao_clima_mpi.c](estacao_clima_mpi.c) | Estação meteorológica (rank 0) envia leituras de temperatura e umidade à central (rank 1), que preenche `alerta_ativo` com `'S'` em calor extremo e seco, tempestade/ar saturado ou geada, e devolve a struct; casos fixos conferem as fronteiras de cada condição | MPI tipo derivado: `Get_address`, `Type_create_struct`, `Type_commit`, `Type_free` |
 
 ## Como executar
 
@@ -40,6 +41,9 @@ gcc -fopenmp -O2 soma_arvore.c -o soma_arvore && ./soma_arvore
 # C com MPI: exatamente 3 processos; leituras e intervalo (ms) são opcionais
 mpicc -O2 caldeira_mpi.c -o caldeira_mpi && mpirun -np 3 ./caldeira_mpi
 mpirun -np 3 ./caldeira_mpi 10 100   # teste rápido: 10 leituras a cada 100 ms
+
+# C com MPI: exatamente 2 processos; o número de leituras aleatórias é opcional
+mpicc -O2 estacao_clima_mpi.c -o estacao_clima_mpi && mpirun -np 2 ./estacao_clima_mpi 5
 ```
 
 No macOS, o `gcc` padrão é o clang, que não aceita `-fopenmp`. Instale o GCC do Homebrew (`brew install gcc`) e use `gcc-15` (ou a versão instalada) no lugar de `gcc`. Para o MPI, `brew install open-mpi` fornece o `mpicc` e o `mpirun`.
